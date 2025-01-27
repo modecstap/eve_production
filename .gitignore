@@ -1,0 +1,7 @@
+/my-app/build/**
+/my-app/node_modules/**
+/my-app/.idea/**
+/src/.idea/**
+/.idea/**
+/.postgres
+/.env

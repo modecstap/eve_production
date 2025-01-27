@@ -1,0 +1,24 @@
+meta {
+  name: add_orders
+  type: http
+  seq: 4
+}
+
+post {
+  url: http://localhost:8080/api/order/add_order
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "price": 51000000,
+    "commission_percent": 2.35,
+    "tax_percent": 4.5,
+    "updating_cost": 0,
+    "release_date": "2024-06-12 04:05:06.000",
+    "status": 1,
+    "product_count": 2,
+    "type_id": 2
+  }
+}

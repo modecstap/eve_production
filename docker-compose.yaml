@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  eve_server:
+    container_name: eve_server
+    build: /src
+    ports:
+      - 8080:8080
+    environment:
+      - DB_HOST=${DB_HOST}
+      - DB_NAME=${DB_NAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_PORT=${DB_PORT}
+      - DB_USER=${DB_USER}
+      - PYTHONUNBUFFERED=1
+    depends_on:
+      - eve_db
+    command: python main.py --env prod
+
+  eve_db:
+    container_name: eve_db
+    image: postgres:16.4
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - .postgres:/var/lib/postgresql/data
+
+  your_ph_ui:
+    container_name: eve_ui
+    build: my-app
+    ports:
+      - 5555:80
+    depends_on:
+      - eve_server

@@ -1,0 +1,37 @@
+meta {
+  name: add_transactions
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:8080/api/transaction/add_transactions
+  body: json
+  auth: none
+}
+
+body:json {
+  [
+    {
+      "release_date": "2025-01-06 19:43:00.000",
+      "count": 7761600,
+      "material_id": 1,
+      "price": 4.51,
+      "remains": 7761600
+    },
+    {
+      "release_date": "2025-01-06 19:43:00.000",
+      "count": 3880800,
+      "material_id": 2,
+      "price": 17.83,
+      "remains": 3880800
+    },
+    {
+      "release_date": "2025-01-06 19:43:00.000",
+      "count": 88000,
+      "material_id": 3,
+      "price": 134.4,
+      "remains": 88000
+    }
+  ]
+}

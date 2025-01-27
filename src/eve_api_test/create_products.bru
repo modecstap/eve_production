@@ -1,0 +1,24 @@
+meta {
+  name: create_products
+  type: http
+  seq: 8
+}
+
+post {
+  url: http://localhost:8080/api/product/create_products
+  body: json
+  auth: none
+}
+
+body:json {
+  [
+    {
+      "type_id": 2,
+      "production_date": "2025-01-03 04:05:06"
+    },
+    {
+      "type_id": 2,
+      "production_date": "2025-01-03 04:05:06"
+    }
+  ]
+}
