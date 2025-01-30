@@ -11,5 +11,8 @@ class TransactionHandler:
     async def get_transactions(self, request: Request):
         return await self.transaction_service.get_models()
 
+    async def get_available_materials(self, request: Request):
+        return await self.transaction_service.get_available_materials()
+
     async def add_transactions(self, request: Request, transactions: list[TransactionModel]):
         await self.transaction_service.add_models(transactions)
