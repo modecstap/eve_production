@@ -10,6 +10,15 @@ EMPTY = object()
 
 class Middlewares:
     @web.middleware
+    async def CORS_middlevare(self, request: web.Request, handler):
+        response = await handler(request)
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+
+        return response
+
+    @web.middleware
     async def response_status(self, request: web.Request, handler):
         try:
             response = await handler(request)

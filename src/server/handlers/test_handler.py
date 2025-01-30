@@ -7,3 +7,6 @@ class TestHandler:
             status=200,
             text="pong"
         )
+
+    async def preflight_handler(self, request):
+        return Response(status=200)

@@ -41,11 +41,13 @@ class MainServer:
     def _setup_middlewares(self):
         middlewares = Middlewares()
 
+        self.app.middlewares.append(middlewares.CORS_middlevare)
         self.app.middlewares.append(middlewares.response_status)
         self.app.middlewares.append(middlewares.model_type)
 
     def _setup_routs(self):
         self.app.router.add_get("/api/test/ping", self.test_handler.ping)
+        self.app.router.add_route("OPTIONS", "/{tail:.*}", self.test_handler.preflight_handler)
 
         self._setup_transaction_routs()
         self._setup_order_routs()
