@@ -1,3 +1,5 @@
+import time
+
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
 
@@ -10,6 +12,8 @@ from src.storage.utils import get_db_url
 
 class Database(metaclass=Singleton):
     def __init__(self):
+        self._is_connection = False
+
         db_config = Settings().config.db_config
         db_url = get_db_url(
             user=db_config.user,
@@ -31,9 +35,17 @@ class Database(metaclass=Singleton):
         Transaction()
         UsedTransactionList()
         TypeInfo()
+        while not self._is_connection:
+            await self._try_create_session()
 
-        async with self.async_engine.begin() as conn:
-            await conn.run_sync(DeclarativeBase().base.metadata.create_all)
+    async def _try_create_session(self):
+        try:
+            async with self.async_engine.begin() as conn:
+                await conn.run_sync(DeclarativeBase().base.metadata.create_all)
+            self._is_connection = True
+        except Exception as e:
+            print(f"error connect to DB: {str(e)}")
+            time.sleep(10)
 
 
 if __name__ == '__main__':
