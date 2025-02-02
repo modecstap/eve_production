@@ -68,6 +68,8 @@ class MainServer:
 
     def _setup_product_routs(self):
         self.app.router.add_get("/api/product/get_products", self.product_handler.get_products)
+        self.app.router.add_get("/api/product/get_available_products",
+                                self.product_handler.get_available_products)
         self.app.router.add_post("/api/product/create_products", self.product_handler.create_products)
 
     def _setup_type_routs(self):

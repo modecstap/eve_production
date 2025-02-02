@@ -31,7 +31,7 @@ const ProductionForm = () => {
     e.preventDefault();
 
     if (!selectedType || !productionDate || quantity < 1) {
-      alert("Please fill all fields correctly.");
+      alert("Заполни всё корректно");
       return;
     }
 
@@ -50,22 +50,22 @@ const ProductionForm = () => {
       });
 
       if (response.ok) {
-        alert("Production data submitted successfully!");
+        alert("Успешно");
       } else {
-        alert("Error submitting production data.");
+        alert("Ошибка");
       }
     } catch (error) {
       console.error("Error:", error);
-      alert("Failed to submit production data.");
+      alert("Ошибка");
     }
   };
 
   return (
     <div className="form-container">
-      <h1 className="form-title">Production Input Form</h1>
+      <h1 className="form-title">Запись о производстве</h1>
       <form onSubmit={handleSubmit} className="production-form">
         <div className="form-group">
-          <label htmlFor="type" className="form-label">Product Type</label>
+          <label htmlFor="type" className="form-label">Тип продукта</label>
           <select
             id="type"
             value={selectedType}
@@ -73,7 +73,7 @@ const ProductionForm = () => {
             className="form-select"
             required
           >
-            <option value="">Select a type</option>
+            <option value="">Выбери тип</option>
             {types.map((type) => (
               <option key={type.id} value={type.id}>
                 {type.name}
@@ -82,7 +82,7 @@ const ProductionForm = () => {
           </select>
         </div>
         <div className="form-group">
-          <label htmlFor="date" className="form-label">Production Date</label>
+          <label htmlFor="date" className="form-label">Дата производства</label>
           <input
             type="datetime-local"
             id="date"
@@ -93,7 +93,7 @@ const ProductionForm = () => {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="quantity" className="form-label">Quantity</label>
+          <label htmlFor="quantity" className="form-label">Количество</label>
           <input
             type="number"
             id="quantity"
@@ -104,7 +104,7 @@ const ProductionForm = () => {
             required
           />
         </div>
-        <button type="submit" className="form-button">Submit</button>
+        <button type="submit" className="form-button">Записать</button>
       </form>
     </div>
   );

@@ -1,7 +1,7 @@
-from sqlalchemy import text, select, and_
+from sqlalchemy import text, select, and_, func
 
 from src.storage.repositories.base import BaseRepository
-from src.storage.tables import Product
+from src.storage.tables import Product, UsedTransactionList, Transaction, TypeInfo
 
 
 class ProductRepository(BaseRepository):
@@ -64,7 +64,17 @@ class ProductRepository(BaseRepository):
                 await session.execute(create_used_transaction)
             await session.commit()
 
-    async def get_products_without_order(self, type_id: int) -> list[Product]:
+    async def get_products_without_order(self) -> list[Product]:
+        async with self.db.async_session() as session:
+            products = await session.execute(
+                select(self._entity)
+                .where(
+                    self._entity.order == None
+                )
+            )
+            return products.scalars().all()
+
+    async def get_products_without_order_by_type(self, type_id: int) -> list[Product]:
         async with self.db.async_session() as session:
             products = await session.execute(
                 select(self._entity)
@@ -77,6 +87,19 @@ class ProductRepository(BaseRepository):
             )
             return products.scalars().all()
 
-    async def set_order(self, products: list[Product]):
+    async def get_products_costs(self, products_id: list[int]):
         async with self.db.async_session() as session:
-            await session.commit()
+            products_costs = await session.execute(
+                select(
+                    Product.id,
+                    TypeInfo.name,
+                    Product.production_date,
+                    func.sum(UsedTransactionList.used_count * Transaction.price).label("product_cost")
+                )
+                .join(UsedTransactionList)
+                .join(Transaction)
+                .join(TypeInfo)
+                .where(Product.id.in_(products_id))
+                .group_by(Product.id, TypeInfo.name, Product.production_date)
+            )
+            return products_costs.all()

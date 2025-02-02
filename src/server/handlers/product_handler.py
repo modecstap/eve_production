@@ -11,5 +11,8 @@ class ProductHandler:
     async def get_products(self, request: Request):
         return await self.product_service.get_models()
 
+    async def get_available_products(self, request: Request):
+        return await self.product_service.get_available_products()
+
     async def create_products(self, request: Request, products: list[ProductModel]):
         await self.product_service.create_products(products)

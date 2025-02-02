@@ -22,9 +22,9 @@ class Middlewares:
     async def response_status(self, request: web.Request, handler):
         try:
             response = await handler(request)
-            if response and isinstance(response, list):
+            if isinstance(response, list):
                 return Response(body=json.dumps([item.model_dump(mode='json', by_alias=True) for item in response]))
-            elif response and isinstance(response, BaseModel):
+            elif isinstance(response, BaseModel):
                 return Response(body=json.dumps(response.model_dump(mode='json', by_alias=True)))
             elif response is not None:
                 return response

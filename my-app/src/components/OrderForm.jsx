@@ -59,22 +59,22 @@ const OrderForm = () => {
       });
 
       if (response.ok) {
-        alert("Order submitted successfully!");
+        alert("Успешно");
       } else {
-        alert("Error submitting the order.");
+        alert("Ошибка создания приказа");
       }
     } catch (error) {
       console.error("Error:", error);
-      alert("Failed to submit the order.");
+      alert("Ошибка создания приказа");
     }
   };
 
   return (
     <div className="form-container">
-      <h1 className="form-title">Order Input Form</h1>
+      <h1 className="form-title">Форма ввода приказа </h1>
       <form onSubmit={handleSubmit} className="order-form">
         <div className="form-group">
-          <label htmlFor="item-type" className="form-label">Item Type</label>
+          <label htmlFor="item-type" className="form-label">Тип предмета</label>
           <select
             id="item-type"
             value={selectedItemType}
@@ -82,7 +82,7 @@ const OrderForm = () => {
             className="form-select"
             required
           >
-            <option value="">Select an item type</option>
+            <option value="">Выбери тип предмета</option>
             {itemTypes.map((itemType) => (
               <option key={itemType.id} value={itemType.id}>
                 {itemType.name}
@@ -91,7 +91,7 @@ const OrderForm = () => {
           </select>
         </div>
         <div className="form-group">
-          <label htmlFor="date" className="form-label">Release Date</label>
+          <label htmlFor="date" className="form-label">Дата выпуска</label>
           <input
             type="datetime-local"
             id="date"
@@ -102,7 +102,7 @@ const OrderForm = () => {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="price" className="form-label">Price</label>
+          <label htmlFor="price" className="form-label">Цена</label>
           <input
             type="number"
             id="price"
@@ -115,7 +115,7 @@ const OrderForm = () => {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="quantity" className="form-label">Quantity</label>
+          <label htmlFor="quantity" className="form-label">Количество</label>
           <input
             type="number"
             id="quantity"
@@ -126,7 +126,7 @@ const OrderForm = () => {
             required
           />
         </div>
-        <button type="submit" className="form-button">Submit</button>
+        <button type="submit" className="form-button">Записать</button>
       </form>
     </div>
   );

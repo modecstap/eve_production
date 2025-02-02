@@ -1,5 +1,3 @@
-from pydantic import BaseModel
-
 from src.mappers import OrderMapper
 from src.server.handlers.models import StatusModel, InsertOrderModel
 from src.services import BaseService
@@ -19,7 +17,7 @@ class OrderService(BaseService):
 
         order_entity = self._main_mapper.model_to_entity(insert_order_model)
         inserted_order_entity = (await self._main_repository.insert([order_entity]))[0]
-        products = await self._product_repository.get_products_without_order(insert_order_model.type_id)
+        products = await self._product_repository.get_products_without_order_by_type(insert_order_model.type_id)
 
         if len(products) < insert_order_model.product_count:
             raise ProductCountException()

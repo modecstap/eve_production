@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import OrderForm from "../components/OrderForm";
 import ProductionForm from "../components/ProductionForm";
 import TransactionForm from "../components/TransactionForm";
+import AvailableMaterials from "../components/AvailableMaterials";
+import AvailableProducts from "../components/AvailableProducts";
 import "./MainPage.css";
 
 const MainPage = () => {
@@ -11,25 +13,37 @@ const MainPage = () => {
     <div className="main-container">
       {/* Левая панель выбора формы */}
       <div className="sidebar">
-        <h2 className="sidebar-title">Select a Form</h2>
+        <h2 className="sidebar-title">Меню</h2>
         <ul className="menu">
           <li
             className={`menu-item ${selectedForm === "order" ? "active" : ""}`}
             onClick={() => setSelectedForm("order")}
           >
-            Order Form
+            Форма ввода приказа
           </li>
           <li
             className={`menu-item ${selectedForm === "production" ? "active" : ""}`}
             onClick={() => setSelectedForm("production")}
           >
-            Production Form
+            Запись о производстве
           </li>
           <li
             className={`menu-item ${selectedForm === "transaction" ? "active" : ""}`}
             onClick={() => setSelectedForm("transaction")}
           >
-            Transaction Form
+            Ввод транзакций
+          </li>
+          <li
+            className={`menu-item ${selectedForm === "availableMaterials" ? "active" : ""}`}
+            onClick={() => setSelectedForm("availableMaterials")}
+          >
+            таблица доступных материалов
+          </li>
+          <li
+            className={`menu-item ${selectedForm === "availableProducts" ? "active" : ""}`}
+            onClick={() => setSelectedForm("availableProducts")}
+          >
+            таблица доступных продуктов
           </li>
         </ul>
       </div>
@@ -39,6 +53,8 @@ const MainPage = () => {
         {selectedForm === "order" && <OrderForm />}
         {selectedForm === "production" && <ProductionForm />}
         {selectedForm === "transaction" && <TransactionForm />}
+        {selectedForm === "availableMaterials" && <AvailableMaterials />}
+        {selectedForm === "availableProducts" && <AvailableProducts />}
       </div>
     </div>
   );
