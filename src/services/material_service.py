@@ -1,5 +1,5 @@
-from src.mappers import MaterialMapper
 from src.services import BaseService
+from src.services.mappers import MaterialMapper
 from src.storage.repositories import MaterialRepository
 
 

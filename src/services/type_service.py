@@ -1,5 +1,5 @@
-from src.mappers import TypeMapper
 from src.services import BaseService
+from src.services.mappers import TypeMapper
 from src.storage.repositories import TypeInfoRepository
 
 

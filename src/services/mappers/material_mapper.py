@@ -1,5 +1,5 @@
-from src.mappers import BaseMapper
 from src.server.handlers.models import MaterialModel
+from src.services.mappers import BaseMapper
 from src.storage.tables import Material
 
 

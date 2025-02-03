@@ -1,7 +1,7 @@
-from src.mappers import OrderMapper
 from src.server.handlers.models import StatusModel, InsertOrderModel
 from src.services import BaseService
 from src.services.exceptions import ProductCountException
+from src.services.mappers import OrderMapper
 from src.storage.repositories import ProductRepository, OrderRepository
 
 

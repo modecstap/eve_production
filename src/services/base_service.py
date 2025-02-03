@@ -2,7 +2,7 @@ from abc import ABC
 
 from pydantic import BaseModel
 
-from src.mappers import BaseMapper
+from src.services.mappers import BaseMapper
 from src.storage.repositories import BaseRepository
 
 

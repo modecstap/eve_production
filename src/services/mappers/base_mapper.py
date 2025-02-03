@@ -3,13 +3,11 @@ from abc import ABC
 from pydantic import BaseModel
 from sqlalchemy.orm import declarative_base
 
-from src.storage.tables import Order
-
 
 class BaseMapper(ABC):
     def __init__(self):
         self._model_type: BaseModel = None
-        self._entity_type: Order = None
+        self._entity_type = None
 
     def model_to_entity(self, model: BaseModel):
         return self._entity_type(**model.dict())
