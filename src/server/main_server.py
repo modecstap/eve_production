@@ -2,7 +2,7 @@ from aiohttp import web
 
 from src.config import Settings
 from src.server.handlers import TestHandler, TransactionHandler, OrderHandler, ProductHandler, TypeHandler, \
-    MaterialHandler
+    MaterialHandler, StationHandler
 from src.server.middlewares import Middlewares
 
 
@@ -37,6 +37,7 @@ class MainServer:
         self.product_handler = ProductHandler()
         self.type_handler = TypeHandler()
         self.material_handler = MaterialHandler()
+        self.station_handler = StationHandler()
 
     def _setup_middlewares(self):
         middlewares = Middlewares()
@@ -54,6 +55,7 @@ class MainServer:
         self._setup_product_routs()
         self._setup_type_routs()
         self._setup_material_routs()
+        self._setup_station_routs()
 
     def _setup_transaction_routs(self):
         self.app.router.add_get("/api/transaction/get_transactions", self.transaction_handler.get_transactions)
@@ -77,3 +79,6 @@ class MainServer:
 
     def _setup_material_routs(self):
         self.app.router.add_get("/api/material/get_materials", self.material_handler.get_materials)
+
+    def _setup_station_routs(self):
+        self.app.router.add_get("/api/station/get_stations", self.station_handler.get_stations)

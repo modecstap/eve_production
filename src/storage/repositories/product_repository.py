@@ -16,51 +16,59 @@ class ProductRepository(BaseRepository):
             await session.flush()
             for product in products:
                 create_used_transaction = text(f"""
-                                DO $$
-                                    DECLARE
-                                        r_material material_list%ROWTYPE;
-                                        r_transaction transactions%ROWTYPE;
-                                        r_used_count INTEGER;
-                                        r_remaining_need INTEGER;
-                                        r_remaining_remains INTEGER;
-                                        input_product_id INTEGER;
-                                    BEGIN
-                                        input_product_id := {product.id};
-
-                                        FOR r_material IN 
-                                            SELECT * FROM material_list 
-                                            WHERE count > 0 AND type_id = (SELECT type_id FROM product WHERE id = input_product_id)
-                                        LOOP
-                                            r_remaining_need := r_material.count;
-
-                                            FOR r_transaction IN 
-                                                SELECT * FROM transactions
-                                                WHERE material_id = r_material.material_id AND remains > 0
-                                                ORDER BY release_date
-                                            LOOP
-                                                IF r_remaining_need > 0 THEN
-                                                    IF r_transaction.remains >= r_remaining_need THEN
-                                                        r_used_count := r_remaining_need;
-                                                        r_remaining_remains := r_transaction.remains - r_used_count;
-                                                        r_remaining_need := 0;
-                                                    ELSE
-                                                        r_used_count := r_transaction.remains;
-                                                        r_remaining_remains := 0;
-                                                        r_remaining_need := r_remaining_need - r_used_count;
-                                                    END IF;
-
-                                                    INSERT INTO used_transaction_list (product_id, transaction_id, used_count)
-                                                    VALUES (input_product_id, r_transaction.id, r_used_count)
-                                                    ON CONFLICT (product_id, transaction_id) DO NOTHING;
-
-                                                    UPDATE transactions
-                                                    SET remains = r_remaining_remains
-                                                    WHERE id = r_transaction.id;
-                                                END IF;
-                                            END LOOP;
-                                        END LOOP;
-                                    END $$;
-                            """)
+                DO $$ 
+                DECLARE
+                    r_material material_list%ROWTYPE;
+                    r_transaction transactions%ROWTYPE;
+                    r_used_count INTEGER;
+                    r_remaining_need INTEGER;
+                    r_remaining_remains INTEGER;
+                    input_product_id INTEGER;
+                    blueprint_efficiency NUMERIC;
+                    material_efficiency NUMERIC;
+                BEGIN
+                    input_product_id := {product.id}; 
+                
+                    SELECT p.blueprint_efficiency, s.material_efficiency 
+                    INTO blueprint_efficiency, material_efficiency
+                    FROM product p 
+                    JOIN station s ON p.station_id = s.id
+                    WHERE p.id = input_product_id;
+                
+                    FOR r_material IN 
+                        SELECT material_id, count FROM material_list 
+                        WHERE count > 0 AND type_id = (SELECT type_id FROM product WHERE id = input_product_id)
+                    LOOP
+                        r_remaining_need := ROUND(r_material.count * blueprint_efficiency * material_efficiency);
+                
+                        FOR r_transaction IN 
+                            SELECT id, remains FROM transactions
+                            WHERE material_id = r_material.material_id AND remains > 0
+                            ORDER BY release_date
+                        LOOP
+                            IF r_remaining_need > 0 THEN
+                                IF r_transaction.remains >= r_remaining_need THEN
+                                    r_used_count := r_remaining_need;
+                                    r_remaining_remains := r_transaction.remains - r_used_count;
+                                    r_remaining_need := 0;
+                                ELSE
+                                    r_used_count := r_transaction.remains;
+                                    r_remaining_remains := 0;
+                                    r_remaining_need := r_remaining_need - r_used_count;
+                                END IF;
+                
+                                INSERT INTO used_transaction_list (product_id, transaction_id, used_count)
+                                VALUES (input_product_id, r_transaction.id, r_used_count)
+                                ON CONFLICT (product_id, transaction_id) DO NOTHING;
+                
+                                UPDATE transactions
+                                SET remains = r_remaining_remains
+                                WHERE id = r_transaction.id;
+                            END IF;
+                        END LOOP;
+                    END LOOP;
+                END $$;
+                """)
                 await session.execute(create_used_transaction)
             await session.commit()
 

@@ -6,7 +6,8 @@ from sqlalchemy.orm import sessionmaker
 from src.config import Settings
 from src.extensions import Singleton
 from src.storage.declarative_base import DeclarativeBase
-from src.storage.tables import Order, Product, Material, MaterialList, Transaction, UsedTransactionList, TypeInfo
+from src.storage.tables import Order, Product, Material, MaterialList, Transaction, UsedTransactionList, TypeInfo, \
+    Station
 from src.storage.utils import get_db_url
 
 
@@ -35,6 +36,7 @@ class Database(metaclass=Singleton):
         Transaction()
         UsedTransactionList()
         TypeInfo()
+        Station()
         while not self._is_connection:
             await self._try_create_session()
 

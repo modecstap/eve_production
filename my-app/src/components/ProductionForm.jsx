@@ -6,6 +6,8 @@ const ProductionForm = () => {
   const [types, setTypes] = useState([]);
   const [selectedType, setSelectedType] = useState("");
   const [productionDate, setProductionDate] = useState("");
+  const [station, setSelectedStation] = useState([]);
+  const [BlueprintEfficiency, setBlueprintEfficiency] = useState(1);
   const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
@@ -27,6 +29,25 @@ const ProductionForm = () => {
     fetchTypes();
   }, []);
 
+  useEffect(() => {
+    // Fetch available types from the API
+    const fetchStations = async () => {
+      try {
+        const response = await fetch(`${serverIP}/api/station/get_stations`);
+        if (response.ok) {
+          const data = await response.json();
+          setStation(data); // Assume `data` is an array of types like [{id: 1, name: "Type A"}, ...]
+        } else {
+          console.error("Failed to fetch types");
+        }
+      } catch (error) {
+        console.error("Error fetching types:", error);
+      }
+    };
+
+    fetchStations();
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -38,6 +59,8 @@ const ProductionForm = () => {
     const formattedData = Array.from({ length: quantity }).map(() => ({
       type_id: parseInt(selectedType, 10),
       production_date: productionDate,
+      blueprint_efficiency: BlueprintEfficiency,
+      station_id: station
     }));
 
     try {
@@ -77,6 +100,23 @@ const ProductionForm = () => {
             {types.map((type) => (
               <option key={type.id} value={type.id}>
                 {type.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="form-group">
+          <label htmlFor="type" className="form-label">Станция</label>
+          <select
+            id="station"
+            value={selectedType}
+            onChange={(e) => setSelectedStation(e.target.value)}
+            className="form-select"
+            required
+          >
+            <option value="">Выбери станцию</option>
+            {types.map((type) => (
+              <option key={station.id} value={station.id}>
+                {station.name}
               </option>
             ))}
           </select>
