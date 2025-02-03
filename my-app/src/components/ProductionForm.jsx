@@ -6,8 +6,9 @@ const ProductionForm = () => {
   const [types, setTypes] = useState([]);
   const [selectedType, setSelectedType] = useState("");
   const [productionDate, setProductionDate] = useState("");
-  const [station, setSelectedStation] = useState([]);
-  const [BlueprintEfficiency, setBlueprintEfficiency] = useState(1);
+  const [station, setStation] = useState("");
+  const [selectedStation, setSelectedStation] = useState([]);
+  const [blueprintEfficiency, setBlueprintEfficiency] = useState(1);
   const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
@@ -59,8 +60,8 @@ const ProductionForm = () => {
     const formattedData = Array.from({ length: quantity }).map(() => ({
       type_id: parseInt(selectedType, 10),
       production_date: productionDate,
-      blueprint_efficiency: BlueprintEfficiency,
-      station_id: station
+      blueprint_efficiency: blueprintEfficiency,
+      station_id: selectedStation
     }));
 
     try {
@@ -129,6 +130,18 @@ const ProductionForm = () => {
             value={productionDate}
             onChange={(e) => setProductionDate(e.target.value)}
             className="form-input"
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="quantity" className="form-label">эффективность чертежа</label>
+          <input
+            type="number"
+            id="blueprintEfficiency"
+            value={blueprintEfficiency}
+            onChange={(e) => setBlueprintEfficiency(e.target.value)}
+            className="form-input"
+            min="1"
             required
           />
         </div>
