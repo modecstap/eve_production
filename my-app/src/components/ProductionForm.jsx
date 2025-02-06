@@ -6,8 +6,8 @@ const ProductionForm = () => {
   const [types, setTypes] = useState([]);
   const [selectedType, setSelectedType] = useState("");
   const [productionDate, setProductionDate] = useState("");
-  const [station, setStation] = useState("");
-  const [selectedStation, setSelectedStation] = useState([]);
+  const [stations, setStations] = useState([]); // Changed from station to stations for proper handling
+  const [selectedStation, setSelectedStation] = useState(""); // Default as empty string for single station selection
   const [blueprintEfficiency, setBlueprintEfficiency] = useState(1);
   const [quantity, setQuantity] = useState(1);
 
@@ -31,18 +31,18 @@ const ProductionForm = () => {
   }, []);
 
   useEffect(() => {
-    // Fetch available types from the API
+    // Fetch available stations from the API
     const fetchStations = async () => {
       try {
         const response = await fetch(`${serverIP}/api/station/get_stations`);
         if (response.ok) {
           const data = await response.json();
-          setStation(data); // Assume `data` is an array of types like [{id: 1, name: "Type A"}, ...]
+          setStations(data); // Set stations data
         } else {
-          console.error("Failed to fetch types");
+          console.error("Failed to fetch stations");
         }
       } catch (error) {
-        console.error("Error fetching types:", error);
+        console.error("Error fetching stations:", error);
       }
     };
 
@@ -52,7 +52,7 @@ const ProductionForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!selectedType || !productionDate || quantity < 1) {
+    if (!selectedType || !productionDate || quantity < 1 || !selectedStation) {
       alert("Заполни всё корректно");
       return;
     }
@@ -61,7 +61,7 @@ const ProductionForm = () => {
       type_id: parseInt(selectedType, 10),
       production_date: productionDate,
       blueprint_efficiency: blueprintEfficiency,
-      station_id: selectedStation
+      station_id: selectedStation, // Send station_id as selectedStation
     }));
 
     try {
@@ -105,23 +105,25 @@ const ProductionForm = () => {
             ))}
           </select>
         </div>
+
         <div className="form-group">
-          <label htmlFor="type" className="form-label">Станция</label>
+          <label htmlFor="station" className="form-label">Станция</label>
           <select
             id="station"
-            value={selectedType}
+            value={selectedStation}
             onChange={(e) => setSelectedStation(e.target.value)}
             className="form-select"
             required
           >
             <option value="">Выбери станцию</option>
-            {types.map((type) => (
+            {stations.map((station) => (
               <option key={station.id} value={station.id}>
                 {station.name}
               </option>
             ))}
           </select>
         </div>
+
         <div className="form-group">
           <label htmlFor="date" className="form-label">Дата производства</label>
           <input
@@ -133,8 +135,9 @@ const ProductionForm = () => {
             required
           />
         </div>
+
         <div className="form-group">
-          <label htmlFor="quantity" className="form-label">эффективность чертежа</label>
+          <label htmlFor="blueprintEfficiency" className="form-label">Эффективность чертежа</label>
           <input
             type="number"
             id="blueprintEfficiency"
@@ -145,6 +148,7 @@ const ProductionForm = () => {
             required
           />
         </div>
+
         <div className="form-group">
           <label htmlFor="quantity" className="form-label">Количество</label>
           <input
@@ -157,6 +161,7 @@ const ProductionForm = () => {
             required
           />
         </div>
+
         <button type="submit" className="form-button">Записать</button>
       </form>
     </div>
