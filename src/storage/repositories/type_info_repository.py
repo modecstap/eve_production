@@ -1,8 +1,6 @@
-from sqlalchemy import update
-
-from src.server.handlers.models import StatusModel
 from src.storage.repositories.base import BaseRepository
-from src.storage.tables import TypeInfo
+from sqlalchemy import select
+from src.storage.tables import TypeInfo, MaterialList
 
 
 class TypeInfoRepository(BaseRepository):

@@ -5,3 +5,4 @@ from src.storage.repositories.product_repository import ProductRepository
 from src.storage.repositories.station_repository import StationRepository
 from src.storage.repositories.transacion_repository import TransactionRepository
 from src.storage.repositories.type_info_repository import TypeInfoRepository
+from src.storage.repositories.material_list_repository import MaterialListRepository

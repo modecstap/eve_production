@@ -31,6 +31,5 @@ class OrderService(BaseService):
         for insert_order_model in insert_order_models:
             await self.add_model(insert_order_model)
 
-
     async def update_status(self, statuses: list[StatusModel]):
         await self._main_repository.update_statuses(statuses)

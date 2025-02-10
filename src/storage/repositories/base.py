@@ -19,6 +19,14 @@ class BaseRepository(ABC):
             )
             return result.scalars().all()
 
+    async def get_entitiy_by_id(self, entity_id: int) -> declarative_base:
+        async with self.db.async_session() as session:
+            result = await session.execute(
+                select(self._entity)
+                .where(self._entity.id == entity_id)
+            )
+            return result.scalars().all()
+
     async def insert(self, entities) -> list:
         async with self.db.async_session() as session:
             session.add_all(entities)

@@ -11,4 +11,3 @@ class ProductCountException(Exception):
             return f'ProductCountException, {self.message}'
         else:
             return 'ProductCountException: the number of required products exceeds the available ones'
-
