@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from sqlalchemy import text, select, and_, func
 
 from src.storage.repositories.base import BaseRepository
@@ -76,6 +78,25 @@ class ProductRepository(BaseRepository):
                 await session.execute(create_used_transaction)
             await session.commit()
 
+    async def calculate_material_cost(
+            self,
+            material_id: int,
+            need_count: int
+    ) -> Decimal:
+        async with self.db.async_session() as session:
+            query = text("""
+                SELECT calculate_material_cost(:p_material_id, :p_need_count)
+            """)
+
+            result = await session.execute(query, {
+                'p_material_id': material_id,
+                'p_need_count': need_count
+            })
+
+            material_cost = result.scalar()
+            return Decimal(material_cost) if material_cost is not None else Decimal('0.00')
+
+
     async def get_products_without_order(self) -> list[Product]:
         async with self.db.async_session() as session:
             products = await session.execute(
@@ -115,3 +136,4 @@ class ProductRepository(BaseRepository):
                 .group_by(Product.id, TypeInfo.name, Product.production_date)
             )
             return products_costs.all()
+

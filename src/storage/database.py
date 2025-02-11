@@ -6,6 +6,7 @@ from sqlalchemy.orm import sessionmaker
 from src.config import Settings
 from src.extensions import Singleton
 from src.storage.declarative_base import DeclarativeBase
+from src.storage.pgsql_functions import pgsql_functions
 from src.storage.tables import Order, Product, Material, MaterialList, Transaction, UsedTransactionList, TypeInfo, \
     Station
 from src.storage.utils import get_db_url
@@ -29,6 +30,7 @@ class Database(metaclass=Singleton):
         self.async_session = sessionmaker(self.async_engine, expire_on_commit=False, class_=AsyncSession)
 
     async def create_all(self):
+        # SQLAlchemy не создат таблицы в БД если не создать объекты.
         Order()
         Product()
         Material()
@@ -44,6 +46,8 @@ class Database(metaclass=Singleton):
         try:
             async with self.async_engine.begin() as conn:
                 await conn.run_sync(DeclarativeBase().base.metadata.create_all)
+                for function in pgsql_functions.values():
+                    await conn.execute(function)
             self._is_connection = True
         except Exception as e:
             print(f"error connect to DB: {str(e)}")

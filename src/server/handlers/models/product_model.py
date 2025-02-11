@@ -8,6 +8,6 @@ class ProductModel(BaseModel):
     id: int | None = None
     type_id: int
     order_id: int | None = None
-    production_date: datetime
+    production_date: datetime | datetime = Field(default=datetime.now())
     blueprint_efficiency: Decimal = Field(default=1)
     station_id: int
