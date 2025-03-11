@@ -1,12 +1,11 @@
-from aiohttp.web import Response, Request
+from fastapi import Response
 
 
 class TestHandler:
-    async def ping(self, request: Request) -> Response:
+    async def ping(self) -> Response:
         return Response(
-            status=200,
-            text="pong"
+            content="pong"
         )
 
-    async def preflight_handler(self, request):
-        return Response(status=200)
+    async def preflight_handler(self):
+        return Response()

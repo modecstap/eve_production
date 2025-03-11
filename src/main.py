@@ -3,7 +3,7 @@ import signal
 import sys
 
 from src.config import Settings
-from src.server import MainServer
+from src.server import FastAPIServer
 from src.storage import Database
 
 
@@ -11,7 +11,7 @@ async def main():
     Settings()
     await Database().create_all()
 
-    server = MainServer()
+    server = FastAPIServer()
     await server.start()
 
     loop = asyncio.get_event_loop()

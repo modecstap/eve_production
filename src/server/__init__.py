@@ -1,1 +1,1 @@
-from src.server.main_server import MainServer
+from src.server.fastAPI_server import FastAPIServer
