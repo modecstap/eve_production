@@ -2,6 +2,7 @@ import asyncio
 
 import uvicorn
 from fastapi import FastAPI
+from starlette.middleware.cors import CORSMiddleware
 
 from src.config import Settings
 from src.server.handlers import OrderHandler, TestHandler, TransactionHandler, ProductHandler, TypeHandler, \
@@ -9,13 +10,22 @@ from src.server.handlers import OrderHandler, TestHandler, TransactionHandler, P
 
 
 class FastAPIServer:
-    def __init__(self, host: str = "127.0.0.1", port: int = 8000):
+    def __init__(self):
         self._config = Settings().config.server_config
         self.app = FastAPI()
         self.server = None
 
+        self._setup_cors()
         self._setup_handlers()
         self._setup_routs()
+
+    def _setup_cors(self):
+        self.app.add_middleware(
+            CORSMiddleware,
+            allow_origins=["*"],
+            allow_methods=["*"],
+            allow_headers=["*"]
+        )
 
     def _setup_handlers(self):
         self.test_handler = TestHandler()
@@ -38,7 +48,7 @@ class FastAPIServer:
 
     def _setup_routs(self):
         self.app.get("/api/test/ping")( self.test_handler.ping)
-        self.app.route("/{tail:.*}" "OPTIONS")(self.test_handler.preflight_handler)
+        self.app.route("/{tail:.*}", methods=["OPTIONS"])(self.test_handler.preflight_handler)
 
         self._setup_transaction_routs()
         self._setup_order_routs()
