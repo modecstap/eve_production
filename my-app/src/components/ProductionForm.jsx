@@ -144,7 +144,6 @@ const ProductionForm = () => {
             value={blueprintEfficiency}
             onChange={(e) => setBlueprintEfficiency(e.target.value)}
             className="form-input"
-            min="1"
             required
           />
         </div>

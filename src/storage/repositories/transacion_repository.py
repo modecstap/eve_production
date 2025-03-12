@@ -18,8 +18,7 @@ class TransactionRepository(BaseRepository):
                     Transaction.material_id,
                     Material.name,
                     func.sum(Transaction.remains).label("count"),
-                    (func.sum(Transaction.remains * Transaction.price) / func.sum(Transaction.remains)).label(
-                        "mean_price")
+                    func.coalesce(func.sum(Transaction.remains * Transaction.price) / func.nullif(func.sum(Transaction.remains), 0), 0)
                 )
                 .join(Material)
                 .group_by(Transaction.material_id, Material.name)
