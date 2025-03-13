@@ -21,7 +21,7 @@ class FastAPIServer:
 
     def _setup_cors(self):
         origins = [
-            "http://192.168.0.55"
+            "https://eve-production.my-shield.ru"
         ]
 
         self.app.add_middleware(
