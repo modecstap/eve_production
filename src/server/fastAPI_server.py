@@ -2,7 +2,7 @@ import asyncio
 
 import uvicorn
 from fastapi import FastAPI
-from starlette.middleware.cors import CORSMiddleware
+from fastapi.middleware.cors import CORSMiddleware
 
 from src.config import Settings
 from src.server.handlers import OrderHandler, TestHandler, TransactionHandler, ProductHandler, TypeHandler, \
@@ -20,11 +20,16 @@ class FastAPIServer:
         self._setup_routs()
 
     def _setup_cors(self):
+        origins = [
+            "https://eve-production.my-shield.ru"
+        ]
+
         self.app.add_middleware(
             CORSMiddleware,
-            allow_origins=["*"],
+            allow_origins=origins,
+            allow_credentials=True,
             allow_methods=["*"],
-            allow_headers=["*"]
+            allow_headers=["*"],
         )
 
     def _setup_handlers(self):
