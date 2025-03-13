@@ -21,7 +21,7 @@ class FastAPIServer:
 
     def _setup_cors(self):
         origins = [
-            "https://eve-production.my-shield.ru"
+            "http://192.168.0.55"
         ]
 
         self.app.add_middleware(
@@ -53,7 +53,7 @@ class FastAPIServer:
 
     def _setup_routs(self):
         self.app.get("/api/test/ping")( self.test_handler.ping)
-        self.app.route("/{tail:.*}", methods=["OPTIONS"])(self.test_handler.preflight_handler)
+        self.app.options("/{tail:.*}")(self.test_handler.preflight_handler)
 
         self._setup_transaction_routs()
         self._setup_order_routs()
