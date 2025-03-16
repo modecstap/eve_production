@@ -1,6 +1,8 @@
 from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.storage.repositories.base import BaseRepository
+from src.storage.repositories.wrappers import ensure_session
 from src.storage.tables import MaterialList
 
 
@@ -10,8 +12,9 @@ class MaterialListRepository(BaseRepository):
         super().__init__()
         self._entity = MaterialList
 
-    async def get_materials_by_type_id(self, type_id: int) -> list[MaterialList]:
-        products = await self._session.execute(
+    @ensure_session
+    async def get_materials_by_type_id(self, type_id: int, session: AsyncSession = None) -> list[MaterialList]:
+        products = await session.execute(
             select(
                 MaterialList
             ).where(

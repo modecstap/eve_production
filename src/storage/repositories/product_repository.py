@@ -1,8 +1,10 @@
 from decimal import Decimal
 
 from sqlalchemy import text, select, and_, func
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.storage.repositories.base import BaseRepository
+from src.storage.repositories.wrappers import ensure_session
 from src.storage.tables import Product, UsedTransactionList, Transaction, TypeInfo
 
 
@@ -12,9 +14,10 @@ class ProductRepository(BaseRepository):
         super().__init__()
         self._entity = Product
 
-    async def insert_with_used_transaction(self, products: list[Product]):
-        self._session.add_all(products)
-        await self._session.flush()
+    @ensure_session
+    async def insert_with_used_transaction(self, products: list[Product], session: AsyncSession = None):
+        session.add_all(products)
+        await session.flush()
         for product in products:
             create_used_transaction = text(f"""
             DO $$ 
@@ -74,20 +77,22 @@ class ProductRepository(BaseRepository):
                 END LOOP;
             END $$;
             """)
-            await self._session.execute(create_used_transaction)
-        await self._session.commit()
+            await session.execute(create_used_transaction)
+        await session.commit()
 
+    @ensure_session
     async def calculate_material_cost(
             self,
             material_id: int,
-            need_count: int
+            need_count: int,
+            session: AsyncSession = None
     ) -> Decimal:
         
             query = text("""
                 SELECT calculate_material_cost(:p_material_id, :p_need_count)
             """)
 
-            result = await self._session.execute(query, {
+            result = await session.execute(query, {
                 'p_material_id': material_id,
                 'p_need_count': need_count
             })
@@ -96,9 +101,9 @@ class ProductRepository(BaseRepository):
             return Decimal(material_cost) if material_cost is not None else Decimal('0.00')
 
 
-    async def get_products_without_order(self) -> list[Product]:
+    async def get_products_without_order(self, session: AsyncSession = None) -> list[Product]:
         
-            products = await self._session.execute(
+            products = await session.execute(
                 select(self._entity)
                 .where(
                     self._entity.order == None
@@ -106,9 +111,10 @@ class ProductRepository(BaseRepository):
             )
             return products.scalars().all()
 
-    async def get_products_without_order_by_type(self, type_id: int) -> list[Product]:
+    @ensure_session
+    async def get_products_without_order_by_type(self, type_id: int, session: AsyncSession = None) -> list[Product]:
         
-            products = await self._session.execute(
+            products = await session.execute(
                 select(self._entity)
                 .where(
                     and_(
@@ -119,9 +125,10 @@ class ProductRepository(BaseRepository):
             )
             return products.scalars().all()
 
-    async def get_products_costs(self, products_id: list[int]):
+    @ensure_session
+    async def get_products_costs(self, products_id: list[int], session: AsyncSession = None):
         
-            products_costs = await self._session.execute(
+            products_costs = await session.execute(
                 select(
                     Product.id,
                     TypeInfo.name,

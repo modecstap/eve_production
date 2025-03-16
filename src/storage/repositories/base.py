@@ -1,3 +1,4 @@
+import asyncio
 from abc import ABC
 from heapq import merge
 
@@ -6,65 +7,47 @@ from sqlalchemy.orm import declarative_base
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.storage.database import Database
-
+from src.storage.repositories.wrappers import ensure_session
 
 class BaseRepository(ABC):
     def __init__(self):
         self.db = Database()
-        self._entity: declarative_base = None
 
-        self._session: AsyncSession = self.db.async_session_maker()
+    def create_session(self) -> AsyncSession:
+        return self.db.async_session_maker()
 
-    async def start_transaction(self):
-        if self._session.is_active:
-            return
-
-        await self._session.begin()
-
-    async def commit_transaction(self):
-        if self._session.is_active:
-            await self._session.commit()
-
-    async def rollback_transaction(self):
-        if self._session.is_active:
-            await self._session.rollback()
-
-    async def close_transaction(self):
-        if self._session.is_active:
-            await self._session.close()
-
-    async def get_entities(self) -> list[declarative_base]:
-        
-        result = await self._session.execute(
-            select(self._entity)
-        )
+    @ensure_session
+    async def get_entities(self, session: AsyncSession = None) -> list:
+        result = await session.execute(select(self._entity))
         return result.scalars().all()
 
-    async def get_entitiy_by_id(self, entity_id: int) -> declarative_base:
-        
-        result = await self._session.execute(
+    @ensure_session
+    async def get_entitiy_by_id(self, entity_id: int, session: AsyncSession = None) -> declarative_base:
+        result = await session.execute(
             select(self._entity)
             .where(self._entity.id == entity_id)
         )
         return result.scalars().all()
 
-    async def insert(self, entities) -> list:
-        
-        self._session.add_all(entities)
-        await self._session.flush()
-        await self._session.commit()
+    @ensure_session
+    async def insert(self, entities, session: AsyncSession = None) -> list:
+        session.add_all(entities)
+        await session.flush()
+        await session.commit()
         return entities
 
-    async def update(self, transaction_entities):
-        
-        await self._session.execute(
+    @ensure_session
+    async def update(self, transaction_entities, session: AsyncSession = None):
+
+        await session.execute(
             merge(transaction_entities)
         )
-        await self._session.commit()
+        await session.commit()
 
-    async def delete(self, ids: list[int]):
-        
-        await self._session.execute(
+    @ensure_session
+    async def delete(self, ids: list[int], session: AsyncSession = None):
+
+        await session.execute(
             delete(self._entity).where(self._entity.id.in_(ids))
         )
-        await self._session.commit()
+        await session.commit()
