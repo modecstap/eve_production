@@ -12,15 +12,14 @@ class TransactionRepository(BaseRepository):
         self._entity = Transaction
 
     async def get_available_materials(self):
-        async with self.db.async_session() as session:
-            result = await session.execute(
-                select(
-                    Transaction.material_id,
-                    Material.name,
-                    func.sum(Transaction.remains).label("count"),
-                    func.coalesce(func.sum(Transaction.remains * Transaction.price) / func.nullif(func.sum(Transaction.remains), 0), 0)
-                )
-                .join(Material)
-                .group_by(Transaction.material_id, Material.name)
+        result = await self._session.execute(
+            select(
+                Transaction.material_id,
+                Material.name,
+                func.sum(Transaction.remains).label("count"),
+                func.coalesce(func.sum(Transaction.remains * Transaction.price) / func.nullif(func.sum(Transaction.remains), 0), 0)
             )
-            return result.all()
+            .join(Material)
+            .group_by(Transaction.material_id, Material.name)
+        )
+        return result.all()

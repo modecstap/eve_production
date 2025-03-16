@@ -13,6 +13,15 @@ class TransactionService(BaseService):
         self._available_material_mapper = AvailableMaterialRowMapper()
 
     async def get_available_materials(self) -> list[AvailableMaterialModel]:
+        try:
+            return await self.__try_get_available_materials()
+        except Exception as e:
+            await self._main_repository.rollback_transaction()
+        finally:
+            await self._main_repository.close_transaction()
+
+    async def __try_get_available_materials(self):
+        await self._main_repository.start_transaction()
         entities = await self._main_repository.get_available_materials()
         models = self._available_material_mapper.entities_to_models(entities)
         return models

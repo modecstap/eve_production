@@ -27,7 +27,7 @@ class Database(metaclass=Singleton):
 
         self.async_engine = create_async_engine(db_url)
 
-        self.async_session = sessionmaker(self.async_engine, expire_on_commit=False, class_=AsyncSession)
+        self.async_session_maker = sessionmaker(self.async_engine, expire_on_commit=False, class_=AsyncSession)
 
     async def create_all(self):
         # SQLAlchemy не создат таблицы в БД если не создать объекты.

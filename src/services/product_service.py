@@ -21,13 +21,31 @@ class ProductService(BaseService):
         self._main_mapper = ProductMapper()
         self._product_cost_mapper = ProductCostRowMapper()
 
-    async def get_available_products(self) -> list[AvailableProductModel]:
+    async def get_available_products(self) -> list[AvailableProductModel] | None:
+        try:
+            return await self.__try_get_available_products()
+        except Exception as e:
+            await self._main_repository.rollback_transaction()
+        finally:
+            await self._main_repository.close_transaction()
+
+    async def __try_get_available_products(self):
+        await self._main_repository.start_transaction()
         product_entities = await self._main_repository.get_products_without_order()
         products_id = [product.id for product in product_entities]
         product_cost_entities = await self._main_repository.get_products_costs(products_id)
         return self._product_cost_mapper.entities_to_models(product_cost_entities)
 
     async def create_products(self, products: list[ProductModel]):
+        try:
+            await self.__try_create_products(products)
+        except Exception as e:
+            await self._main_repository.rollback_transaction()
+        finally:
+            await self._main_repository.close_transaction()
+
+    async def __try_create_products(self, products):
+        await self._main_repository.start_transaction()
         if await self._materials_is_available(products):
             product_entities = self._main_mapper.models_to_entities(products)
             await self._main_repository.insert_with_used_transaction(product_entities)
@@ -81,12 +99,24 @@ class ProductService(BaseService):
         return merged_required_materials
 
     async def calculate_production_cost(self, product: ProductModel) -> ProductionCostModel:
+        try:
+            return await self.__try_calculate_production_cost(product)
+        except NotEnoughMaterialsException as e:
+            raise e
+        except Exception as e:
+            await self._main_repository.rollback_transaction()
+        finally:
+            await self._main_repository.close_transaction()
+
+    async def __try_calculate_production_cost(self, product):
+        await self._main_repository.start_transaction()
         if await self._materials_is_available([product]):
             materials_cost = {}
 
             required_materials = await self._get_product_required_materials(product)
             for material_id, required_count in required_materials.items():
-                materials_cost[material_id] = await self._main_repository.calculate_material_cost(material_id, required_count)
+                materials_cost[material_id] = await self._main_repository.calculate_material_cost(material_id,
+                                                                                                  required_count)
 
             production_cost = sum(materials_cost.values())
 
@@ -96,3 +126,4 @@ class ProductService(BaseService):
             )
         else:
             raise NotEnoughMaterialsException()
+

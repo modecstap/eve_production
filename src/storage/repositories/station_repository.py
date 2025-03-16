@@ -13,8 +13,7 @@ class StationRepository(BaseRepository):
         self._entity = Station
 
     async def get_station_material_efficiency(self, station_id: int) -> Decimal:
-        async with self.db.async_session() as session:
-            result = await session.execute(
-                select(Station.material_efficiency).where(Station.id == station_id)
-            )
-            return result.scalar_one_or_none()
+        result = await self._session.execute(
+            select(Station.material_efficiency).where(Station.id == station_id)
+        )
+        return result.scalar_one_or_none()

@@ -15,8 +15,8 @@ class BaseMapper(ABC):
     def models_to_entities(self, models: list[BaseModel]):
         return [self.model_to_entity(model) for model in models]
 
-    def entity_to_model(self, entity: declarative_base):
+    def entity_to_model(self, entity: declarative_base) -> BaseModel:
         return self._model_type(**entity.__dict__)
 
-    def entities_to_models(self, entities: list[declarative_base]):
+    def entities_to_models(self, entities: list[declarative_base]) -> list[BaseModel]:
         return [self.entity_to_model(entity) for entity in entities]

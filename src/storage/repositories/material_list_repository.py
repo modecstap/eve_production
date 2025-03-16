@@ -11,12 +11,11 @@ class MaterialListRepository(BaseRepository):
         self._entity = MaterialList
 
     async def get_materials_by_type_id(self, type_id: int) -> list[MaterialList]:
-        async with self.db.async_session() as session:
-            products = await session.execute(
-                select(
-                    MaterialList
-                ).where(
-                    MaterialList.type_id == type_id
-                )
+        products = await self._session.execute(
+            select(
+                MaterialList
+            ).where(
+                MaterialList.type_id == type_id
             )
-            return products.scalars().all()
+        )
+        return products.scalars().all()

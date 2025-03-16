@@ -12,11 +12,10 @@ class OrderRepository(BaseRepository):
         self._entity = Order
 
     async def update_statuses(self, statuses: list[StatusModel]):
-        async with self.db.async_session() as session:
-            for status in statuses:
-                await session.execute(
-                    update(Order)
-                    .where(Order.id == status.order_id)
-                    .values(status=status.status)
-                )
-            await session.commit()
+        for status in statuses:
+            await self._session.execute(
+                update(Order)
+                .where(Order.id == status.order_id)
+                .values(status=status.status)
+            )
+        await self._session.commit()
