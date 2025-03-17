@@ -1,4 +1,4 @@
-from sqlalchemy import Column, BigInteger, ForeignKey, Numeric, Sequence, text, TIMESTAMP
+from sqlalchemy import Column, BigInteger, ForeignKey, Numeric, Sequence, text, TIMESTAMP, Boolean
 from sqlalchemy.orm import relationship
 
 from src.storage.declarative_base import DeclarativeBase
@@ -24,6 +24,7 @@ class Transaction(Base):
     count = Column(BigInteger, nullable=False)
     price = Column(Numeric, nullable=False)
     remains = Column(BigInteger, nullable=False)
+    is_produced = Column(Boolean, nullable=False, default=False)
 
     material = relationship('TypeInfo', back_populates='transactions')
     used_transaction_list = relationship('UsedTransactionList', back_populates='transaction')
