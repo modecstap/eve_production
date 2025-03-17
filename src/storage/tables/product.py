@@ -15,9 +15,19 @@ class Product(Base):
         primary_key=True,
         server_default=text("nextval('product_id_seq')")
     )
-    type_id = Column(BigInteger, ForeignKey('type_info.id'), nullable=False)
-    order_id = Column(BigInteger, ForeignKey('order.id'))
-    station_id = Column(BigInteger, ForeignKey('station.id'))
+    type_id = Column(
+        BigInteger,
+        ForeignKey('type_info.id', onupdate="CASCADE", ondelete="CASCADE"),
+        nullable=False
+    )
+    order_id = Column(
+        BigInteger,
+        ForeignKey('order.id', onupdate="CASCADE", ondelete="CASCADE")
+    )
+    station_id = Column(
+        BigInteger,
+        ForeignKey('station.id', onupdate="CASCADE", ondelete="CASCADE")
+    )
     blueprint_efficiency = Column(Numeric)
     production_date = Column(Date, nullable=False)
 

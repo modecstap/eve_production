@@ -16,7 +16,11 @@ class Transaction(Base):
         server_default=text("nextval('transactions_id_seq')")
     )
     release_date = Column(TIMESTAMP, nullable=False)
-    material_id = Column(BigInteger, ForeignKey('material.id'), nullable=False)
+    material_id = Column(
+        BigInteger,
+        ForeignKey('material.id', onupdate="CASCADE", ondelete="CASCADE"),
+        nullable=False
+    )
     count = Column(BigInteger, nullable=False)
     price = Column(Numeric, nullable=False)
     remains = Column(BigInteger, nullable=False)

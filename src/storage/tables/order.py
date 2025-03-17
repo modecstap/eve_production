@@ -1,8 +1,8 @@
 from sqlalchemy import Column, BigInteger, Date, Numeric, text, Sequence, Enum
 from sqlalchemy.orm import relationship
 
-from src.storage.tables.enums import Status
 from src.storage.declarative_base import DeclarativeBase
+from src.storage.tables.enums import Status
 
 Base = DeclarativeBase().base
 

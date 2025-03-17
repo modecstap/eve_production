@@ -9,8 +9,17 @@ Base = DeclarativeBase().base
 class MaterialList(Base):
     __tablename__ = 'material_list'
 
-    material_id = Column(BigInteger, ForeignKey('material.id'), primary_key=True)
-    type_id = Column(BigInteger, ForeignKey('type_info.id'), primary_key=True)
+    material_id = Column(
+        BigInteger,
+        ForeignKey('material.id', onupdate="CASCADE", ondelete="CASCADE"),
+        primary_key=True
+    )
+
+    type_id = Column(
+        BigInteger,
+        ForeignKey('type_info.id', onupdate="CASCADE", ondelete="CASCADE"),
+        primary_key=True
+    )
     need_count = Column(BigInteger)
 
     material = relationship('Material', back_populates='material_list')
