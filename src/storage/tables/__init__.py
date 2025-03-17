@@ -1,4 +1,3 @@
-from src.storage.tables.material import Material
 from src.storage.tables.material_list import MaterialList
 from src.storage.tables.order import Order
 from src.storage.tables.product import Product

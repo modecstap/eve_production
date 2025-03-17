@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.storage.repositories.base import BaseRepository
 from src.storage.repositories.wrappers import ensure_session
-from src.storage.tables import Transaction, Material
+from src.storage.tables import Transaction, TypeInfo
 
 
 class TransactionRepository(BaseRepository):
@@ -18,11 +18,11 @@ class TransactionRepository(BaseRepository):
         result = await session.execute(
             select(
                 Transaction.material_id,
-                Material.name,
+                TypeInfo.name,
                 func.sum(Transaction.remains).label("count"),
                 func.coalesce(func.sum(Transaction.remains * Transaction.price) / func.nullif(func.sum(Transaction.remains), 0), 0).label("mean_price"),
             )
-            .join(Material)
-            .group_by(Transaction.material_id, Material.name)
+            .join(TypeInfo)
+            .group_by(Transaction.material_id, TypeInfo.name)
         )
         return result.all()

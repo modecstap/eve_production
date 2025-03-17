@@ -11,7 +11,7 @@ class MaterialList(Base):
 
     material_id = Column(
         BigInteger,
-        ForeignKey('material.id', onupdate="CASCADE", ondelete="CASCADE"),
+        ForeignKey('type_info.id', onupdate="CASCADE", ondelete="CASCADE"),
         primary_key=True
     )
 
@@ -22,5 +22,13 @@ class MaterialList(Base):
     )
     need_count = Column(BigInteger)
 
-    material = relationship('Material', back_populates='material_list')
-    type_info = relationship('TypeInfo', back_populates='material_list')
+    material = relationship(
+        'TypeInfo',
+        foreign_keys=[material_id],
+        back_populates='material_list_material'
+    )
+    type_info = relationship(
+        'TypeInfo',
+        foreign_keys=[type_id],
+        back_populates='material_list_type'
+    )

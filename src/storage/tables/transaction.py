@@ -18,12 +18,12 @@ class Transaction(Base):
     release_date = Column(TIMESTAMP, nullable=False)
     material_id = Column(
         BigInteger,
-        ForeignKey('material.id', onupdate="CASCADE", ondelete="CASCADE"),
+        ForeignKey('type_info.id', onupdate="CASCADE", ondelete="CASCADE"),
         nullable=False
     )
     count = Column(BigInteger, nullable=False)
     price = Column(Numeric, nullable=False)
     remains = Column(BigInteger, nullable=False)
 
-    material = relationship('Material')
+    material = relationship('TypeInfo', back_populates='transactions')
     used_transaction_list = relationship('UsedTransactionList', back_populates='transaction')

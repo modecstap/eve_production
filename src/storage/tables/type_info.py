@@ -13,5 +13,15 @@ class TypeInfo(Base):
     name = Column(String(500), nullable=False)
     is_produced = Column(Boolean, nullable=False, default=False)
 
+    transactions = relationship('Transaction', back_populates='material')
     products = relationship('Product', back_populates='type_info')
-    material_list = relationship('MaterialList', back_populates='type_info')
+    material_list_material = relationship(
+        'MaterialList',
+        back_populates='material',
+        foreign_keys='MaterialList.material_id'
+    )
+    material_list_type = relationship(
+        'MaterialList',
+        back_populates='type_info',
+        foreign_keys='MaterialList.type_id'
+    )

@@ -11,7 +11,7 @@ const TransactionForm = () => {
     // Загружаем материалы при монтировании компонента
     const fetchMaterials = async () => {
       try {
-        const response = await fetch(`${serverIP}/api/material/get_materials`);
+        const response = await fetch(`${serverIP}/api/type_info/get_types`);
         const data = await response.json();
         setMaterials(data);
       } catch (err) {

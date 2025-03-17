@@ -1,4 +1,3 @@
-from src.server.handlers.material_handler import MaterialHandler
 from src.server.handlers.order_handler import OrderHandler
 from src.server.handlers.product_handler import ProductHandler
 from src.server.handlers.station_handler import StationHandler

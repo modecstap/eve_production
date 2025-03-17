@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from src.config import Settings
 from src.server.handlers import OrderHandler, TestHandler, TransactionHandler, ProductHandler, TypeHandler, \
-    MaterialHandler, StationHandler
+    StationHandler
 
 
 class FastAPIServer:
@@ -38,7 +38,6 @@ class FastAPIServer:
         self.order_handler = OrderHandler()
         self.product_handler = ProductHandler()
         self.type_handler = TypeHandler()
-        self.material_handler = MaterialHandler()
         self.station_handler = StationHandler()
 
     async def start(self):
@@ -59,7 +58,6 @@ class FastAPIServer:
         self._setup_order_routs()
         self._setup_product_routs()
         self._setup_type_routs()
-        self._setup_material_routs()
         self._setup_station_routs()
 
     def _setup_transaction_routs(self):
@@ -81,9 +79,6 @@ class FastAPIServer:
 
     def _setup_type_routs(self):
         self.app.get("/api/type_info/get_types")(self.type_handler.get_types)
-
-    def _setup_material_routs(self):
-        self.app.get("/api/material/get_materials")(self.material_handler.get_materials)
 
     def _setup_station_routs(self):
         self.app.get("/api/station/get_stations")(self.station_handler.get_stations)
