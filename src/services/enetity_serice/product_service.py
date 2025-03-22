@@ -1,15 +1,15 @@
+from collections import defaultdict
 from decimal import Decimal, ROUND_UP
 
 from src.server.handlers.models import ProductModel, AvailableProductModel, ProductionCostModel
-from src.services import BaseService
-from src.services.mappers import ProductMapper, ProductCostRowMapper
+from src.services.enetity_serice import BaseEntityService
 from src.services.exceptions import NotEnoughMaterialsException
+from src.services.mappers.entity_mappers  import ProductMapper
+from src.services.mappers.row_mappers import ProductCostRowMapper
 from src.storage.repositories import ProductRepository, MaterialListRepository, TransactionRepository, StationRepository
 
-from collections import defaultdict
 
-
-class ProductService(BaseService):
+class ProductService(BaseEntityService):
 
     def __init__(self):
         super().__init__()
@@ -34,11 +34,11 @@ class ProductService(BaseService):
         await self.__try_create_products(products)
 
     async def __try_create_products(self, products):
-        if await self._materials_is_available(products):
-            product_entities = self._main_mapper.models_to_entities(products)
-            await self._main_repository.insert_with_used_transaction(product_entities)
-        else:
+        if not await self._materials_is_available(products):
             raise NotEnoughMaterialsException()
+
+        product_entities = self._main_mapper.models_to_entities(products)
+        await self._main_repository.insert_with_used_transaction(product_entities)
 
     async def _materials_is_available(self, products: list[ProductModel]):
         required_materials = await self._get_products_required_materials(products)
@@ -109,4 +109,3 @@ class ProductService(BaseService):
             )
         else:
             raise NotEnoughMaterialsException()
-

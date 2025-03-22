@@ -1,7 +1,6 @@
 from abc import ABC
 
 from pydantic import BaseModel
-from sqlalchemy.orm import declarative_base
 from sqlalchemy import Row
 
 

@@ -1,4 +1,4 @@
-from src.services import StationService
+from src.services.enetity_serice import StationService
 
 
 class StationHandler:

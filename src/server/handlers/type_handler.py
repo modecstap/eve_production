@@ -1,4 +1,4 @@
-from src.services import TypeService
+from src.services.enetity_serice import TypeService
 
 
 class TypeHandler:

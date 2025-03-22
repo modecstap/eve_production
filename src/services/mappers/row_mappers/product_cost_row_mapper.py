@@ -1,7 +1,7 @@
 from sqlalchemy import Row
 
 from src.server.handlers.models import AvailableProductModel
-from src.services.mappers import BaseRowMapper
+from src.services.mappers.row_mappers import BaseRowMapper
 
 
 class ProductCostRowMapper(BaseRowMapper):

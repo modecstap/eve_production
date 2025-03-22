@@ -1,10 +1,11 @@
 from src.server.handlers.models import AvailableMaterialModel
-from src.services import BaseService
-from src.services.mappers import TransactionMapper, AvailableMaterialRowMapper
+from src.services.enetity_serice import BaseEntityService
+from src.services.mappers.entity_mappers  import TransactionMapper
+from src.services.mappers.row_mappers import AvailableMaterialRowMapper
 from src.storage.repositories import TransactionRepository
 
 
-class TransactionService(BaseService):
+class TransactionService(BaseEntityService):
 
     def __init__(self):
         super().__init__()

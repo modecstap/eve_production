@@ -1,9 +1,9 @@
-from src.services import BaseService
-from src.services.mappers import TypeMapper
+from src.services.enetity_serice import BaseEntityService
+from src.services.mappers.entity_mappers  import TypeMapper
 from src.storage.repositories import TypeInfoRepository
 
 
-class TypeService(BaseService):
+class TypeService(BaseEntityService):
 
     def __init__(self):
         super().__init__()

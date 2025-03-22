@@ -1,11 +1,11 @@
 from src.server.handlers.models import StatusModel, InsertOrderModel
-from src.services import BaseService
+from src.services.enetity_serice import BaseEntityService
 from src.services.exceptions import ProductCountException
-from src.services.mappers import OrderMapper
+from src.services.mappers.entity_mappers  import OrderMapper
 from src.storage.repositories import ProductRepository, OrderRepository
 
 
-class OrderService(BaseService):
+class OrderService(BaseEntityService):
 
     def __init__(self):
         super().__init__()

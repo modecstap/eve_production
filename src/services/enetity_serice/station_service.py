@@ -1,9 +1,9 @@
-from src.services import BaseService
-from src.services.mappers import StationMapper
+from src.services.enetity_serice import BaseEntityService
+from src.services.mappers.entity_mappers  import StationMapper
 from src.storage.repositories import StationRepository
 
 
-class StationService(BaseService):
+class StationService(BaseEntityService):
 
     def __init__(self):
         super().__init__()

@@ -1,5 +1,5 @@
 from src.server.handlers.models import InsertOrderModel, StatusModel
-from src.services import OrderService
+from src.services.enetity_serice import OrderService
 
 
 class OrderHandler:
