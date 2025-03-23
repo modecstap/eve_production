@@ -1,6 +1,6 @@
 from abc import ABC
 
-from src.services.mappers.entity_mappers import BaseMapper
+from src.services.mappers import BaseMapper
 
 
 class BaseService(ABC):

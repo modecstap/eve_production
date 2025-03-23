@@ -15,70 +15,66 @@ class ProductRepository(BaseRepository):
         self._entity = Product
 
     @ensure_session
-    async def insert_with_used_transaction(self, products: list[Product], session: AsyncSession = None):
-        session.add_all(products)
-        await session.flush()
-        for product in products:
-            create_used_transaction = text(f"""
-            DO $$ 
-            DECLARE
-                r_material_id INTEGER;
-                r_material_need_count INTEGER;
-            
-                r_transaction_id INTEGER;
-                r_transaction_remains INTEGER;
-            
-                r_used_count INTEGER;
-                r_remaining_need INTEGER;
-                r_remaining_remains INTEGER;
-                input_product_id INTEGER;
-                blueprint_efficiency NUMERIC;
-                material_efficiency NUMERIC;
-            BEGIN
-                input_product_id := {product.id}; 
-            
-                SELECT p.blueprint_efficiency, s.material_efficiency 
-                INTO blueprint_efficiency, material_efficiency
-                FROM product p 
-                JOIN station s ON p.station_id = s.id
-                WHERE p.id = input_product_id;
-            
-                FOR r_material_id, r_material_need_count IN 
-                    SELECT material_id, need_count FROM material_list 
-                    WHERE need_count > 0 AND type_id = (SELECT type_id FROM product WHERE id = input_product_id)
+    async def insert_with_used_transaction(self, product: Product, count, session: AsyncSession = None):
+        create_used_transaction = text(f"""
+        DO $$ 
+        DECLARE
+            r_material_id INTEGER;
+            r_material_need_count INTEGER;
+        
+            r_transaction_id INTEGER;
+            r_transaction_remains INTEGER;
+        
+            r_used_count INTEGER;
+            r_remaining_need INTEGER;
+            r_remaining_remains INTEGER;
+            input_product_id INTEGER;
+            blueprint_efficiency NUMERIC;
+            material_efficiency NUMERIC;
+        BEGIN
+            input_product_id := {product.id}; 
+        
+            SELECT p.blueprint_efficiency, s.material_efficiency 
+            INTO blueprint_efficiency, material_efficiency
+            FROM product p 
+            JOIN station s ON p.station_id = s.id
+            WHERE p.id = input_product_id;
+        
+            FOR r_material_id, r_material_need_count IN 
+                SELECT material_id, need_count FROM material_list 
+                WHERE need_count > 0 AND type_id = (SELECT type_id FROM product WHERE id = input_product_id)
+            LOOP
+                r_remaining_need := CEIL(r_material_need_count * blueprint_efficiency * material_efficiency*{count});
+        
+                FOR r_transaction_id, r_transaction_remains IN 
+                    SELECT id, remains FROM transactions
+                    WHERE material_id = r_material_id AND remains > 0
+                    ORDER BY release_date
                 LOOP
-                    r_remaining_need := ROUND(r_material_need_count * blueprint_efficiency * material_efficiency);
-            
-                    FOR r_transaction_id, r_transaction_remains IN 
-                        SELECT id, remains FROM transactions
-                        WHERE material_id = r_material_id AND remains > 0
-                        ORDER BY release_date
-                    LOOP
-                        IF r_remaining_need > 0 THEN
-                            IF r_transaction_remains >= r_remaining_need THEN
-                                r_used_count := r_remaining_need;
-                                r_remaining_remains := r_transaction_remains - r_used_count;
-                                r_remaining_need := 0;
-                            ELSE
-                                r_used_count := r_transaction_remains;
-                                r_remaining_remains := 0;
-                                r_remaining_need := r_remaining_need - r_used_count;
-                            END IF;
-            
-                            INSERT INTO used_transaction_list (product_id, transaction_id, used_count)
-                            VALUES (input_product_id, r_transaction_id, r_used_count)
-                            ON CONFLICT (product_id, transaction_id) DO NOTHING;
-            
-                            UPDATE transactions
-                            SET remains = r_remaining_remains
-                            WHERE id = r_transaction_id;
+                    IF r_remaining_need > 0 THEN
+                        IF r_transaction_remains >= r_remaining_need THEN
+                            r_used_count := r_remaining_need;
+                            r_remaining_remains := r_transaction_remains - r_used_count;
+                            r_remaining_need := 0;
+                        ELSE
+                            r_used_count := r_transaction_remains;
+                            r_remaining_remains := 0;
+                            r_remaining_need := r_remaining_need - r_used_count;
                         END IF;
-                    END LOOP;
+        
+                        INSERT INTO used_transaction_list (product_id, transaction_id, used_count)
+                        VALUES (input_product_id, r_transaction_id, r_used_count)
+                        ON CONFLICT (product_id, transaction_id) DO NOTHING;
+        
+                        UPDATE transactions
+                        SET remains = r_remaining_remains
+                        WHERE id = r_transaction_id;
+                    END IF;
                 END LOOP;
-            END $$;
-            """)
-            await session.execute(create_used_transaction)
-        await session.commit()
+            END LOOP;
+        END $$;
+        """)
+        await session.execute(create_used_transaction)
 
     @ensure_session
     async def calculate_material_cost(

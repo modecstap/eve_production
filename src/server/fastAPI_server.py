@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from src.config import Settings
 from src.server.handlers import OrderHandler, TestHandler, TransactionHandler, ProductHandler, TypeHandler, \
-    StationHandler
+    StationHandler, ProductionHandler
 
 
 class FastAPIServer:
@@ -26,8 +26,7 @@ class FastAPIServer:
 
         self.app.add_middleware(
             CORSMiddleware,
-            allow_origins=origins,
-            allow_credentials=True,
+            allow_origins=["*"],
             allow_methods=["*"],
             allow_headers=["*"],
         )
@@ -39,6 +38,8 @@ class FastAPIServer:
         self.product_handler = ProductHandler()
         self.type_handler = TypeHandler()
         self.station_handler = StationHandler()
+        self.production_handler = ProductionHandler()
+
 
     async def start(self):
         config = uvicorn.Config(self.app, host=self._config.host, port=self._config.port, loop="asyncio")
@@ -59,6 +60,7 @@ class FastAPIServer:
         self._setup_product_routs()
         self._setup_type_routs()
         self._setup_station_routs()
+        self.setup_production_routs()
 
     def _setup_transaction_routs(self):
         self.app.get("/api/transaction/get_transactions")(self.transaction_handler.get_transactions)
@@ -74,11 +76,13 @@ class FastAPIServer:
     def _setup_product_routs(self):
         self.app.get("/api/product/get_products")(self.product_handler.get_products)
         self.app.get("/api/product/get_available_products")(self.product_handler.get_available_products)
-        self.app.post("/api/product/create_products")(self.product_handler.create_products)
-        self.app.post("/api/product/get_production_cost")(self.product_handler.calculate_production_cost)
 
     def _setup_type_routs(self):
         self.app.get("/api/type_info/get_types")(self.type_handler.get_types)
 
     def _setup_station_routs(self):
         self.app.get("/api/station/get_stations")(self.station_handler.get_stations)
+
+    def setup_production_routs(self):
+        self.app.post("/api/product/create_products")(self.production_handler.create_products)
+        self.app.post("/api/product/get_production_cost")(self.production_handler.calculate_production_cost)

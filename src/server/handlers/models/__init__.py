@@ -8,3 +8,4 @@ from src.server.handlers.models.status_model import StatusModel
 from src.server.handlers.models.transaction_model import TransactionModel
 from src.server.handlers.models.type_info_model import TypeInfoModel
 from src.server.handlers.models.prodcuction_cost_model import ProductionCostModel
+from src.server.handlers.models.production_model import ProductionModel

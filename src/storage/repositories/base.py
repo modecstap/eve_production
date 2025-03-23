@@ -27,7 +27,7 @@ class BaseRepository(ABC):
             select(self._entity)
             .where(self._entity.id == entity_id)
         )
-        return result.scalars().all()
+        return result.scalar_one_or_none()
 
     @ensure_session
     async def insert(self, entities, session: AsyncSession = None) -> list:

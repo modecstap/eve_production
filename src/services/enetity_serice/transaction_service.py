@@ -1,6 +1,6 @@
 from src.server.handlers.models import AvailableMaterialModel
 from src.services.enetity_serice import BaseEntityService
-from src.services.mappers.entity_mappers  import TransactionMapper
+from src.services.mappers.entity_mappers  import TransactionEntityMapper
 from src.services.mappers.row_mappers import AvailableMaterialRowMapper
 from src.storage.repositories import TransactionRepository
 
@@ -10,7 +10,7 @@ class TransactionService(BaseEntityService):
     def __init__(self):
         super().__init__()
         self._main_repository = TransactionRepository()
-        self._main_mapper = TransactionMapper()
+        self._main_mapper = TransactionEntityMapper()
         self._available_material_mapper = AvailableMaterialRowMapper()
 
     async def get_available_materials(self) -> list[AvailableMaterialModel]:

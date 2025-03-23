@@ -2,7 +2,7 @@ from src.services.base_service import BaseService
 
 from pydantic import BaseModel
 
-from src.services.mappers.entity_mappers  import BaseMapper
+from src.services.mappers.entity_mappers  import BaseEntityMapper
 from src.storage.repositories import BaseRepository
 
 
@@ -10,7 +10,7 @@ class BaseEntityService(BaseService):
 
     def __init__(self):
         self._main_repository = BaseRepository()
-        self._main_mapper = BaseMapper()
+        self._main_mapper = BaseEntityMapper()
 
     async def get_models(self) -> list[BaseModel] | None:
         return await self.__try_get_models()

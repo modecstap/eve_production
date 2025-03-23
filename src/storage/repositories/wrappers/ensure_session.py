@@ -5,17 +5,14 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 def ensure_session(method):
     @wraps(method)
-    async def wrapper(self, session: AsyncSession = None, *args, **kwargs):
-        function_owner_session = session is None  # Проверяем, создаёт ли метод свою сессию
-
-        if function_owner_session:
-            async with self.db.async_session_maker() as session:  # Создаём новую сессию
-
+    async def wrapper(self, *args, session: AsyncSession = None, **kwargs):
+        if session is None:  # Если сессия не передана, создаём новую
+            async with self.db.async_session_maker() as session:
                 try:
-                    return await method(self, session, *args, **kwargs)  # Передаём сессию в метод
+                    return await method(self, *args, session=session, **kwargs)
                 finally:
-                    if function_owner_session:
-                        await session.close()  # Закрываем сессию, если создавали её здесь
+                    await session.close()
+        else:
+            return await method(self, *args, session=session, **kwargs)  # Используем переданную сессию
 
     return wrapper
-

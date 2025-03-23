@@ -30,19 +30,20 @@ class Database(metaclass=Singleton):
         self.async_session_maker = sessionmaker(self.async_engine, expire_on_commit=False, class_=AsyncSession)
 
     async def create_all(self):
-        # SQLAlchemy не создат таблицы в БД если не создать объекты.
-        Order()
-        Product()
-        MaterialList()
-        Transaction()
-        UsedTransactionList()
-        TypeInfo()
-        Station()
         while not self._is_connection:
             await self._try_create_session()
 
     async def _try_create_session(self):
         try:
+            # SQLAlchemy не создат таблицы в БД если не создать объекты.
+            Order()
+            Product()
+            MaterialList()
+            Transaction()
+            UsedTransactionList()
+            TypeInfo()
+            Station()
+
             async with self.async_engine.begin() as conn:
                 await conn.run_sync(DeclarativeBase().base.metadata.create_all)
                 for function in pgsql_functions.values():

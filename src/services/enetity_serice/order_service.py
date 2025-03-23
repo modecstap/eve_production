@@ -1,7 +1,7 @@
 from src.server.handlers.models import StatusModel, InsertOrderModel
 from src.services.enetity_serice import BaseEntityService
 from src.services.exceptions import ProductCountException
-from src.services.mappers.entity_mappers  import OrderMapper
+from src.services.mappers.entity_mappers  import OrderEntityMapper
 from src.storage.repositories import ProductRepository, OrderRepository
 
 
@@ -11,7 +11,7 @@ class OrderService(BaseEntityService):
         super().__init__()
         self._main_repository = OrderRepository()
         self._product_repository = ProductRepository()
-        self._main_mapper = OrderMapper()
+        self._main_mapper = OrderEntityMapper()
 
     async def add_model(self, insert_order_model: InsertOrderModel):
         await self.__try_add_model(insert_order_model)

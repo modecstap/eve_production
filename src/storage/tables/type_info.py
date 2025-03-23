@@ -14,7 +14,6 @@ class TypeInfo(Base):
     is_produced = Column(Boolean, nullable=False, default=False)
 
     transactions = relationship('Transaction', back_populates='material')
-    products = relationship('Product', back_populates='type_info')
     material_list_material = relationship(
         'MaterialList',
         back_populates='material',

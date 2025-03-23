@@ -1,10 +1,10 @@
-from abc import ABC
-
 from pydantic import BaseModel
 from sqlalchemy.orm import declarative_base
 
+from src.services.mappers import BaseMapper
 
-class BaseMapper(ABC):
+
+class BaseEntityMapper(BaseMapper):
     def __init__(self):
         self._model_type: BaseModel = None
         self._entity_type = None

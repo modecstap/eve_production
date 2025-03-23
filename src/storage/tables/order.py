@@ -1,4 +1,4 @@
-from sqlalchemy import Column, BigInteger, Date, Numeric, text, Sequence, Enum
+from sqlalchemy import Column, BigInteger, Date, Numeric, text, Sequence, Enum, ForeignKey
 from sqlalchemy.orm import relationship
 
 from src.storage.declarative_base import DeclarativeBase
@@ -9,6 +9,8 @@ Base = DeclarativeBase().base
 
 class Order(Base):
     __tablename__ = 'order'
+
+    # ПОЛЯ ТАБЛИЦЫ
 
     id = Column(
         BigInteger,
@@ -21,12 +23,18 @@ class Order(Base):
     tax_percent = Column(Numeric, nullable=False)
     updating_cost = Column(Numeric)
     release_date = Column(Date, nullable=False)
+    transaction_id = Column(
+        BigInteger,
+        ForeignKey('transactions.id', onupdate="CASCADE", ondelete="CASCADE"),
+        nullable=False
+    )
     status = Column(
-        Enum(
-            Status,
-            name="StatusNames"
-        ),
+        Enum(Status, name="StatusNames"),
         nullable=False
     )
 
-    products = relationship('Product', back_populates='order')
+    # ИСХОДЯЩИЕ ОТНОШЕНИЯ
+
+    transaction = relationship('Transaction', back_populates='orders')
+
+    # ВХОДЯЩИЕ ОТНОШЕНИЯ
