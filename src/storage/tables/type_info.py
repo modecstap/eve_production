@@ -9,9 +9,15 @@ Base = DeclarativeBase().base
 class TypeInfo(Base):
     __tablename__ = 'type_info'
 
+    # ПОЛЯ ТАБЛИЦЫ
+
     id = Column(BigInteger, primary_key=True)
     name = Column(String(500), nullable=False)
     is_produced = Column(Boolean, nullable=False, default=False)
+
+    # ИСХОДЯЩИЕ ОТНОШЕНИЯ
+
+    # ВХОДЯЩИЕ ОТНОШЕНИЯ
 
     transactions = relationship('Transaction', back_populates='material')
     material_list_material = relationship(

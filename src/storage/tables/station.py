@@ -9,6 +9,8 @@ Base = DeclarativeBase().base
 class Station(Base):
     __tablename__ = 'station'
 
+    # ПОЛЯ ТАБЛИЦЫ
+
     id = Column(
         BigInteger,
         Sequence('station_id_seq', start=1, increment=1),
@@ -19,5 +21,9 @@ class Station(Base):
     material_efficiency = Column(Numeric)
     tax_percent = Column(Numeric)
     security_status = Column(Numeric)
+
+    # ИСХОДЯЩИЕ ОТНОШЕНИЯ
+
+    # ВХОДЯЩИЕ ОТНОШЕНИЯ
 
     product = relationship('Product', back_populates='station')

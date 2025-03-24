@@ -9,6 +9,8 @@ Base = DeclarativeBase().base
 class MaterialList(Base):
     __tablename__ = 'material_list'
 
+    # ПОЛЯ ТАБЛИЦЫ
+
     material_id = Column(
         BigInteger,
         ForeignKey('type_info.id', onupdate="CASCADE", ondelete="CASCADE"),
@@ -21,6 +23,10 @@ class MaterialList(Base):
         primary_key=True
     )
     need_count = Column(BigInteger)
+
+    # ИСХОДЯЩИЕ ОТНОШЕНИЯ
+
+    # ИСХОДЯЩИЕ ОТНОШЕНИЯ
 
     material = relationship(
         'TypeInfo',
