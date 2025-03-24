@@ -14,15 +14,33 @@ class TransactionRepository(BaseRepository):
         self._entity = Transaction
 
     @ensure_session
-    async def get_available_materials(self, session: AsyncSession = None):
-        result = await session.execute(
+    async def get_transactions_by_type_id(self, type_id: list[int], session: AsyncSession = None) -> list[Transaction]:
+        query = (
+            select(Transaction)
+            .where(Transaction.material_id.in_(type_id))
+        )
+
+        result = await session.execute(query)
+
+        return result.scalars().all()
+
+    @ensure_session
+    async def get_available_materials(self, type_id: list[int] = None, session: AsyncSession = None):
+        query = (
             select(
                 Transaction.material_id,
                 TypeInfo.name,
                 func.sum(Transaction.remains).label("count"),
-                func.coalesce(func.sum(Transaction.remains * Transaction.price) / func.nullif(func.sum(Transaction.remains), 0), 0).label("mean_price"),
+                func.coalesce(
+                    func.sum(Transaction.remains * Transaction.price) / func.nullif(func.sum(Transaction.remains), 0), 0
+                ).label("mean_price"),
             )
             .join(TypeInfo)
             .group_by(Transaction.material_id, TypeInfo.name)
         )
-        return result.all()
+
+        if type_id:
+            query = query.where(Transaction.material_id.in_(type_id))
+
+        result = await session.execute(query)
+        return result.scalars().all()

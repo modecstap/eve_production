@@ -1,5 +1,5 @@
 from src.services.mappers.entity_mappers.base_entity_mapper import BaseEntityMapper
-from src.services.mappers.entity_mappers.order_mapper import OrderEntityMapper
+from src.services.mappers.entity_mappers.order_mapper import InsertOrderEntityMapper
 from src.services.mappers.entity_mappers.product_mapper import ProductEntityMapper
 from src.services.mappers.entity_mappers.station_mapper import StationEntityMapper
 from src.services.mappers.entity_mappers.transaction_mapper import TransactionEntityMapper
