@@ -38,10 +38,8 @@ class BaseRepository(ABC):
 
     @ensure_session
     async def update(self, transaction_entities, session: AsyncSession = None):
-
-        await session.execute(
-            merge(transaction_entities)
-        )
+        merged_entity = await session.merge(transaction_entities)
+        session.add(merged_entity)
         await session.commit()
 
     @ensure_session
