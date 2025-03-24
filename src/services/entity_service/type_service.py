@@ -1,4 +1,4 @@
-from src.services.enetity_serice import BaseEntityService
+from src.services.entity_service import BaseEntityService
 from src.services.mappers.entity_mappers  import TypeEntityMapper
 from src.storage.repositories import TypeInfoRepository
 

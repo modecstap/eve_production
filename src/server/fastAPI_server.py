@@ -72,6 +72,7 @@ class FastAPIServer:
         self.app.get("/api/order/get_orders")(self.order_handler.get_orders)
         self.app.post("/api/order/add_order")(self.order_handler.add_order)
         self.app.post("/api/order/change_order_status")(self.order_handler.change_order_status)
+        self.app.post("/api/order/update_sell_count")(self.order_handler.update_sell_count)
 
     def _setup_product_routs(self):
         self.app.get("/api/product/get_products")(self.product_handler.get_products)

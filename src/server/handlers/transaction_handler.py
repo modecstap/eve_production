@@ -1,5 +1,5 @@
 from src.server.handlers.models import TransactionModel
-from src.services.enetity_serice import TransactionService
+from src.services.entity_service import TransactionService
 
 
 class TransactionHandler:

@@ -1,5 +1,5 @@
 from src.server.handlers.models import AvailableMaterialModel
-from src.services.enetity_serice import BaseEntityService
+from src.services.entity_service import BaseEntityService
 from src.services.mappers.entity_mappers  import TransactionEntityMapper
 from src.services.mappers.row_mappers import AvailableMaterialRowMapper
 from src.storage.repositories import TransactionRepository

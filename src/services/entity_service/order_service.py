@@ -1,7 +1,7 @@
-from src.server.handlers.models import StatusModel, InsertOrderModel
-from src.services.enetity_serice import BaseEntityService
+from src.server.handlers.models import StatusModel, InsertOrderModel, SellItemModel
+from src.services.entity_service import BaseEntityService
 from src.services.exceptions import NotEnoughMaterialsException
-from src.services.mappers.entity_mappers  import InsertOrderEntityMapper
+from src.services.mappers.entity_mappers import InsertOrderEntityMapper, OrderEntityMapper
 from src.storage.repositories import OrderRepository, TransactionRepository
 from src.storage.tables import Transaction
 
@@ -11,8 +11,9 @@ class OrderService(BaseEntityService):
     def __init__(self):
         super().__init__()
         self._main_repository = OrderRepository()
+        self._main_mapper = OrderEntityMapper()
         self._transaction_repository = TransactionRepository()
-        self._main_mapper = InsertOrderEntityMapper()
+        self._insert_order_mapper = InsertOrderEntityMapper()
 
     async def add_model(self, insert_order_model: InsertOrderModel):
         session = self._main_repository.create_session()
@@ -24,9 +25,8 @@ class OrderService(BaseEntityService):
         finally:
             await session.close()
 
-
     async def __try_add_model(self, insert_order_model: InsertOrderModel, session):
-        order_entity = self._main_mapper.model_to_entity(insert_order_model)
+        order_entity = self._insert_order_mapper.model_to_entity(insert_order_model)
         await self.__prepare_transaction(insert_order_model, order_entity, session)
         await self._main_repository.insert([order_entity], session=session)
         await session.commit()
@@ -76,3 +76,17 @@ class OrderService(BaseEntityService):
 
     async def __try_update_statuses(self, statuses):
         await self._main_repository.update_statuses(statuses)
+
+    async def update_sell_count(self, sell_count_model: SellItemModel):
+        session = self._main_repository.create_session()
+
+        order = await self._main_repository.get_entitiy_by_id(sell_count_model.order_id, session=session)
+
+        if order.remains < sell_count_model.sell_count:
+            raise NotEnoughMaterialsException
+
+        order.remains -= sell_count_model.sell_count
+        order.income += order.price * sell_count_model.sell_count
+
+        await self._main_repository.update(order)
+

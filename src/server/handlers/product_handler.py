@@ -1,5 +1,5 @@
 from src.server.handlers.models import ProductModel, ProductionCostModel
-from src.services.enetity_serice import ProductService
+from src.services.entity_service import ProductService
 
 
 class ProductHandler:
