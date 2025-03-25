@@ -1,4 +1,6 @@
-from src.server.handlers.models import StatusModel, InsertOrderModel, SellItemModel
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from src.server.handlers.models import StatusModel, InsertOrderModel, SellItemModel, ChangePriceModel
 from src.services.entity_service import BaseEntityService
 from src.services.exceptions import NotEnoughMaterialsException
 from src.services.mappers.entity_mappers import InsertOrderEntityMapper, OrderEntityMapper
@@ -90,3 +92,21 @@ class OrderService(BaseEntityService):
 
         await self._main_repository.update(order)
 
+    async def update_price(self, change_price_model: ChangePriceModel):
+        session = self._main_repository.create_session()
+        try:
+            await self.__try_update_price(change_price_model, session)
+        except Exception as e:
+            await session.rollback()
+            raise e
+        finally:
+            await session.close()
+
+    async def __try_update_price(self, change_price_model: ChangePriceModel, session: AsyncSession):
+        order = await self._main_repository.get_entitiy_by_id(change_price_model.order_id, session=session)
+
+        order.price = change_price_model.new_price
+        order.broker_cost += change_price_model.broker_cost
+
+        await self._main_repository.update([order], session=session)
+        await session.commit()

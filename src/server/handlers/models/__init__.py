@@ -11,3 +11,4 @@ from src.server.handlers.models.prodcuction_cost_model import ProductionCostMode
 from src.server.handlers.models.production_model import ProductionModel
 from src.server.handlers.models.sell_item_model import SellItemModel
 from src.server.handlers.models.order_model import OrderModel
+from src.server.handlers.models.change_price_model import ChangePriceModel
