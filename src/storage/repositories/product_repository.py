@@ -96,7 +96,7 @@ class ProductRepository(BaseRepository):
             material_cost = result.scalar()
             return Decimal(material_cost) if material_cost is not None else Decimal('0.00')
 
-
+    @ensure_session
     async def get_products_without_order(self, session: AsyncSession = None) -> list[Product]:
         
             products = await session.execute(

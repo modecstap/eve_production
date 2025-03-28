@@ -82,7 +82,7 @@ class FastAPIServer:
         self.app.get("/api/type_info/get_types")(self.type_handler.get_types)
 
     def _setup_station_routs(self):
-        self.app.get("/api/station/get_stations")(self.station_handler.get_stations)
+        self.app.get("/api/stations")(self.station_handler.get_stations)
 
     def setup_production_routs(self):
         self.app.post("/api/product/create_products")(self.production_handler.create_products)

@@ -14,10 +14,12 @@ from src.storage.utils import get_db_url
 
 class Database(metaclass=Singleton):
     def __init__(self):
+        self.async_session_maker = None
+        self.async_engine = None
         self._is_connection = False
 
         db_config = Settings().config.db_config
-        db_url = get_db_url(
+        self.db_url = get_db_url(
             user=db_config.user,
             password=db_config.password,
             host=db_config.host,
@@ -25,8 +27,10 @@ class Database(metaclass=Singleton):
             dname=db_config.db_name
         )
 
-        self.async_engine = create_async_engine(db_url)
+        self.create_connection()
 
+    def create_connection(self):
+        self.async_engine = create_async_engine(self.db_url)
         self.async_session_maker = sessionmaker(self.async_engine, expire_on_commit=False, class_=AsyncSession)
 
     async def create_all(self):
@@ -52,6 +56,16 @@ class Database(metaclass=Singleton):
         except Exception as e:
             print(f"error connect to DB: {str(e)}")
             time.sleep(10)
+
+    async def drop_all(self):
+        async with self.async_engine.begin() as conn:
+            meta = DeclarativeBase().base.metadata
+            for table in reversed(meta.sorted_tables):
+                await conn.execute(table.delete())
+            await conn.commit()
+
+    async def dispose_connection(self):
+        await self.async_engine.dispose()
 
 
 if __name__ == '__main__':

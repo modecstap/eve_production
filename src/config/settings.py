@@ -1,4 +1,3 @@
-import argparse
 import os
 import re
 
@@ -10,16 +9,12 @@ from src.extensions import Singleton
 
 class Settings(metaclass=Singleton):
     def __init__(self):
-        parser = argparse.ArgumentParser(description="Описание вашего приложения")
-        parser.add_argument('--env', type=str, help='Выбор значения окружения')
+        env = os.getenv("ENV", "test")
 
-        args = parser.parse_args()
-
-        # тут в будущем настроить выбор файла в зависимости от env
-        if args.env in ['dev', 'prod']:
+        if env in ['dev', 'prod']:
             filename = 'config.yaml'
-        else:
-            raise Exception('Пошел нах')
+        elif env == "test":
+            filename = 'test-config.yaml'
 
         if os.path.isfile(filename):
             with open(filename, 'r') as fd:
