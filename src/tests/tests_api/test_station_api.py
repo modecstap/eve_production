@@ -50,7 +50,7 @@ class TestStationApi(AbstractTestApi):
     async def test_get_positive(self):
         # ПОСТРОЕНИЕ
         await self.setup_db()
-        station = Station(name="test station", material_efficiency=1, tax_percent=0.025, security_status=1)
+        station = Station(name="test station", material_efficiency="1", tax_percent="0.025", security_status='1')
         await self.insert_into_db([station])
 
         station_dict = StationModel(**station.__dict__).model_dump(mode="json")
@@ -81,8 +81,8 @@ class TestStationApi(AbstractTestApi):
         # ПОСТРОЕНИЕ
         await self.setup_db()
         stations = [
-            Station(name="Station 1", material_efficiency=0.1, tax_percent=0.05, security_status=0.9),
-            Station(name="Station 2", material_efficiency=0.2, tax_percent=0.03, security_status=0.7),
+            Station(name="Station 1", material_efficiency="0.1", tax_percent="0.05", security_status="0.9"),
+            Station(name="Station 2", material_efficiency="0.2", tax_percent="0.03", security_status="0.7"),
         ]
         await self.insert_into_db(stations)
 
@@ -104,7 +104,7 @@ class TestStationApi(AbstractTestApi):
     async def test_insert_positive(self):
         # ПОСТРОЕНИЕ
         await self.setup_db()
-        payload = {"name": "New Station", "material_efficiency": 0.15, "tax_percent": 3.5, "security_status": 0.8}
+        payload = {"name": "New Station", "material_efficiency": "0.15", "tax_percent": "3.5", "security_status": "0.8"}
 
         # ОПЕРАЦИИ
         response = self.client.post("/api/stations/", json=payload)
@@ -140,8 +140,8 @@ class TestStationApi(AbstractTestApi):
         # ПОСТРОЕНИЕ
         await self.setup_db()
         payload = [
-            {"name": "New Station", "material_efficiency": 0.15, "tax_percent": 3.5, "security_status": 0.8},
-            {"name": "New Station1", "material_efficiency": 0.1, "tax_percent": 3, "security_status": 1},
+            {"name": "New Station", "material_efficiency": '0.15', "tax_percent": "3.5", "security_status": "0.8"},
+            {"name": "New Station1", "material_efficiency": "0.1", "tax_percent": "3", "security_status": "1"},
         ]
 
         # ОПЕРАЦИИ
@@ -168,8 +168,8 @@ class TestStationApi(AbstractTestApi):
         # ПОСТРОЕНИЕ
         await self.setup_db()
         payload = [
-            {"material_efficiency": "asbc", "tax_percent": "asd", "security_status": -200},
-            {"name": "New Station1", "material_efficiency": 0.1, "tax_percent": 3, "security_status": 1},
+            {"material_efficiency": "asbc", "tax_percent": "asd", "security_status": "-200"},
+            {"name": "New Station1", "material_efficiency": "0.1", "tax_percent": "3", "security_status": "1"},
         ]
 
         # ОПЕРАЦИИ
@@ -182,10 +182,10 @@ class TestStationApi(AbstractTestApi):
     async def test_update_positive(self):
         # ПОСТРОЕНИЕ
         await self.setup_db()
-        station = Station(name="Station 1", material_efficiency=0.1, tax_percent=0.05, security_status=0.9)
+        station = Station(name="Station 1", material_efficiency="0.1", tax_percent="0.05", security_status="0.9")
         await self.insert_into_db([station])
 
-        payload = {"name": "Updated Station", "material_efficiency": 0.25, "tax_percent": 7.5, "security_status": 0.95}
+        payload = {"name": "Updated Station", "material_efficiency": "0.25", "tax_percent": "7.5", "security_status": "0.95"}
 
         # ОПЕРАЦИИ
         response = self.client.put(f"/api/stations/{station.id}", json=payload)
@@ -210,14 +210,14 @@ class TestStationApi(AbstractTestApi):
         # ПОСТРОЕНИЕ
         await self.setup_db()
         stations = [
-            Station(name="Station 1", material_efficiency=0.1, tax_percent=0.05, security_status=0.9),
-            Station(name="Station 2", material_efficiency=0.2, tax_percent=0.03, security_status=0.7),
+            Station(name="Station 1", material_efficiency="0.1", tax_percent="0.05", security_status="0.9"),
+            Station(name="Station 2", material_efficiency="0.2", tax_percent="0.03", security_status="0.7"),
         ]
         await self.insert_into_db(stations)
 
         payloads = [
-            {"name": "Updated Station 1", "material_efficiency": 0.3, "tax_percent": 12.0, "security_status": 0.95},
-            {"name": "Updated Station 2", "material_efficiency": 0.4, "tax_percent": 15.0, "security_status": 1.0}
+            {"name": "Updated Station 1", "material_efficiency": "0.3", "tax_percent": "12.0", "security_status": "0.95"},
+            {"name": "Updated Station 2", "material_efficiency": "0.4", "tax_percent": "15.0", "security_status": "1.0"}
         ]
 
         # ОПЕРАЦИИ
@@ -241,7 +241,7 @@ class TestStationApi(AbstractTestApi):
     async def test_delete_positive(self):
         # ПОСТРОЕНИЕ
         await self.setup_db()
-        station = self.entity(name="Station to Delete", material_efficiency=0.3, tax_percent=5.0, security_status=0.85)
+        station = self.entity(name="Station to Delete", material_efficiency="0.3", tax_percent="5.0", security_status="0.85")
         await self.insert_into_db([station])
 
         # ОПЕРАЦИИ
@@ -262,8 +262,8 @@ class TestStationApi(AbstractTestApi):
         # ПОСТРОЕНИЕ
         await self.setup_db()
         stations = [
-            Station(name="Station 1", material_efficiency=0.1, tax_percent=0.05, security_status=0.9),
-            Station(name="Station 2", material_efficiency=0.2, tax_percent=0.03, security_status=0.7),
+            Station(name="Station 1", material_efficiency="0.1", tax_percent="0.05", security_status="0.9"),
+            Station(name="Station 2", material_efficiency="0.2", tax_percent="0.03", security_status="0.7"),
         ]
         await self.insert_into_db(stations)
 
