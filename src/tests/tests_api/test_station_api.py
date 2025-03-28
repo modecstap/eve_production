@@ -53,10 +53,10 @@ class TestStationApi(AbstractTestApi):
         station = Station(name="test station", material_efficiency=1, tax_percent=0.025, security_status=1)
         await self.insert_into_db([station])
 
-        station_dict = StationModel(**station.__dict__).model_dump()
+        station_dict = StationModel(**station.__dict__).model_dump(mode="json")
 
         # ОПЕРАЦИИ
-        response = self.client.get(f"/stations/{station.id}")
+        response = self.client.get(f"/api/stations/{station.id}")
         data = response.json()
 
         # ПРОВЕРКИ
@@ -66,9 +66,10 @@ class TestStationApi(AbstractTestApi):
     @pytest.mark.asyncio
     async def test_get_negative(self):
         # ПОСТРОЕНИЕ
+        await self.setup_db()
 
         # ОПЕРАЦИИ
-        response = self.client.get(f"/stations/{999999}")
+        response = self.client.get(f"/api/stations/{999999}")
         data = response.json()
 
         # ПРОВЕРКИ
@@ -86,11 +87,11 @@ class TestStationApi(AbstractTestApi):
         await self.insert_into_db(stations)
 
         station_dict = [
-            StationModel(**station.__dict__).model_dump() for station in stations
+            StationModel(**station.__dict__).model_dump(mode="json") for station in stations
         ]
 
         # ОПЕРАЦИИ
-        response = self.client.get("/stations/")
+        response = self.client.get("/api/stations/")
         data = response.json()
 
         # ПРОВЕРКИ
@@ -106,7 +107,7 @@ class TestStationApi(AbstractTestApi):
         payload = {"name": "New Station", "material_efficiency": 0.15, "tax_percent": 3.5, "security_status": 0.8}
 
         # ОПЕРАЦИИ
-        response = self.client.post("/stations/", json=payload)
+        response = self.client.post("/api/stations/", json=payload)
         data = response.json()
 
         # ПРОВЕРКИ
@@ -128,11 +129,11 @@ class TestStationApi(AbstractTestApi):
         payload = {"material_efficiency": "asbc", "tax_percent": "asd", "security_status": -200}
 
         # ОПЕРАЦИИ
-        response = self.client.post("/stations/", json=payload)
+        response = self.client.post("/api/stations/", json=payload)
 
         # ПРОВЕРКИ
-        assert response.status_code == 400, \
-            f"Expected 400, got {response.status_code}"
+        assert response.status_code == 422, \
+            f"Expected 422, got {response.status_code}"
 
     @pytest.mark.asyncio
     async def test_inserts_positive(self):
@@ -144,7 +145,7 @@ class TestStationApi(AbstractTestApi):
         ]
 
         # ОПЕРАЦИИ
-        response = self.client.post("/stations/", json=payload)
+        response = self.client.post("/api/stations/", json=payload)
         data = response.json()
 
         # ПРОВЕРКИ
@@ -172,10 +173,10 @@ class TestStationApi(AbstractTestApi):
         ]
 
         # ОПЕРАЦИИ
-        response = self.client.post("/stations/", json=payload)
+        response = self.client.post("/api/stations/", json=payload)
 
         # ПРОВЕРКИ
-        assert response.status_code == 400, f"Expected 400, got {response.status_code}"
+        assert response.status_code == 422, f"Expected 422, got {response.status_code}"
 
     @pytest.mark.asyncio
     async def test_update_positive(self):
@@ -187,7 +188,7 @@ class TestStationApi(AbstractTestApi):
         payload = {"name": "Updated Station", "material_efficiency": 0.25, "tax_percent": 7.5, "security_status": 0.95}
 
         # ОПЕРАЦИИ
-        response = self.client.put(f"/stations/{station.id}", json=payload)
+        response = self.client.put(f"/api/stations/{station.id}", json=payload)
         data = response.json()
 
         # ПРОВЕРКИ
@@ -221,7 +222,7 @@ class TestStationApi(AbstractTestApi):
 
         # ОПЕРАЦИИ
         for station, payload in zip(stations, payloads):
-            response = self.client.put(f"/stations/{station.id}", json=payload)
+            response = self.client.put(f"/api/stations/{station.id}", json=payload)
             data = response.json()
 
             # ПРОВЕРКИ
@@ -244,7 +245,7 @@ class TestStationApi(AbstractTestApi):
         await self.insert_into_db([station])
 
         # ОПЕРАЦИИ
-        response = self.client.delete(f"/stations/{station.id}")
+        response = self.client.delete(f"/api/stations/{station.id}")
         stations_after_delete = await self.get_from_db(self.entity, [station.id])
         response_after_delete = self.client.get(f"/stations/{station.id}")
 
@@ -268,7 +269,7 @@ class TestStationApi(AbstractTestApi):
 
         # ОПЕРАЦИИ
         for station in stations:
-            response = self.client.delete(f"/stations/{station.id}")
+            response = self.client.delete(f"/api/stations/{station.id}")
             response_after_delete = self.client.get(f"/stations/{station.id}")
 
             # ПРОВЕРКИ
