@@ -19,6 +19,7 @@ class FastAPIServer:
         self._setup_handlers()
         self._setup_routs()
 
+
     def _setup_cors(self):
         origins = [
             "https://eve-production.my-shield.ru"
@@ -55,35 +56,41 @@ class FastAPIServer:
         self.app.get("/api/test/ping")( self.test_handler.ping)
         self.app.options("/{tail:.*}")(self.test_handler.preflight_handler)
 
-        self._setup_transaction_routs()
-        self._setup_order_routs()
-        self._setup_product_routs()
-        self._setup_type_routs()
-        self._setup_station_routs()
-        self.setup_production_routs()
+        self._setup_transaction_routes()
+        self._setup_order_routes()
+        self._setup_product_routes()
+        self._setup_type_routes()
+        self._setup_station_routes()
+        self.setup_production_routes()
 
-    def _setup_transaction_routs(self):
+    def _setup_transaction_routes(self):
         self.app.get("/api/transaction/get_transactions")(self.transaction_handler.get_transactions)
         self.app.get("/api/transaction/get_available_materials")(
             self.transaction_handler.get_available_materials)
         self.app.post("/api/transaction/add_transactions")(self.transaction_handler.add_transactions)
 
-    def _setup_order_routs(self):
+    def _setup_order_routes(self):
         self.app.get("/api/order/get_orders")(self.order_handler.get_orders)
         self.app.post("/api/order/add_order")(self.order_handler.add_order)
         self.app.post("/api/order/update_price")(self.order_handler.update_price)
         self.app.post("/api/order/update_sell_count")(self.order_handler.update_sell_count)
 
-    def _setup_product_routs(self):
+    def _setup_product_routes(self):
         self.app.get("/api/product/get_products")(self.product_handler.get_products)
         self.app.get("/api/product/get_available_products")(self.product_handler.get_available_products)
 
-    def _setup_type_routs(self):
+    def _setup_type_routes(self):
         self.app.get("/api/type_info/get_types")(self.type_handler.get_types)
 
-    def _setup_station_routs(self):
-        self.app.get("/api/stations")(self.station_handler.get_stations)
+    def _setup_station_routes(self):
+        self.app.get("/api/stations/")(self.station_handler.get_stations)
+        self.app.get("/api/stations/{station_id}")(self.station_handler.get_station)
+        self.app.post("/api/stations/")(self.station_handler.create_station)
+        self.app.post("/api/stations/bulk")(self.station_handler.create_stations)
+        self.app.put("/api/stations/{station_id}")(self.station_handler.update_station)
+        self.app.put("/api/stations/")(self.station_handler.update_stations)
+        self.app.delete("/api/stations/{station_id}")(self.station_handler.delete_station)
 
-    def setup_production_routs(self):
+    def setup_production_routes(self):
         self.app.post("/api/product/create_products")(self.production_handler.create_products)
         self.app.post("/api/product/get_production_cost")(self.production_handler.calculate_production_cost)

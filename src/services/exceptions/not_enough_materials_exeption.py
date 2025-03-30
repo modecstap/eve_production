@@ -1,4 +1,7 @@
-class NotEnoughMaterialsException(Exception):
+from src.services.exceptions import ServiceException
+
+
+class NotEnoughMaterialsException(ServiceException):
     def __init__(self, *args):
         if args:
             self.message = args[0]

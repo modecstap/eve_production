@@ -1,2 +1,4 @@
+from src.services.exceptions.service_exception import ServiceException
 from src.services.exceptions.product_count_exception import ProductCountException
 from src.services.exceptions.not_enough_materials_exeption import NotEnoughMaterialsException
+from src.services.exceptions.not_found_exception import NotFoundException

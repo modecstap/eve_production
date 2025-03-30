@@ -1,4 +1,7 @@
-class ProductCountException(Exception):
+from src.services.exceptions import ServiceException
+
+
+class ProductCountException(ServiceException):
     def __init__(self, *args):
         if args:
             self.message = args[0]
