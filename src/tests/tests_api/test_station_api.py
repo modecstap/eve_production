@@ -145,7 +145,7 @@ class TestStationApi(AbstractTestApi):
         ]
 
         # ОПЕРАЦИИ
-        response = self.client.post("/api/stations/", json=payload)
+        response = self.client.post("/api/stations/bulk", json=payload)
         data = response.json()
 
         # ПРОВЕРКИ
@@ -216,16 +216,28 @@ class TestStationApi(AbstractTestApi):
         await self.insert_into_db(stations)
 
         payloads = [
-            {"name": "Updated Station 1", "material_efficiency": "0.3", "tax_percent": "12.0", "security_status": "0.95"},
-            {"name": "Updated Station 2", "material_efficiency": "0.4", "tax_percent": "15.0", "security_status": "1.0"}
+            {
+                "id": stations[0].id,
+                "name": "New Station 1",
+                "material_efficiency": "1",
+                "tax_percent": "0",
+                "security_status": "0"
+            },
+            {
+                "id": stations[1].id,
+                "name": "New Station 2",
+                "material_efficiency": "1",
+                "tax_percent": "0",
+                "security_status": "0"
+            }
         ]
 
         # ОПЕРАЦИИ
-        for station, payload in zip(stations, payloads):
-            response = self.client.put(f"/api/stations/{station.id}", json=payload)
-            data = response.json()
+        response = self.client.put(f"/api/stations/", json=payloads)
+        data = response.json()
 
-            # ПРОВЕРКИ
+        # ПРОВЕРКИ
+        for payload, data in zip(payloads, data):
             assert response.status_code == 200, \
                 f"Expected 200, got {response.status_code}"
             assert data["name"] == payload["name"], \
@@ -235,7 +247,7 @@ class TestStationApi(AbstractTestApi):
             assert data["tax_percent"] == payload["tax_percent"], \
                 f"Expected tax_percent {payload['tax_percent']}, got {data['tax_percent']}"
             assert data["security_status"] == payload["security_status"], \
-                f"Expected security_status {payload['security_status']}, got {data['security_status']}"
+                    f"Expected security_status {payload['security_status']}, got {data['security_status']}"
 
     @pytest.mark.asyncio
     async def test_delete_positive(self):
@@ -256,24 +268,3 @@ class TestStationApi(AbstractTestApi):
             "Station should be deleted from database"
         assert response_after_delete.status_code == 404, \
             f"Expected 404 after deletion, got {response_after_delete.status_code}"
-
-    @pytest.mark.asyncio
-    async def test_deletes_positive(self):
-        # ПОСТРОЕНИЕ
-        await self.setup_db()
-        stations = [
-            Station(name="Station 1", material_efficiency="0.1", tax_percent="0.05", security_status="0.9"),
-            Station(name="Station 2", material_efficiency="0.2", tax_percent="0.03", security_status="0.7"),
-        ]
-        await self.insert_into_db(stations)
-
-        # ОПЕРАЦИИ
-        for station in stations:
-            response = self.client.delete(f"/api/stations/{station.id}")
-            response_after_delete = self.client.get(f"/stations/{station.id}")
-
-            # ПРОВЕРКИ
-            assert response.status_code == 200, \
-                f"Expected 200, got {response.status_code}"
-            assert response_after_delete.status_code == 404, \
-                f"Expected 404 after deletion, got {response_after_delete.status_code}"
