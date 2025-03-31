@@ -6,7 +6,8 @@ from sqlalchemy.ext.declarative import declarative_base
 
 from src.storage import Database
 
-
+# Не добавлять @abstractmethod к методам.
+# Pytest перестаёт их распознавать
 class AbstractTestApi(ABC):
     model: BaseModel
     entity: declarative_base
