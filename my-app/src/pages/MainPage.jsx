@@ -8,7 +8,6 @@ import "./MainPage.css";
 
 const MainPage = () => {
   const [selectedForm, setSelectedForm] = useState("order");
-
   return (
     <div className="main-container">
       {/* Левая панель выбора формы */}
@@ -19,19 +18,19 @@ const MainPage = () => {
             className={`menu-item ${selectedForm === "order" ? "active" : ""}`}
             onClick={() => setSelectedForm("order")}
           >
-            Форма ввода приказа
+            Запись выставления прказа
           </li>
           <li
             className={`menu-item ${selectedForm === "production" ? "active" : ""}`}
             onClick={() => setSelectedForm("production")}
           >
-            Запись о производстве
+            Запись производства
           </li>
           <li
             className={`menu-item ${selectedForm === "transaction" ? "active" : ""}`}
             onClick={() => setSelectedForm("transaction")}
           >
-            Ввод транзакций
+            Запись транзакций
           </li>
           <li
             className={`menu-item ${selectedForm === "availableMaterials" ? "active" : ""}`}
