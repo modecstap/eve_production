@@ -1,4 +1,4 @@
-from src.server.handlers.models import ProductionModel, ProductionCostModel
+from src.server.handlers.models.production_models import ProductionModel, ProductionCostModel
 from src.services import ProductionService
 
 

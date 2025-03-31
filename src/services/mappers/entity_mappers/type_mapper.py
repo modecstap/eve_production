@@ -1,4 +1,4 @@
-from src.server.handlers.models import TypeInfoModel
+from src.server.handlers.models.type_info_models import TypeInfoModel
 from src.services.mappers.entity_mappers import BaseEntityMapper
 from src.storage.tables import TypeInfo
 

@@ -1,4 +1,4 @@
-from src.server.handlers.models import InsertOrderModel
+from src.server.handlers.models.order_models import InsertOrderModel
 from src.services.mappers.entity_mappers  import BaseEntityMapper
 from src.storage.tables import Order
 

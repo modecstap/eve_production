@@ -1,5 +1,5 @@
-from src.server.handlers.models import InsertOrderModel, StatusModel, ChangePriceModel
-from src.server.handlers.models import SellItemModel
+from src.server.handlers.models.order_models import InsertOrderModel, ChangePriceModel, SellItemModel
+from src.server.handlers.models.order_models.order_model import OrderModel
 from src.services.entity_service import OrderService
 
 
@@ -7,7 +7,7 @@ class OrderHandler:
     def __init__(self):
         self.order_service = OrderService()
 
-    async def get_orders(self):
+    async def get_orders(self) -> OrderModel:
         return await self.order_service.get_models()
 
     async def add_order(self, order: InsertOrderModel):

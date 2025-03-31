@@ -1,1 +1,1 @@
-export const serverIP = 'https://eve-production-api.my-shield.ru';
+export const serverIP = 'http://localhost:8080';

@@ -1,4 +1,4 @@
-from src.server.handlers.models import TransactionModel
+from src.server.handlers.models.transactions_models import TransactionModel
 from src.services.entity_service import TransactionService
 
 
@@ -6,7 +6,7 @@ class TransactionHandler:
     def __init__(self):
         self.transaction_service = TransactionService()
 
-    async def get_transactions(self):
+    async def get_transactions(self) -> list[TransactionModel]:
         return await self.transaction_service.get_models()
 
     async def get_available_materials(self):

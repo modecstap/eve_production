@@ -6,7 +6,7 @@ from sqlalchemy import select, Row
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.server import FastAPIServer
-from src.server.handlers.models import StationModel
+from src.server.handlers.models.station_models import StationModel
 from src.storage import Database
 from src.storage.tables import Station
 from src.tests.tests_api.abstract_test_api import AbstractTestApi
@@ -21,6 +21,7 @@ class TestStationApi(AbstractTestApi):
     async def setup_db(self):
         self.db.create_connection()
         try:
+            await self.db.create_all()
             await self.db.drop_all()
             await self.db.create_all()
         finally:

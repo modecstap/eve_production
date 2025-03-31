@@ -1,4 +1,4 @@
-from src.server.handlers.models import ProductionModel
+from src.server.handlers.models.production_models import ProductionModel
 from src.services.mappers import BaseMapper
 from src.storage.tables import Product
 

@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from src.server.handlers.models import StationModel
+from src.server.handlers.models.station_models import StationModel, InsertStationModel, UpdateStationModel
 from src.services.entity_service import StationService
 from fastapi import HTTPException, status
 from typing import List, Union
@@ -36,23 +36,23 @@ class StationHandler:
         except NotFoundException as e:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
 
-    async def create_station(self, station_data: StationModel) -> StationModel:
+    async def create_station(self, station_data: InsertStationModel) -> StationModel:
         created_station = await self.station_service.add_models([station_data])
         self.__raise_creation_error(created_station)
         return created_station[0]
 
-    async def create_stations(self, stations_data: List[StationModel]) -> List[StationModel]:
+    async def create_stations(self, stations_data: List[InsertStationModel]) -> List[StationModel]:
         created_stations = await self.station_service.add_models(stations_data)
         self.__raise_creation_error(created_stations)
         return created_stations
 
-    async def update_station(self, station_id: int, station_data: StationModel) -> StationModel:
+    async def update_station(self, station_id: int, station_data: UpdateStationModel) -> StationModel:
         station_data.id = station_id
         updated_station = await self.station_service.update_models([station_data])
         self.__raise_if_not_found(updated_station)
         return updated_station[0]
 
-    async def update_stations(self, stations_data: List[StationModel]) -> List[StationModel]:
+    async def update_stations(self, stations_data: List[UpdateStationModel]) -> List[StationModel]:
         updated_stations = await self.station_service.update_models(stations_data)
         self.__raise_if_not_found(updated_stations)
         return updated_stations

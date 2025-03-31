@@ -1,4 +1,4 @@
-from src.server.handlers.models import TransactionModel
+from src.server.handlers.models.transactions_models import TransactionModel
 from src.services.mappers.entity_mappers  import BaseEntityMapper
 from src.storage.tables import Transaction
 

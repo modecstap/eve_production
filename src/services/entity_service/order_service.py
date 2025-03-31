@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.server.handlers.models import StatusModel, InsertOrderModel, SellItemModel, ChangePriceModel
+from src.server.handlers.models.order_models import InsertOrderModel, SellItemModel, ChangePriceModel
 from src.services.entity_service import BaseEntityService
 from src.services.exceptions import NotEnoughMaterialsException
 from src.services.mappers.entity_mappers import InsertOrderEntityMapper, OrderEntityMapper
@@ -72,12 +72,6 @@ class OrderService(BaseEntityService):
 
     async def add_models(self, insert_order_models: list[InsertOrderModel]):
         await self.__try_add_models(insert_order_models)
-
-    async def update_status(self, statuses: list[StatusModel]):
-        await self.__try_update_statuses(statuses)
-
-    async def __try_update_statuses(self, statuses):
-        await self._main_repository.update_statuses(statuses)
 
     async def update_sell_count(self, sell_count_model: SellItemModel):
         session = self._main_repository.create_session()

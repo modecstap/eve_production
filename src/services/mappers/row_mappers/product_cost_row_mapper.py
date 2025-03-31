@@ -1,4 +1,4 @@
-from src.server.handlers.models import AvailableProductModel
+from src.server.handlers.models.product_models import AvailableProductModel
 from src.services.mappers.row_mappers import BaseRowMapper
 
 

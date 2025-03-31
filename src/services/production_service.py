@@ -1,7 +1,7 @@
 from collections import defaultdict
 from decimal import Decimal, ROUND_UP
 
-from src.server.handlers.models import ProductionModel, ProductionCostModel
+from src.server.handlers.models.production_models import ProductionModel, ProductionCostModel
 from src.services.base_service import BaseService
 from src.services.exceptions import NotEnoughMaterialsException
 from src.services.mappers import ProductionMapper
