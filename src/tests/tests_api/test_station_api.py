@@ -18,6 +18,7 @@ class TestStationApi(AbstractTestApi):
     db = Database()
     client = TestClient(FastAPIServer().app)
 
+    @pytest.fixture(autouse=True)
     async def setup_db(self):
         self.db.create_connection()
         try:
@@ -50,7 +51,6 @@ class TestStationApi(AbstractTestApi):
     @pytest.mark.asyncio
     async def test_get_positive(self):
         # ПОСТРОЕНИЕ
-        await self.setup_db()
         station = Station(name="test station", material_efficiency="1", tax_percent="0.025", security_status='1')
         await self.insert_into_db([station])
 
@@ -67,7 +67,6 @@ class TestStationApi(AbstractTestApi):
     @pytest.mark.asyncio
     async def test_get_negative(self):
         # ПОСТРОЕНИЕ
-        await self.setup_db()
 
         # ОПЕРАЦИИ
         response = self.client.get(f"/api/stations/{999999}")
@@ -80,7 +79,6 @@ class TestStationApi(AbstractTestApi):
     @pytest.mark.asyncio
     async def test_gets_positive(self):
         # ПОСТРОЕНИЕ
-        await self.setup_db()
         stations = [
             Station(name="Station 1", material_efficiency="0.1", tax_percent="0.05", security_status="0.9"),
             Station(name="Station 2", material_efficiency="0.2", tax_percent="0.03", security_status="0.7"),
@@ -104,7 +102,6 @@ class TestStationApi(AbstractTestApi):
     @pytest.mark.asyncio
     async def test_insert_positive(self):
         # ПОСТРОЕНИЕ
-        await self.setup_db()
         payload = {"name": "New Station", "material_efficiency": "0.15", "tax_percent": "3.5", "security_status": "0.8"}
 
         # ОПЕРАЦИИ
@@ -126,7 +123,6 @@ class TestStationApi(AbstractTestApi):
     @pytest.mark.asyncio
     async def test_insert_negative(self):
         # ПОСТРОЕНИЕ
-        await self.setup_db()
         payload = {"material_efficiency": "asbc", "tax_percent": "asd", "security_status": -200}
 
         # ОПЕРАЦИИ
@@ -139,7 +135,6 @@ class TestStationApi(AbstractTestApi):
     @pytest.mark.asyncio
     async def test_inserts_positive(self):
         # ПОСТРОЕНИЕ
-        await self.setup_db()
         payload = [
             {"name": "New Station", "material_efficiency": '0.15', "tax_percent": "3.5", "security_status": "0.8"},
             {"name": "New Station1", "material_efficiency": "0.1", "tax_percent": "3", "security_status": "1"},
@@ -167,7 +162,6 @@ class TestStationApi(AbstractTestApi):
     @pytest.mark.asyncio
     async def test_inserts_negative(self):
         # ПОСТРОЕНИЕ
-        await self.setup_db()
         payload = [
             {"material_efficiency": "asbc", "tax_percent": "asd", "security_status": "-200"},
             {"name": "New Station1", "material_efficiency": "0.1", "tax_percent": "3", "security_status": "1"},
@@ -182,7 +176,6 @@ class TestStationApi(AbstractTestApi):
     @pytest.mark.asyncio
     async def test_update_positive(self):
         # ПОСТРОЕНИЕ
-        await self.setup_db()
         station = Station(name="Station 1", material_efficiency="0.1", tax_percent="0.05", security_status="0.9")
         await self.insert_into_db([station])
 
@@ -209,7 +202,6 @@ class TestStationApi(AbstractTestApi):
     @pytest.mark.asyncio
     async def test_updates_positive(self):
         # ПОСТРОЕНИЕ
-        await self.setup_db()
         stations = [
             Station(name="Station 1", material_efficiency="0.1", tax_percent="0.05", security_status="0.9"),
             Station(name="Station 2", material_efficiency="0.2", tax_percent="0.03", security_status="0.7"),
@@ -253,7 +245,6 @@ class TestStationApi(AbstractTestApi):
     @pytest.mark.asyncio
     async def test_delete_positive(self):
         # ПОСТРОЕНИЕ
-        await self.setup_db()
         station = self.entity(name="Station to Delete", material_efficiency="0.3", tax_percent="5.0", security_status="0.85")
         await self.insert_into_db([station])
 
