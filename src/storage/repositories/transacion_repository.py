@@ -1,4 +1,6 @@
-from sqlalchemy import func
+from typing import Any, Coroutine, Sequence
+
+from sqlalchemy import func, Row, RowMapping
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -43,4 +45,5 @@ class TransactionRepository(BaseRepository):
             query = query.where(Transaction.material_id.in_(type_id))
 
         result = await session.execute(query)
-        return result.scalars().all()
+
+        return result.all()
