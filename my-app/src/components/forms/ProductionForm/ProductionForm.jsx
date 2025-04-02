@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./ProductionForm.css"; // Подключаем стили
-import { serverIP } from "../constants/serverIP";
+import { serverIP } from "../../../constants/serverIP";
 
 const ProductionForm = () => {
   const [types, setTypes] = useState([]);

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { serverIP } from "../constants/serverIP";
+import { serverIP } from "../../../constants/serverIP";
 import "./AvailableMaterials.css";
-import ItemList from "../components/ItemList"
+import ItemList from "../../stuff/ItemList/ItemList"
 
 const AvailableMaterials = () => {
   const [materials, setMaterials] = useState([]);
@@ -17,7 +17,7 @@ const AvailableMaterials = () => {
           setMaterials(data);
           setLoading(false);
         } else {
-          throw new Error("Failed to fetch materials.");
+          throw new Error("Ошибка получения материалов.");
         }
       } catch (error) {
         setError(error.message);
@@ -34,7 +34,7 @@ const AvailableMaterials = () => {
   return (
     <div className="materials-container">
       <h1 className="materials-title">Доступные материалы</h1>
-      <ItemList data={materials} disableAction={true} />
+      <ItemList data={materials} disableAction={false} />
     </div>
   );
 };

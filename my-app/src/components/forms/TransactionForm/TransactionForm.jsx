@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./TransactionForm.css"; // Подключаем стили
-import { serverIP } from "../constants/serverIP";
+import { serverIP } from "../../../constants/serverIP";
 
 const TransactionForm = () => {
   const [transactionsInput, setTransactionsInput] = useState("");
@@ -30,6 +30,7 @@ const TransactionForm = () => {
 
       if (parts.length < 9) return;
 
+      // eslint-disable-next-line
       const [date, count, materialName, pricePerUnit, allPrice] = parts;
       const material = materials.find((mat) => mat.name.toLowerCase() === materialName.trim().toLowerCase());
 

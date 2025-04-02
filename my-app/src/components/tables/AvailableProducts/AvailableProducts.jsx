@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { serverIP } from "../constants/serverIP";
+import { serverIP } from "../../../constants/serverIP";
 import "./AvailableProducts.css";
 
 const AvailableProducts = () => {

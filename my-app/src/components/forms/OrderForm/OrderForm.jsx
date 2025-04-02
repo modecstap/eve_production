@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./OrderForm.css"; // Подключаем стили
-import { serverIP } from "../constants/serverIP";
+import { serverIP } from "../../../constants/serverIP";
 
 const OrderForm = () => {
   const [itemTypes, setItemTypes] = useState([]);

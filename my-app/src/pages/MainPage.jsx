@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import OrderForm from "../components/OrderForm";
-import ProductionForm from "../components/ProductionForm";
-import TransactionForm from "../components/TransactionForm";
-import AvailableMaterials from "../components/AvailableMaterials";
-import AvailableProducts from "../components/AvailableProducts";
+import OrderForm from "../components/forms/OrderForm/OrderForm";
+import ProductionForm from "../components/forms/ProductionForm/ProductionForm";
+import TransactionForm from "../components/forms/TransactionForm/TransactionForm";
+import AvailableMaterials from "../components/tables/AvailableMaterials/AvailableMaterials";
+import AvailableProducts from "../components/tables/AvailableProducts/AvailableProducts";
 import "./MainPage.css";
 
 const MainPage = () => {
@@ -18,7 +18,7 @@ const MainPage = () => {
             className={`menu-item ${selectedForm === "order" ? "active" : ""}`}
             onClick={() => setSelectedForm("order")}
           >
-            Запись выставления прказа
+            Запись выставления приказа
           </li>
           <li
             className={`menu-item ${selectedForm === "production" ? "active" : ""}`}
