@@ -1,9 +1,6 @@
-from datetime import datetime
 from decimal import Decimal
 
-from pydantic import BaseModel, Field
-
-from src.server.handlers.enums import Status
+from pydantic import BaseModel
 
 
 class ChangePriceModel(BaseModel):

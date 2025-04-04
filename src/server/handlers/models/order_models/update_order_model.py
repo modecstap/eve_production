@@ -4,13 +4,13 @@ from decimal import Decimal
 from pydantic import BaseModel, Field
 
 
-class OrderModel(BaseModel):
+class UpdateOrderModel(BaseModel):
     id: int | None = None
     transaction_id: int
     release_date: datetime
     price: Decimal
     count: int
     remains: int
-    broker_cost: Decimal = Field(default=0)
-    tax_percent: Decimal = Field(default=7.5)
+    broker_cost: Decimal
+    tax_percent: Decimal
     income: Decimal

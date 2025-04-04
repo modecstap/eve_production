@@ -1,10 +1,7 @@
 from fastapi import HTTPException, status
 
 from src.server.handlers.models import AvailableMaterialModel
-from src.server.handlers.models.transactions_models import TransactionModel, InsertTransactionModel, \
-    UpdateTransactionModel
 from src.services.entity_service import TransactionService
-from src.services.exceptions import NotFoundException
 
 
 class AvailableMaterialHandler:

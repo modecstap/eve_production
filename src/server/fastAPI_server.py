@@ -77,26 +77,36 @@ class FastAPIServer:
         self.app.get("/api/available_materials")(self.available_material_handler.get_all)
 
     def _setup_order_routes(self):
-        self.app.get("/api/order/get_orders")(self.order_handler.get_orders)
-        self.app.post("/api/order/add_order")(self.order_handler.add_order)
-        self.app.post("/api/order/update_price")(self.order_handler.update_price)
-        self.app.post("/api/order/update_sell_count")(self.order_handler.update_sell_count)
+        self.app.get("/api/orders/")(self.order_handler.get_all)
+        self.app.get("/api/orders/{id}")(self.order_handler.get)
+        self.app.post("/api/orders/")(self.order_handler.create)
+        self.app.post("/api/orders/bulk")(self.order_handler.create_bulk)
+        self.app.put("/api/orders/{id}")(self.order_handler.update)
+        self.app.put("/api/orders/{id}/sell_count")(self.order_handler.update_sell_count)
+        self.app.put("/api/orders/{id}/update_price")(self.order_handler.update_price)
+        self.app.put("/api/orders/")(self.order_handler.update_bulk)
+        self.app.delete("/api/orders/{id}")(self.order_handler.delete)
 
     def _setup_product_routes(self):
-        self.app.get("/api/product/get_products")(self.product_handler.get_products)
-        self.app.get("/api/product/get_available_products")(self.product_handler.get_available_products)
+        self.app.get("/api/products/")(self.product_handler.get_all)
+        self.app.get("/api/products/{id}")(self.product_handler.get)
+        self.app.post("/api/products/")(self.product_handler.create)
+        self.app.post("/api/products/bulk")(self.product_handler.create_bulk)
+        self.app.put("/api/products/{id}")(self.product_handler.update)
+        self.app.put("/api/products/")(self.product_handler.update_bulk)
+        self.app.delete("/api/products/{id}")(self.product_handler.delete)
 
     def _setup_type_routes(self):
         self.app.get("/api/type_info/get_types")(self.type_handler.get_types)
 
     def _setup_station_routes(self):
-        self.app.get("/api/stations/")(self.station_handler.get_stations)
-        self.app.get("/api/stations/{station_id}")(self.station_handler.get_station)
-        self.app.post("/api/stations/")(self.station_handler.create_station)
-        self.app.post("/api/stations/bulk")(self.station_handler.create_stations)
-        self.app.put("/api/stations/{station_id}")(self.station_handler.update_station)
-        self.app.put("/api/stations/")(self.station_handler.update_stations)
-        self.app.delete("/api/stations/{station_id}")(self.station_handler.delete_station)
+        self.app.get("/api/stations/")(self.station_handler.get_all)
+        self.app.get("/api/stations/{station_id}")(self.station_handler.get)
+        self.app.post("/api/stations/")(self.station_handler.create)
+        self.app.post("/api/stations/bulk")(self.station_handler.create_bulk)
+        self.app.put("/api/stations/{station_id}")(self.station_handler.update)
+        self.app.put("/api/stations/")(self.station_handler.update_bulk)
+        self.app.delete("/api/stations/{station_id}")(self.station_handler.delete)
 
     def setup_production_routes(self):
         self.app.post("/api/product/create_products")(self.production_handler.create_products)

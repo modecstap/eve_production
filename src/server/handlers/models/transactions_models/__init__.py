@@ -1,3 +1,3 @@
-from src.server.handlers.models.transactions_models.transaction_model import TransactionModel
 from src.server.handlers.models.transactions_models.insert_transaction_model import InsertTransactionModel
+from src.server.handlers.models.transactions_models.transaction_model import TransactionModel
 from src.server.handlers.models.transactions_models.update_transaction_model import UpdateTransactionModel

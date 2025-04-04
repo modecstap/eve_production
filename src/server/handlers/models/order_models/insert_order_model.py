@@ -3,8 +3,6 @@ from decimal import Decimal
 
 from pydantic import BaseModel, Field
 
-from src.server.handlers.enums import Status
-
 
 class InsertOrderModel(BaseModel):
     release_date: datetime
