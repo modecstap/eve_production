@@ -4,6 +4,7 @@ import ProductionForm from "../components/forms/ProductionForm/ProductionForm";
 import TransactionForm from "../components/forms/TransactionForm/TransactionForm";
 import AvailableMaterials from "../components/tables/AvailableMaterials/AvailableMaterials";
 import AvailableProducts from "../components/tables/AvailableProducts/AvailableProducts";
+import Stations from "../components/tables/Stations/Stations"
 import "./MainPage.css";
 
 const MainPage = () => {
@@ -33,6 +34,12 @@ const MainPage = () => {
             Запись транзакций
           </li>
           <li
+            className={`menu-item ${selectedForm === "stations" ? "active" : ""}`}
+            onClick={() => setSelectedForm("stations")}
+          >
+            Станции
+          </li>
+          <li
             className={`menu-item ${selectedForm === "availableMaterials" ? "active" : ""}`}
             onClick={() => setSelectedForm("availableMaterials")}
           >
@@ -52,6 +59,7 @@ const MainPage = () => {
         {selectedForm === "order" && <OrderForm />}
         {selectedForm === "production" && <ProductionForm />}
         {selectedForm === "transaction" && <TransactionForm />}
+        {selectedForm === "stations" && <Stations />}
         {selectedForm === "availableMaterials" && <AvailableMaterials />}
         {selectedForm === "availableProducts" && <AvailableProducts />}
       </div>

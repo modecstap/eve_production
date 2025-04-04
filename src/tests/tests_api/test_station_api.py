@@ -179,7 +179,8 @@ class TestStationApi(AbstractTestApi):
         station = Station(name="Station 1", material_efficiency="0.1", tax_percent="0.05", security_status="0.9")
         await self.insert_into_db([station])
 
-        payload = {"name": "Updated Station", "material_efficiency": "0.25", "tax_percent": "7.5", "security_status": "0.95"}
+        payload = {"name": "Updated Station", "material_efficiency": "0.25", "tax_percent": "7.5",
+                   "security_status": "0.95"}
 
         # ОПЕРАЦИИ
         response = self.client.put(f"/api/stations/{station.id}", json=payload)
@@ -240,12 +241,13 @@ class TestStationApi(AbstractTestApi):
             assert data["tax_percent"] == payload["tax_percent"], \
                 f"Expected tax_percent {payload['tax_percent']}, got {data['tax_percent']}"
             assert data["security_status"] == payload["security_status"], \
-                    f"Expected security_status {payload['security_status']}, got {data['security_status']}"
+                f"Expected security_status {payload['security_status']}, got {data['security_status']}"
 
     @pytest.mark.asyncio
     async def test_delete_positive(self):
         # ПОСТРОЕНИЕ
-        station = self.entity(name="Station to Delete", material_efficiency="0.3", tax_percent="5.0", security_status="0.85")
+        station = self.entity(name="Station to Delete", material_efficiency="0.3", tax_percent="5.0",
+                              security_status="0.85")
         await self.insert_into_db([station])
 
         # ОПЕРАЦИИ

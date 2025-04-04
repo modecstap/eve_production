@@ -34,7 +34,7 @@ const AvailableMaterials = () => {
   return (
     <div className="materials-container">
       <h1 className="materials-title">Доступные материалы</h1>
-      <ItemList data={materials} disableAction={false} />
+      <ItemList data={materials} disableAction={true} />
     </div>
   );
 };

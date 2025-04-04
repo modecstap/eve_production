@@ -12,7 +12,7 @@ const formatNumber = (value) => {
   return value; // Если не число, оставить как есть
 };
 
-const ItemRow = ({ data, index, disableAction }) => {
+const ItemRow = ({ data, index, disableAction, onEdit }) => {
   return (
     <div className={`item-row ${index % 2 === 0 ? "even" : "odd"}`}>
       {Object.entries(data).map(([key, value]) => (
@@ -20,7 +20,7 @@ const ItemRow = ({ data, index, disableAction }) => {
           {formatNumber(value)}
         </span>
       ))}
-      {!disableAction && <button className="update-button">Update</button>}
+      {!disableAction && <button className="update-button" onClick={onEdit}>Изменить</button>}
     </div>
   );
 };
