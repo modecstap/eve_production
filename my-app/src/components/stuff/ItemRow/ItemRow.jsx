@@ -1,23 +1,32 @@
 import "./ItemRow.css";
 
-const formatNumber = (value) => {
+const formatValue = (value) => {
   if (typeof value === "number") {
-    return value
+    return value;
   }
-  const num =  parseFloat(value);
-  
-  if (!isNaN(num)) {
-    return num.toLocaleString("ru-RU", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+  if (typeof value === "string") {
+    const date = new Date(value);
+    if (!isNaN(date.getTime()) && value.includes("T")) {
+      return value.replace("T", " ");
+    }
+
+    const num = parseFloat(value);
+    if (!isNaN(num)) {
+      return num.toLocaleString("ru-RU", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
   }
-  return value; // Если не число, оставить как есть
+
+  return value;
 };
+
 
 const ItemRow = ({ data, index, disableAction, onEdit }) => {
   return (
     <div className={`item-row ${index % 2 === 0 ? "even" : "odd"}`}>
       {Object.entries(data).map(([key, value]) => (
         <span key={key} className="item-field">
-          {formatNumber(value)}
+          {formatValue(value)}
         </span>
       ))}
       {!disableAction && <button className="update-button" onClick={onEdit}>Изменить</button>}
