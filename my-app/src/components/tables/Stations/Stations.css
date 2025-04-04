@@ -7,7 +7,7 @@
 }
 
 .refresh-button {
-  background-color: #008cff;
+  background-color: #007bff;
   color: white;
   border: none;
   font-size: 16px;
@@ -19,7 +19,7 @@
 }
 
 .refresh-button:hover {
-  background-color: #006fcb;
+  background-color: #0056b3;
 }
 
 .materials-container {
