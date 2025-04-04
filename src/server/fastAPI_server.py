@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from src.config import Settings
 from src.server.handlers import OrderHandler, TestHandler, TransactionHandler, ProductHandler, TypeHandler, \
-    StationHandler, ProductionHandler
+    StationHandler, ProductionHandler, AvailableMaterialHandler
 
 
 class FastAPIServer:
@@ -40,6 +40,7 @@ class FastAPIServer:
         self.type_handler = TypeHandler()
         self.station_handler = StationHandler()
         self.production_handler = ProductionHandler()
+        self.available_material_handler = AvailableMaterialHandler()
 
 
     async def start(self):
@@ -64,10 +65,16 @@ class FastAPIServer:
         self.setup_production_routes()
 
     def _setup_transaction_routes(self):
-        self.app.get("/api/transaction/get_transactions")(self.transaction_handler.get_transactions)
-        self.app.get("/api/transaction/get_available_materials")(
-            self.transaction_handler.get_available_materials)
-        self.app.post("/api/transaction/add_transactions")(self.transaction_handler.add_transactions)
+        self.app.get("/api/transactions/")(self.transaction_handler.get_all)
+        self.app.get("/api/transactions/{id}")(self.transaction_handler.get)
+        self.app.post("/api/transactions/")(self.transaction_handler.create)
+        self.app.post("/api/transactions/bulk")(self.transaction_handler.create_bulk)
+        self.app.put("/api/transactions/{id}")(self.transaction_handler.update)
+        self.app.put("/api/transactions/")(self.transaction_handler.update_bulk)
+        self.app.delete("/api/transactions/{id}")(self.transaction_handler.delete)
+
+    def _setup_available_materials(self):
+        self.app.get("/api/available_materials")(self.available_material_handler.get_all)
 
     def _setup_order_routes(self):
         self.app.get("/api/order/get_orders")(self.order_handler.get_orders)

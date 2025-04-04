@@ -1,1 +1,1 @@
-from src.server.handlers.models.available_materials_model import AvailableMaterialModel
+from src.server.handlers.models.available_material_model import AvailableMaterialModel
