@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { serverIP } from "../../../constants/serverIP";
-import "./AvailableProducts.css";
+import { serverIP } from "../../constants/serverIP";
+import "./table.css";
 
 const AvailableProducts = () => {
   const [products, setProducts] = useState([]);

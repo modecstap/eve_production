@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { serverIP } from "../../../constants/serverIP";
-import "./Stations.css";
-import ItemList from "../../stuff/ItemList/ItemList";
+import { serverIP } from "../../constants/serverIP";
+import "./table.css";
+import ItemList from "../stuff/ItemList/ItemList";
 
 const Stations = () => {
   const [materials, setMaterials] = useState([]);

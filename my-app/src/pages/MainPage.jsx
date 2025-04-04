@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import OrderForm from "../components/forms/OrderForm/OrderForm";
 import ProductionForm from "../components/forms/ProductionForm/ProductionForm";
 import TransactionForm from "../components/forms/TransactionForm/TransactionForm";
-import AvailableMaterials from "../components/tables/AvailableMaterials/AvailableMaterials";
-import AvailableProducts from "../components/tables/AvailableProducts/AvailableProducts";
-import Stations from "../components/tables/Stations/Stations"
-import Transactions from "../components/tables/Transactions/Transactions"
+import AvailableMaterials from "../components/tables/AvailableMaterials";
+import AvailableProducts from "../components/tables/AvailableProducts";
+import Stations from "../components/tables/Stations"
+import Products from "../components/tables/Products"
+import Transactions from "../components/tables/Transactions"
+import Orders from "../components/tables/Orders"
 import "./MainPage.css";
 
 const MainPage = () => {
@@ -41,6 +43,18 @@ const MainPage = () => {
             Станции
           </li>
           <li
+            className={`menu-item ${selectedForm === "products" ? "active" : ""}`}
+            onClick={() => setSelectedForm("products")}
+          >
+            Продукты
+          </li>
+          <li
+            className={`menu-item ${selectedForm === "orders" ? "active" : ""}`}
+            onClick={() => setSelectedForm("orders")}
+          >
+            Приказы
+          </li>
+          <li
             className={`menu-item ${selectedForm === "transactions" ? "active" : ""}`}
             onClick={() => setSelectedForm("transactions")}
           >
@@ -67,6 +81,8 @@ const MainPage = () => {
         {selectedForm === "production" && <ProductionForm />}
         {selectedForm === "transaction" && <TransactionForm />}
         {selectedForm === "stations" && <Stations />}
+        {selectedForm === "products" && <Products />}
+        {selectedForm === "orders" && <Orders />}
         {selectedForm === "transactions" && <Transactions />}
         {selectedForm === "availableMaterials" && <AvailableMaterials />}
         {selectedForm === "availableProducts" && <AvailableProducts />}
