@@ -4,16 +4,7 @@ import OrderForm from "../components/forms/OrderForm/OrderForm";
 import ProductionForm from "../components/forms/ProductionForm/ProductionForm";
 import TransactionForm from "../components/forms/TransactionForm/TransactionForm";
 
-import AvailableMaterials from "../components/tables/AvailableMaterials";
-import AvailableProducts from "../components/tables/AvailableProducts";
-
-import MaterialList from "../components/tables/entities/MaterialList"
-import Orders from "../components/tables/entities/Orders"
-import Products from "../components/tables/entities/Products"
-import Stations from "../components/tables/entities/Stations"
-import Transactions from "../components/tables/entities/Transactions"
-import TypeInfo from "../components/tables/entities/TypeInfo"
-import UsedTransaction from "../components/tables/entities/UsedTransaction"
+import Table from "../components/stuff/Table/Table";
 
 import "./MainPage.css";
 
@@ -125,15 +116,15 @@ const MainPage = () => {
         {selectedForm === "order" && <OrderForm />}
         {selectedForm === "production" && <ProductionForm />}
         {selectedForm === "transaction" && <TransactionForm />}
-        {selectedForm === "materialList" && <MaterialList />}
-        {selectedForm === "orders" && <Orders />}
-        {selectedForm === "products" && <Products />}
-        {selectedForm === "stations" && <Stations />}
-        {selectedForm === "transactions" && <Transactions />}
-        {selectedForm === "types" && <TypeInfo />}
-        {selectedForm === "usedTransactions" && <UsedTransaction />}
-        {selectedForm === "availableMaterials" && <AvailableMaterials />}
-        {selectedForm === "availableProducts" && <AvailableProducts />}
+        {selectedForm === "materialList" && <Table endPoint="api/material_list" title="требуемые материалы"  />}
+        {selectedForm === "orders" && <Table endPoint="api/orders" title="Заказы" />}
+        {selectedForm === "products" && <Table endPoint="api/products" title="Приказы" />}
+        {selectedForm === "stations" && <Table endPoint="api/stations" title="Станции" />}
+        {selectedForm === "transactions" && <Table endPoint="api/transactions" title="Транзакции" />}
+        {selectedForm === "types" && <Table endPoint="api/types" title="Типы" />}
+        {selectedForm === "usedTransactions" && <Table endPoint="api/used_transaction" title="Использованные транзакции" />}
+        {selectedForm === "availableMaterials" && <Table endPoint="api/available_materials" title="Доступные материалы" />}
+        {selectedForm === "availableProducts" && <Table endPoint="api/available_products" title="Доступные продукты" />}
       </div>
     </div>
   );

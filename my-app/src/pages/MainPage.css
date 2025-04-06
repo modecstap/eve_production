@@ -99,3 +99,8 @@
 .submenu .menu-item:hover {
   background-color: #444;
 }
+
+.submenu .menu-item.active {
+  background-color: #007bff;
+  color: white;
+}
