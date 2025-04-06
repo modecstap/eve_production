@@ -11,7 +11,7 @@ const AvailableMaterials = () => {
   useEffect(() => {
     const fetchMaterials = async () => {
       try {
-        const response = await fetch(`${serverIP}/api/transaction/get_available_materials`);
+        const response = await fetch(`${serverIP}/api/available_materials`);
         if (response.ok) {
           const data = await response.json();
           setMaterials(data);

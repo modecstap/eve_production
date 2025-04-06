@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { serverIP } from "../../constants/serverIP";
-import "./table.css";
-import ItemList from "../stuff/ItemList/ItemList";
+import { serverIP } from "../../../constants/serverIP";
+import "../table.css";
+import ItemList from "../../stuff/ItemList/ItemList";
 
 const Stations = () => {
   const [materials, setMaterials] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const endPoint = "api/used_transaction"
 
   const fetchMaterials = async () => {
     setLoading(true);
     setError("");
     try {
-      const response = await fetch(`${serverIP}/api/stations`);
+      const response = await fetch(`${serverIP}/${endPoint}`);
       if (response.ok) {
         const data = await response.json();
         setMaterials(data);
@@ -36,10 +37,10 @@ const Stations = () => {
   return (
     <div className="materials-container">
       <div className="materials-header">
-        <h1 className="materials-title">Станции</h1>
+        <h1 className="materials-title">Транзакции</h1>
         <button className="refresh-button" onClick={fetchMaterials}>&#10226;</button>
       </div>
-      <ItemList data={materials} disableAction={false} apiUrl={`${serverIP}/api/stations`} />
+      <ItemList data={materials} disableAction={false} apiUrl={`${serverIP}/${endPoint}`} />
     </div>
   );
 };
