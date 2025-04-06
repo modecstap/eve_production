@@ -5,3 +5,5 @@ from src.services.mappers.entity_mappers.station_mapper import StationEntityMapp
 from src.services.mappers.entity_mappers.transaction_mapper import TransactionEntityMapper
 from src.services.mappers.entity_mappers.type_mapper import TypeEntityMapper
 from src.services.mappers.entity_mappers.order_mapper import OrderEntityMapper
+from src.services.mappers.entity_mappers.material_list_mapper import MaterialListEntityMapper
+from src.services.mappers.entity_mappers.user_transaction_mapper import UsedTransactionMapper

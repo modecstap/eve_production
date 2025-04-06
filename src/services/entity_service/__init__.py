@@ -4,3 +4,5 @@ from src.services.entity_service.product_service import ProductService
 from src.services.entity_service.station_service import StationService
 from src.services.entity_service.transaction_service import TransactionService
 from src.services.entity_service.type_service import TypeService
+from src.services.entity_service.material_list_service import MaterialListService
+from src.services.entity_service.used_transaction_service import UsedTransactionService

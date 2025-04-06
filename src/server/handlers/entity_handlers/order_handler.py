@@ -1,4 +1,4 @@
-from src.server.handlers.entity_handler import EntityHandler
+from src.server.handlers.entity_handlers.entity_handler import EntityHandler
 from src.server.handlers.models.order_models import OrderModel, InsertOrderModel, ChangePriceModel, SellItemModel, \
     UpdateOrderModel
 from src.services.entity_service import OrderService
@@ -37,6 +37,6 @@ class OrderHandler(EntityHandler):
         sell_count_model.order_id = id
         await self._service.update_sell_count(sell_count_model)
 
-    async def update_price(self, id: int,  change_price_model: ChangePriceModel):
-        change_price_model.order_id =id
+    async def update_price(self, id: int, change_price_model: ChangePriceModel):
+        change_price_model.order_id = id
         await self._service.update_price(change_price_model)

@@ -6,7 +6,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from src.config import Settings
 from src.server.handlers import OrderHandler, TestHandler, TransactionHandler, ProductHandler, TypeHandler, \
-    StationHandler, ProductionHandler, AvailableMaterialHandler
+    StationHandler, ProductionHandler, AvailableMaterialHandler, MaterialListHandler
+from src.server.handlers.entity_handlers.used_transaction_handler import UsedTransactionHandler
 
 
 class FastAPIServer:
@@ -18,7 +19,6 @@ class FastAPIServer:
         self._setup_cors()
         self._setup_handlers()
         self._setup_routs()
-
 
     def _setup_cors(self):
         origins = [
@@ -36,12 +36,13 @@ class FastAPIServer:
         self.test_handler = TestHandler()
         self.transaction_handler = TransactionHandler()
         self.order_handler = OrderHandler()
+        self.used_transaction_handler = UsedTransactionHandler()
+        self.material_list_handler = MaterialListHandler()
         self.product_handler = ProductHandler()
         self.type_handler = TypeHandler()
         self.station_handler = StationHandler()
         self.production_handler = ProductionHandler()
         self.available_material_handler = AvailableMaterialHandler()
-
 
     async def start(self):
         config = uvicorn.Config(self.app, host=self._config.host, port=self._config.port, loop="asyncio")
@@ -54,14 +55,17 @@ class FastAPIServer:
             await asyncio.sleep(0.1)  # Даем время для корректного завершения
 
     def _setup_routs(self):
-        self.app.get("/api/test/ping")( self.test_handler.ping)
+        self.app.get("/api/test/ping")(self.test_handler.ping)
         self.app.options("/{tail:.*}")(self.test_handler.preflight_handler)
 
         self._setup_transaction_routes()
         self._setup_order_routes()
         self._setup_product_routes()
+        self._setup_material_list_routes()
         self._setup_type_routes()
+        self._setup_available_materials()
         self._setup_station_routes()
+        self._setup_used_transaction_routes()
         self.setup_production_routes()
 
     def _setup_transaction_routes(self):
@@ -87,6 +91,24 @@ class FastAPIServer:
         self.app.put("/api/orders/")(self.order_handler.update_bulk)
         self.app.delete("/api/orders/{id}")(self.order_handler.delete)
 
+    def _setup_material_list_routes(self):
+        self.app.get("/api/material_list/")(self.material_list_handler.get_all)
+        self.app.get("/api/material_list/{id}")(self.material_list_handler.get)
+        self.app.post("/api/material_list/")(self.material_list_handler.create)
+        self.app.post("/api/material_list/bulk")(self.material_list_handler.create_bulk)
+        self.app.put("/api/material_list/{id}")(self.material_list_handler.update)
+        self.app.put("/api/material_list/")(self.material_list_handler.update_bulk)
+        self.app.delete("/api/material_list/{id}")(self.material_list_handler.delete)
+
+    def _setup_used_transaction_routes(self):
+        self.app.get("/api/used_transaction/")(self.used_transaction_handler.get_all)
+        self.app.get("/api/used_transaction/{id}")(self.used_transaction_handler.get)
+        self.app.post("/api/used_transaction/")(self.used_transaction_handler.create)
+        self.app.post("/api/used_transaction/bulk")(self.used_transaction_handler.create_bulk)
+        self.app.put("/api/used_transaction/{id}")(self.used_transaction_handler.update)
+        self.app.put("/api/used_transaction/")(self.used_transaction_handler.update_bulk)
+        self.app.delete("/api/used_transaction/{id}")(self.used_transaction_handler.delete)
+
     def _setup_product_routes(self):
         self.app.get("/api/products/")(self.product_handler.get_all)
         self.app.get("/api/products/{id}")(self.product_handler.get)
@@ -97,7 +119,13 @@ class FastAPIServer:
         self.app.delete("/api/products/{id}")(self.product_handler.delete)
 
     def _setup_type_routes(self):
-        self.app.get("/api/type_info/get_types")(self.type_handler.get_types)
+        self.app.get("/api/types/")(self.type_handler.get_all)
+        self.app.get("/api/types/{id}")(self.type_handler.get)
+        self.app.post("/api/types/")(self.type_handler.create)
+        self.app.post("/api/types/bulk")(self.type_handler.create_bulk)
+        self.app.put("/api/types/{id}")(self.type_handler.update)
+        self.app.put("/api/types/")(self.type_handler.update_bulk)
+        self.app.delete("/api/types/{id}")(self.type_handler.delete)
 
     def _setup_station_routes(self):
         self.app.get("/api/stations/")(self.station_handler.get_all)

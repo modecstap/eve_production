@@ -1,15 +1,15 @@
-from src.server.handlers.entity_handler import EntityHandler
-from src.server.handlers.models.product_models import ProductModel, InsertProductModel, UpdateProductModel
-from src.services.entity_service import ProductService
+from src.server.handlers.entity_handlers.entity_handler import EntityHandler
+from src.server.handlers.models.used_transactions import UsedTransactionModel, InsertUsedTransactionModel, UpdateUsedTransactionModel
+from src.services.entity_service import UsedTransactionService
 
 
-class ProductHandler(EntityHandler):
-    MODEL = ProductModel
-    INSERT_MODEL = InsertProductModel
-    UPDATE_MODEL = UpdateProductModel
+class UsedTransactionHandler(EntityHandler):
+    MODEL = UsedTransactionModel
+    INSERT_MODEL = InsertUsedTransactionModel
+    UPDATE_MODEL = UpdateUsedTransactionModel
 
     def __init__(self):
-        super().__init__(ProductService())
+        super().__init__(UsedTransactionService())
 
     async def get_all(self) -> list[MODEL]:
         return await super().get_all()

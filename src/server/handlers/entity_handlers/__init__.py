@@ -1,0 +1,6 @@
+from src.server.handlers.entity_handlers.material_list_handler import MaterialListHandler
+from src.server.handlers.entity_handlers.order_handler import OrderHandler
+from src.server.handlers.entity_handlers.product_handler import ProductHandler
+from src.server.handlers.entity_handlers.station_handler import StationHandler
+from src.server.handlers.entity_handlers.transaction_handler import TransactionHandler
+from src.server.handlers.entity_handlers.type_handler import TypeHandler
