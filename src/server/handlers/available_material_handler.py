@@ -14,7 +14,7 @@ class AvailableMaterialHandler:
         if not result:
             raise HTTPException(status_code=status_code, detail=detail)
 
-    async def get_all(self) -> AvailableMaterialModel:
+    async def get_all(self) -> list[AvailableMaterialModel]:
         models = await self._service.get_available_materials()
         self.__raise_if_not_found(models)
         return models
