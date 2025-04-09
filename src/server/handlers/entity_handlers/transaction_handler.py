@@ -21,8 +21,11 @@ class TransactionHandler:
         if not result:
             raise HTTPException(status_code=status_code, detail=detail)
 
-    async def get_all(self) -> list[TransactionModel]:
-        models = await self._service.get_models()
+    async def get_all(
+            self,
+            replace_id_with_name: bool | None = None
+    ) -> list[TransactionModel]:
+        models = await self._service.get_models(replace_id_with_name)
         self.__raise_if_not_found(models)
         return models
 
