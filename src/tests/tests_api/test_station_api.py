@@ -5,6 +5,7 @@ from fastapi.testclient import TestClient
 from sqlalchemy import select, Row
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.config import Settings
 from src.server import FastAPIServer
 from src.server.handlers.models.station_models import StationModel
 from src.storage import Database
@@ -16,7 +17,7 @@ class TestStationApi(AbstractTestApi):
     model: StationModel = StationModel
     entity: Station = Station
     db = Database()
-    client = TestClient(FastAPIServer().app)
+    client = TestClient(FastAPIServer(Settings().config.server_config).app)
 
     @pytest.fixture(autouse=True)
     async def setup_db(self):

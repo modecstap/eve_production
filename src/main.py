@@ -11,7 +11,7 @@ async def main():
     Settings()
     await Database().create_all()
 
-    server = FastAPIServer()
+    server = FastAPIServer(Settings().config.server_config)
     await server.start()
 
     loop = asyncio.get_event_loop()
