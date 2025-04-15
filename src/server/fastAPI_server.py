@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from src.config import Settings
 from src.server.handlers import OrderHandler, TestHandler, TransactionHandler, ProductHandler, TypeHandler, \
-    StationHandler, ProductionHandler, AvailableMaterialHandler, MaterialListHandler
+    StationHandler, ProductionHandler, AvailableMaterialHandler, MaterialListHandler, CostCalculatorHandler
 from src.server.handlers.entity_handlers.used_transaction_handler import UsedTransactionHandler
 
 
@@ -18,7 +18,7 @@ class FastAPIServer:
 
         self._setup_cors()
         self._setup_handlers()
-        self._setup_routs()
+        self._setup_routes()
 
     def _setup_cors(self):
         origins = [
@@ -42,6 +42,7 @@ class FastAPIServer:
         self.type_handler = TypeHandler()
         self.station_handler = StationHandler()
         self.production_handler = ProductionHandler()
+        self.cost_calculator_handler = CostCalculatorHandler()
         self.available_material_handler = AvailableMaterialHandler()
 
     async def start(self):
@@ -54,7 +55,7 @@ class FastAPIServer:
             self.server.should_exit = True
             await asyncio.sleep(0.1)  # Даем время для корректного завершения
 
-    def _setup_routs(self):
+    def _setup_routes(self):
         self.app.get("/api/test/ping")(self.test_handler.ping)
         self.app.options("/{tail:.*}")(self.test_handler.preflight_handler)
 
@@ -63,7 +64,7 @@ class FastAPIServer:
         self._setup_product_routes()
         self._setup_material_list_routes()
         self._setup_type_routes()
-        self._setup_available_materials()
+        self._setup_available_materials_routes()
         self._setup_station_routes()
         self._setup_used_transaction_routes()
         self.setup_production_routes()
@@ -76,9 +77,6 @@ class FastAPIServer:
         self.app.put("/api/transactions/{id}")(self.transaction_handler.update)
         self.app.put("/api/transactions/")(self.transaction_handler.update_bulk)
         self.app.delete("/api/transactions/{id}")(self.transaction_handler.delete)
-
-    def _setup_available_materials(self):
-        self.app.get("/api/available_materials")(self.available_material_handler.get_all)
 
     def _setup_order_routes(self):
         self.app.get("/api/orders/")(self.order_handler.get_all)
@@ -129,13 +127,18 @@ class FastAPIServer:
 
     def _setup_station_routes(self):
         self.app.get("/api/stations/")(self.station_handler.get_all)
-        self.app.get("/api/stations/{station_id}")(self.station_handler.get)
+        self.app.get("/api/stations/{id}")(self.station_handler.get)
         self.app.post("/api/stations/")(self.station_handler.create)
         self.app.post("/api/stations/bulk")(self.station_handler.create_bulk)
-        self.app.put("/api/stations/{station_id}")(self.station_handler.update)
+        self.app.put("/api/stations/{id}")(self.station_handler.update)
         self.app.put("/api/stations/")(self.station_handler.update_bulk)
-        self.app.delete("/api/stations/{station_id}")(self.station_handler.delete)
+        self.app.delete("/api/stations/{id}")(self.station_handler.delete)
 
     def setup_production_routes(self):
         self.app.post("/api/product/create_products")(self.production_handler.create_products)
-        self.app.post("/api/product/get_production_cost")(self.production_handler.calculate_production_cost)
+
+    def setup_cost_calculator_routes(self):
+        self.app.post("/api/cost_calculator")(self.cost_calculator_handler.calculate_production_cost)
+
+    def _setup_available_materials_routes(self):
+        self.app.get("/api/available_materials")(self.available_material_handler.get_all)

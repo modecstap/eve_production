@@ -15,7 +15,7 @@ class ProductRepository(BaseRepository):
         self._entity = Product
 
     @ensure_session
-    async def insert_with_used_transaction(self, product: Product, count, session: AsyncSession = None):
+    async def insert_used_transactions(self, product: Product, count, session: AsyncSession = None):
         create_used_transaction = text(f"""
         DO $$ 
         DECLARE
