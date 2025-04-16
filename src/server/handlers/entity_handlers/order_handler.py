@@ -1,7 +1,7 @@
 from src.server.handlers.entity_handlers.entity_handler import EntityHandler
 from src.server.handlers.models.order_models import OrderModel, InsertOrderModel, ChangePriceModel, SellItemModel, \
     UpdateOrderModel
-from src.services.entity_service import OrderService
+from src.services.utils import EntityServiceFactory
 
 
 class OrderHandler(EntityHandler):
@@ -10,7 +10,7 @@ class OrderHandler(EntityHandler):
     UPDATE_MODEL = UpdateOrderModel
 
     def __init__(self):
-        super().__init__(OrderService())
+        super().__init__(EntityServiceFactory.get_entity_service("order"))
 
     async def get_all(self) -> list[MODEL]:
         return await super().get_all()

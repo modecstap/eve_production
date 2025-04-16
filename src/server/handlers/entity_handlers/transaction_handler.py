@@ -2,14 +2,14 @@ from fastapi import HTTPException, status
 
 from src.server.handlers.models.transactions_models import TransactionModel, InsertTransactionModel, \
     UpdateTransactionModel
-from src.services.entity_service import TransactionService
 from src.services.exceptions import NotFoundException
+from src.services.utils import EntityServiceFactory
 
 
 class TransactionHandler:
 
     def __init__(self):
-        self._service = TransactionService()
+        self._service = EntityServiceFactory.get_entity_service("transaction")
 
     @staticmethod
     def __raise_if_not_found(result, detail: str = "NOT_FOUND", status_code: int = status.HTTP_404_NOT_FOUND):

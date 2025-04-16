@@ -1,6 +1,6 @@
 from src.server.handlers.entity_handlers.entity_handler import EntityHandler
 from src.server.handlers.models.station_models import StationModel, InsertStationModel, UpdateStationModel
-from src.services.entity_service import StationService
+from src.services.utils import EntityServiceFactory
 
 
 class StationHandler(EntityHandler):
@@ -9,7 +9,7 @@ class StationHandler(EntityHandler):
     UPDATE_MODEL = UpdateStationModel
 
     def __init__(self):
-        super().__init__(StationService())
+        super().__init__(EntityServiceFactory.get_entity_service("station"))
 
     async def get_all(self) -> list[MODEL]:
         return await super().get_all()

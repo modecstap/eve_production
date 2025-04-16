@@ -1,6 +1,7 @@
 from src.server.handlers.entity_handlers.entity_handler import EntityHandler
-from src.server.handlers.models.used_transactions import UsedTransactionModel, InsertUsedTransactionModel, UpdateUsedTransactionModel
-from src.services.entity_service import UsedTransactionService
+from src.server.handlers.models.used_transactions import UsedTransactionModel, InsertUsedTransactionModel, \
+    UpdateUsedTransactionModel
+from src.services.utils import EntityServiceFactory
 
 
 class UsedTransactionHandler(EntityHandler):
@@ -9,7 +10,7 @@ class UsedTransactionHandler(EntityHandler):
     UPDATE_MODEL = UpdateUsedTransactionModel
 
     def __init__(self):
-        super().__init__(UsedTransactionService())
+        super().__init__(EntityServiceFactory.get_entity_service("used_transaction"))
 
     async def get_all(self) -> list[MODEL]:
         return await super().get_all()

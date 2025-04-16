@@ -1,20 +1,24 @@
+from typing import Type
+
 from src.server.handlers.models.product_models import AvailableProductModel
 from src.services.entity_service import BaseEntityService
-from src.services.mappers.entity_mappers  import ProductEntityMapper
+from src.services.mappers.entity_mappers import ProductEntityMapper
 from src.services.mappers.row_mappers import ProductCostRowMapper
-from src.storage.repositories import ProductRepository, MaterialListRepository, TransactionRepository, StationRepository
+from src.services.utils import EntityServiceFactory, ServiceConfig
+from src.storage.repositories import ProductRepository
 
 
+@EntityServiceFactory.service_registration_decorator(
+    ServiceConfig(
+        name="product",
+        repository=ProductRepository,
+        mapper=ProductEntityMapper
+    )
+)
 class ProductService(BaseEntityService):
 
-    def __init__(self):
-        super().__init__()
-        self._main_repository = ProductRepository()
-        self._material_list_repository = MaterialListRepository()
-        self._transaction_repository = TransactionRepository()
-        self._station_repository = StationRepository()
-
-        self._main_mapper = ProductEntityMapper()
+    def __init__(self, repository: Type[ProductRepository], mapper: Type[ProductEntityMapper]):
+        super().__init__(repository, mapper)
         self._product_cost_mapper = ProductCostRowMapper()
 
     async def get_available_products(self) -> list[AvailableProductModel] | None:

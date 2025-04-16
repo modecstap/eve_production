@@ -1,6 +1,6 @@
 from src.server.handlers.entity_handlers.entity_handler import EntityHandler
 from src.server.handlers.models.product_models import ProductModel, InsertProductModel, UpdateProductModel
-from src.services.entity_service import ProductService
+from src.services.utils import EntityServiceFactory
 
 
 class ProductHandler(EntityHandler):
@@ -9,7 +9,7 @@ class ProductHandler(EntityHandler):
     UPDATE_MODEL = UpdateProductModel
 
     def __init__(self):
-        super().__init__(ProductService())
+        super().__init__(EntityServiceFactory.get_entity_service("product"))
 
     async def get_all(self) -> list[MODEL]:
         return await super().get_all()

@@ -1,6 +1,6 @@
 from src.server.handlers.entity_handlers.entity_handler import EntityHandler
 from src.server.handlers.models.type_info_models import TypeInfoModel, InsertTypeInfoModel, UpdateTypeInfoModel
-from src.services.entity_service import TypeService
+from src.services.utils import EntityServiceFactory
 
 
 class TypeHandler(EntityHandler):
@@ -9,7 +9,7 @@ class TypeHandler(EntityHandler):
     UPDATE_MODEL = UpdateTypeInfoModel
 
     def __init__(self):
-        super().__init__(TypeService())
+        super().__init__(EntityServiceFactory.get_entity_service("type"))
 
     async def get_all(self) -> list[MODEL]:
         return await super().get_all()

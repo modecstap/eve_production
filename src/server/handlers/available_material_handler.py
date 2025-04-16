@@ -1,13 +1,13 @@
 from fastapi import HTTPException, status
 
 from src.server.handlers.models import AvailableMaterialModel
-from src.services.entity_service import TransactionService
+from src.services import AvailableMaterialsService
 
 
 class AvailableMaterialHandler:
 
     def __init__(self):
-        self._service = TransactionService()
+        self._service = AvailableMaterialsService()
 
     @staticmethod
     def __raise_if_not_found(result, detail: str = "NOT_FOUND", status_code: int = status.HTTP_404_NOT_FOUND):

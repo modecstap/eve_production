@@ -1,17 +1,18 @@
-from src.services.base_service import BaseService
+from typing import Type
 
 from pydantic import BaseModel
 
+from src.services.base_service import BaseService
 from src.services.exceptions import NotFoundException
-from src.services.mappers.entity_mappers  import BaseEntityMapper
+from src.services.mappers.entity_mappers import BaseEntityMapper
 from src.storage.repositories import BaseRepository
 
 
 class BaseEntityService(BaseService):
 
-    def __init__(self):
-        self._main_repository = BaseRepository()
-        self._main_mapper = BaseEntityMapper()
+    def __init__(self, repository: Type[BaseRepository], mapper: Type[BaseEntityMapper]):
+        self._main_repository = repository()
+        self._main_mapper = mapper()
 
     async def get_models(self) -> list[BaseModel]:
         return await self.__try_get_models()

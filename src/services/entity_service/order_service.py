@@ -1,19 +1,27 @@
+from typing import Type
+
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.server.handlers.models.order_models import InsertOrderModel, SellItemModel, ChangePriceModel
 from src.services.entity_service import BaseEntityService
 from src.services.exceptions import NotEnoughMaterialsException
 from src.services.mappers.entity_mappers import InsertOrderEntityMapper, OrderEntityMapper
+from src.services.utils import EntityServiceFactory, ServiceConfig
 from src.storage.repositories import OrderRepository, TransactionRepository
 from src.storage.tables import Transaction
 
 
+@EntityServiceFactory.service_registration_decorator(
+    ServiceConfig(
+        name="order",
+        repository=OrderRepository,
+        mapper=OrderEntityMapper
+    )
+)
 class OrderService(BaseEntityService):
 
-    def __init__(self):
-        super().__init__()
-        self._main_repository = OrderRepository()
-        self._main_mapper = OrderEntityMapper()
+    def __init__(self, repository: Type[OrderRepository], mapper: Type[OrderEntityMapper]):
+        super().__init__(repository, mapper)
         self._transaction_repository = TransactionRepository()
         self._insert_order_mapper = InsertOrderEntityMapper()
 

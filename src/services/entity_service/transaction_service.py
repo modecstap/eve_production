@@ -1,17 +1,24 @@
-from src.server.handlers.models import AvailableMaterialModel
+from typing import Type
+
 from src.server.handlers.models.transactions_models import TransactionModel
 from src.services.entity_service import BaseEntityService
-from src.services.mappers.entity_mappers  import TransactionEntityMapper
+from src.services.mappers.entity_mappers import TransactionEntityMapper
 from src.services.mappers.row_mappers import AvailableMaterialRowMapper
+from src.services.utils import EntityServiceFactory, ServiceConfig
 from src.storage.repositories import TransactionRepository
 
 
+@EntityServiceFactory.service_registration_decorator(
+    ServiceConfig(
+        name="transaction",
+        repository=TransactionRepository,
+        mapper=TransactionEntityMapper
+    )
+)
 class TransactionService(BaseEntityService):
 
-    def __init__(self):
-        super().__init__()
-        self._main_repository = TransactionRepository()
-        self._main_mapper = TransactionEntityMapper()
+    def __init__(self, repository: Type[TransactionRepository], mapper: Type[TransactionEntityMapper]):
+        super().__init__(repository, mapper)
         self._available_material_mapper = AvailableMaterialRowMapper()
 
     async def get_models(self, replace_id_with_name: bool) -> list[TransactionModel]:
@@ -31,12 +38,3 @@ class TransactionService(BaseEntityService):
             raise e
         finally:
             await session.close()
-
-
-    async def get_available_materials(self) -> list[AvailableMaterialModel]:
-        return await self.__try_get_available_materials()
-
-    async def __try_get_available_materials(self):
-        entities = await self._main_repository.get_available_materials()
-        models = self._available_material_mapper.entities_to_models(entities)
-        return models
