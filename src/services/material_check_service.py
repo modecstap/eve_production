@@ -1,11 +1,15 @@
 from collections import defaultdict
-from decimal import Decimal
 
 from src.server.handlers.models.production_models import ProductionModel
 from src.services import RequiredMaterialsService
+from src.services.utils import ServiceFactory, ServiceConfig
 from src.storage.repositories import TransactionRepository
 
-
+@ServiceFactory.service_registration_decorator(
+    ServiceConfig(
+        name="material_check",
+    )
+)
 class MaterialCheckService:
 
     def __init__(self):

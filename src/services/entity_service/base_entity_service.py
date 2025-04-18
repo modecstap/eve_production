@@ -10,9 +10,9 @@ from src.storage.repositories import BaseRepository
 
 class BaseEntityService(BaseService):
 
-    def __init__(self, repository: Type[BaseRepository], mapper: Type[BaseEntityMapper]):
-        self._main_repository = repository()
-        self._main_mapper = mapper()
+    def __init__(self, repository: BaseRepository, mapper: BaseEntityMapper):
+        self._main_repository = repository
+        self._main_mapper = mapper
 
     async def get_models(self) -> list[BaseModel]:
         return await self.__try_get_models()

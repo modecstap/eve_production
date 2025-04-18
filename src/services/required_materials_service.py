@@ -2,10 +2,15 @@ from collections import defaultdict
 from decimal import Decimal, ROUND_UP
 
 from src.server.handlers.models.production_models import ProductionModel
+from src.services.utils import ServiceFactory, ServiceConfig
 from src.storage.repositories import StationRepository, MaterialListRepository
 from src.storage.tables import MaterialList, Station
 
-
+@ServiceFactory.service_registration_decorator(
+    ServiceConfig(
+        name="required_materials",
+    )
+)
 class RequiredMaterialsService:
 
     def __init__(self):

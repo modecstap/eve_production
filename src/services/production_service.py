@@ -1,13 +1,16 @@
 from src.server.handlers.models.production_models import ProductionModel
-from src.services import CostCalculatorService
+from src.services.cost_calculator_service import CostCalculatorService
 from src.services.base_service import BaseService
-from src.services.exceptions import NotEnoughMaterialsException
 from src.services.mappers import ProductionMapper
-from src.services.material_check_service import MaterialCheckService
+from src.services.utils import ServiceFactory, ServiceConfig
 from src.storage.repositories import TransactionRepository, ProductRepository
 from src.storage.tables import Transaction
 
-
+@ServiceFactory.service_registration_decorator(
+    ServiceConfig(
+        name="production",
+    )
+)
 class ProductionService(BaseService):
 
     def __init__(self):

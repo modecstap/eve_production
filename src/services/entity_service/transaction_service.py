@@ -4,22 +4,25 @@ from src.server.handlers.models.transactions_models import TransactionModel
 from src.services.entity_service import BaseEntityService
 from src.services.mappers.entity_mappers import TransactionEntityMapper
 from src.services.mappers.row_mappers import AvailableMaterialRowMapper
-from src.services.utils import EntityServiceFactory, ServiceConfig
+from src.services.utils import ServiceFactory, ServiceConfig
 from src.storage.repositories import TransactionRepository
 
 
-@EntityServiceFactory.service_registration_decorator(
+@ServiceFactory.service_registration_decorator(
     ServiceConfig(
         name="transaction",
-        repository=TransactionRepository,
-        mapper=TransactionEntityMapper
     )
 )
 class TransactionService(BaseEntityService):
 
-    def __init__(self, repository: Type[TransactionRepository], mapper: Type[TransactionEntityMapper]):
+    def __init__(
+            self,
+            repository: TransactionRepository=TransactionEntityMapper(),
+            mapper: TransactionEntityMapper=TransactionEntityMapper(),
+            available_material_mapper: AvailableMaterialRowMapper=AvailableMaterialRowMapper()
+    ):
         super().__init__(repository, mapper)
-        self._available_material_mapper = AvailableMaterialRowMapper()
+        self._available_material_mapper = available_material_mapper
 
     async def get_models(self, replace_id_with_name: bool) -> list[TransactionModel]:
         session = self._main_repository.create_session()

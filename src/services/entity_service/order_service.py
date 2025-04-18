@@ -6,24 +6,28 @@ from src.server.handlers.models.order_models import InsertOrderModel, SellItemMo
 from src.services.entity_service import BaseEntityService
 from src.services.exceptions import NotEnoughMaterialsException
 from src.services.mappers.entity_mappers import InsertOrderEntityMapper, OrderEntityMapper
-from src.services.utils import EntityServiceFactory, ServiceConfig
+from src.services.utils import ServiceFactory, ServiceConfig
 from src.storage.repositories import OrderRepository, TransactionRepository
 from src.storage.tables import Transaction
 
 
-@EntityServiceFactory.service_registration_decorator(
+@ServiceFactory.service_registration_decorator(
     ServiceConfig(
         name="order",
-        repository=OrderRepository,
-        mapper=OrderEntityMapper
     )
 )
 class OrderService(BaseEntityService):
 
-    def __init__(self, repository: Type[OrderRepository], mapper: Type[OrderEntityMapper]):
+    def __init__(
+            self,
+            repository: OrderRepository=OrderRepository(),
+            mapper: OrderEntityMapper=OrderEntityMapper(),
+            transaction_repository: TransactionRepository=TransactionRepository(),
+            insert_order_mapper: InsertOrderEntityMapper=InsertOrderEntityMapper()
+    ):
         super().__init__(repository, mapper)
-        self._transaction_repository = TransactionRepository()
-        self._insert_order_mapper = InsertOrderEntityMapper()
+        self._transaction_repository = transaction_repository
+        self._insert_order_mapper = insert_order_mapper
 
     async def add_model(self, insert_order_model: InsertOrderModel):
         session = self._main_repository.create_session()

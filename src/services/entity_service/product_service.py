@@ -4,22 +4,25 @@ from src.server.handlers.models.product_models import AvailableProductModel
 from src.services.entity_service import BaseEntityService
 from src.services.mappers.entity_mappers import ProductEntityMapper
 from src.services.mappers.row_mappers import ProductCostRowMapper
-from src.services.utils import EntityServiceFactory, ServiceConfig
+from src.services.utils import ServiceFactory, ServiceConfig
 from src.storage.repositories import ProductRepository
 
 
-@EntityServiceFactory.service_registration_decorator(
+@ServiceFactory.service_registration_decorator(
     ServiceConfig(
         name="product",
-        repository=ProductRepository,
-        mapper=ProductEntityMapper
     )
 )
 class ProductService(BaseEntityService):
 
-    def __init__(self, repository: Type[ProductRepository], mapper: Type[ProductEntityMapper]):
+    def __init__(
+            self,
+            repository: ProductRepository=ProductEntityMapper(),
+            mapper: ProductEntityMapper=ProductEntityMapper(),
+            product_cost_mapper: ProductCostRowMapper=ProductCostRowMapper()
+    ):
         super().__init__(repository, mapper)
-        self._product_cost_mapper = ProductCostRowMapper()
+        self._product_cost_mapper = product_cost_mapper
 
     async def get_available_products(self) -> list[AvailableProductModel] | None:
         return await self.__try_get_available_products()
