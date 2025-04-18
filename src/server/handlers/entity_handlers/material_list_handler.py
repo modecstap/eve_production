@@ -1,7 +1,7 @@
 from src.server.handlers.entity_handlers.entity_handler import EntityHandler
 from src.server.handlers.models.material_list_models import MaterialListModel, InsertMaterialListModel, \
     UpdateMaterialListModel
-from src.services.utils import EntityServiceFactory
+from src.services.utils import ServiceFactory
 
 
 class MaterialListHandler(EntityHandler):
@@ -10,7 +10,7 @@ class MaterialListHandler(EntityHandler):
     UPDATE_MODEL = UpdateMaterialListModel
 
     def __init__(self):
-        super().__init__(EntityServiceFactory.get_entity_service("material_list"))
+        super().__init__(ServiceFactory.get_entity_service("material_list"))
 
     async def get_all(self) -> list[MODEL]:
         return await super().get_all()
