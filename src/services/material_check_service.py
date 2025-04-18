@@ -15,10 +15,8 @@ class MaterialCheckService:
     async def get_missing_materials(
             self,
             production: ProductionModel,
-            required_materials: dict[int:Decimal]
     ) -> dict:
-        if not required_materials:
-            required_materials = await self._required_materials_service.get_required_materials(production)
+        required_materials = await self._required_materials_service.get_required_materials(production)
         available_materials = await self._get_available_materials()
         missing_materials = dict()
 
