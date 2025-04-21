@@ -9,7 +9,7 @@ from src.extensions import Singleton
 
 class Settings(metaclass=Singleton):
     def __init__(self):
-        env = os.getenv("ENV", "test")
+        env = os.getenv("MODE", "test")
 
         if env in ['dev', 'prod']:
             filename = 'config.yaml'
@@ -21,7 +21,7 @@ class Settings(metaclass=Singleton):
                 yaml_content = fd.read()
             self._build_config(yaml_content)
         else:
-            raise Exception('Пошел нах, где файл падла')
+            raise Exception(f'{filename} отсутствует')
 
     def _build_config(self, yaml_content):
         yaml_content = self.__replace_env_variables(yaml_content)
