@@ -1,9 +1,8 @@
 from collections import defaultdict
 
 from src.server.handlers.models.production_models import ProductionModel
-from src.services import RequiredMaterialsService
+from src.services import RequiredMaterialsService, AvailableMaterialsService
 from src.services.utils import ServiceFactory, ServiceConfig
-from src.storage.repositories import TransactionRepository
 
 @ServiceFactory.service_registration_decorator(
     ServiceConfig(
@@ -13,7 +12,7 @@ from src.storage.repositories import TransactionRepository
 class MaterialCheckService:
 
     def __init__(self):
-        self._transaction_repository = TransactionRepository()
+        self._available_materials_service = AvailableMaterialsService()
         self._required_materials_service = RequiredMaterialsService()
 
     async def get_missing_materials(
@@ -21,20 +20,15 @@ class MaterialCheckService:
             production: ProductionModel,
     ) -> dict:
         required_materials = await self._required_materials_service.get_required_materials(production)
-        available_materials = await self._get_available_materials()
+        available_materials = await self._available_materials_service.get_available_materials()
         missing_materials = dict()
 
         for material_id, required_count in required_materials.items():
-            available_count = available_materials.get(material_id, 0)
+            available_count = [
+                available_material.count for available_material in  available_materials
+                if available_material.material_id == material_id
+            ]
             if required_count > available_count:
                 missing_materials[material_id] = required_count - available_count
 
         return missing_materials
-
-    async def _get_available_materials(self) -> dict[int, int]:
-        dict_available_materials = defaultdict(int)
-        available_materials = await self._transaction_repository.get_available_materials()
-
-        for available_material in available_materials:
-            dict_available_materials[available_material.material_id] = available_material.count
-        return dict_available_materials

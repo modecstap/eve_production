@@ -1,5 +1,3 @@
-from typing import Type
-
 from src.server.handlers.models import AvailableMaterialModel
 from src.services.base_service import BaseService
 from src.services.mappers.row_mappers import AvailableMaterialRowMapper
