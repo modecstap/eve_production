@@ -4,11 +4,15 @@ from src.server.handlers import OrderHandler
 
 
 class OrdersRouter:
-    def __init__(self):
-        self._prefix = "/api/orders"
-        self._handler = OrderHandler()
+    def __init__(
+            self,
+            prefix: str = "orders",
+            handler: OrderHandler = OrderHandler()
+    ):
+        self._prefix = f"/api/{prefix}"
+        self._handler = handler
 
-        self.router = APIRouter(prefix=self._prefix, tags=[self._prefix])
+        self.router = APIRouter(prefix=self._prefix, tags=[prefix])
 
         self._register_routes()
 

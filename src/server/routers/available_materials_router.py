@@ -4,11 +4,15 @@ from src.server.handlers import AvailableMaterialHandler
 
 
 class AvailableMaterialsRouter:
-    def __init__(self):
-        self._prefix = "/api/available_materials"
-        self._handler = AvailableMaterialHandler()
+    def __init__(
+            self,
+            prefix: str = "available_materials",
+            handler: AvailableMaterialHandler = AvailableMaterialHandler()
+    ):
+        self._prefix = f"/api/{prefix}"
+        self._handler = handler
 
-        self.router = APIRouter(prefix=self._prefix, tags=[self._prefix])
+        self.router = APIRouter(prefix=self._prefix, tags=[prefix])
 
         self._register_routes()
 

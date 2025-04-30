@@ -4,11 +4,15 @@ from src.server.handlers import CostCalculatorHandler
 
 
 class CostCalculatorRouter:
-    def __init__(self):
-        self._prefix = "/api/cost_calculator"
-        self._handler = CostCalculatorHandler()
+    def __init__(
+            self,
+            prefix: str = "cost_calculator",
+            handler: CostCalculatorHandler = CostCalculatorHandler()
+    ):
+        self._prefix = f"/api/{prefix}"
+        self._handler = handler
 
-        self.router = APIRouter(prefix=self._prefix, tags=[self._prefix])
+        self.router = APIRouter(prefix=self._prefix, tags=[prefix])
 
         self._register_routes()
 
