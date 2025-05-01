@@ -15,11 +15,11 @@ from src.storage.tables import Transaction
 class ProductionService(BaseService):
     def __init__(
         self,
-        mapper: ProductionMapper,
-        product_repo: ProductRepository,
-        transaction_repo: TransactionRepository,
-        cost_calculator: CostCalculatorService,
-        builder: ProductionBuilder,
+        mapper: ProductionMapper = ProductionMapper(),
+        product_repo: ProductRepository = ProductRepository(),
+        transaction_repo: TransactionRepository = TransactionRepository(),
+        cost_calculator: CostCalculatorService = CostCalculatorService(),
+        builder: ProductionBuilder = ProductionBuilder(),
     ):
         self._mapper = mapper
         self._product_repo = product_repo

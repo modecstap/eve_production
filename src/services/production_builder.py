@@ -1,11 +1,13 @@
-from src.server.handlers.models.production_models import ProductionModel
 from src.services import CostCalculatorService
 from src.services.mappers import ProductionMapper
 from src.storage.tables import Transaction
 
 
 class ProductionBuilder:
-    def __init__(self, mapper: ProductionMapper):
+    def __init__(
+            self,
+            mapper: ProductionMapper = ProductionMapper()
+    ):
         self._cost_calculator_service = CostCalculatorService()
         self.mapper = mapper
 
