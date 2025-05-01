@@ -17,7 +17,7 @@ class ProductService(BaseEntityService):
 
     def __init__(
             self,
-            repository: ProductRepository=ProductEntityMapper(),
+            repository: ProductRepository=ProductRepository(),
             mapper: ProductEntityMapper=ProductEntityMapper(),
             product_cost_mapper: ProductCostRowMapper=ProductCostRowMapper()
     ):

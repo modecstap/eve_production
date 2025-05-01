@@ -17,7 +17,7 @@ class TransactionService(BaseEntityService):
 
     def __init__(
             self,
-            repository: TransactionRepository=TransactionEntityMapper(),
+            repository: TransactionRepository=TransactionRepository(),
             mapper: TransactionEntityMapper=TransactionEntityMapper(),
             available_material_mapper: AvailableMaterialRowMapper=AvailableMaterialRowMapper()
     ):
