@@ -1,5 +1,3 @@
-from typing import Type
-
 from src.services.entity_service import BaseEntityService
 from src.services.mappers.entity_mappers import MaterialListEntityMapper
 from src.services.utils import ServiceFactory, ServiceConfig

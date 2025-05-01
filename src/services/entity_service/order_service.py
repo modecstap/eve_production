@@ -1,5 +1,3 @@
-from typing import Type
-
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.server.handlers.models.order_models import InsertOrderModel, SellItemModel, ChangePriceModel
@@ -20,10 +18,10 @@ class OrderService(BaseEntityService):
 
     def __init__(
             self,
-            repository: OrderRepository=OrderRepository(),
-            mapper: OrderEntityMapper=OrderEntityMapper(),
-            transaction_repository: TransactionRepository=TransactionRepository(),
-            insert_order_mapper: InsertOrderEntityMapper=InsertOrderEntityMapper()
+            repository: OrderRepository = OrderRepository(),
+            mapper: OrderEntityMapper = OrderEntityMapper(),
+            transaction_repository: TransactionRepository = TransactionRepository(),
+            insert_order_mapper: InsertOrderEntityMapper = InsertOrderEntityMapper()
     ):
         super().__init__(repository, mapper)
         self._transaction_repository = transaction_repository

@@ -1,5 +1,3 @@
-from typing import Type
-
 from src.server.handlers.models.transactions_models import TransactionModel
 from src.services.entity_service import BaseEntityService
 from src.services.mappers.entity_mappers import TransactionEntityMapper
@@ -17,9 +15,9 @@ class TransactionService(BaseEntityService):
 
     def __init__(
             self,
-            repository: TransactionRepository=TransactionRepository(),
-            mapper: TransactionEntityMapper=TransactionEntityMapper(),
-            available_material_mapper: AvailableMaterialRowMapper=AvailableMaterialRowMapper()
+            repository: TransactionRepository = TransactionRepository(),
+            mapper: TransactionEntityMapper = TransactionEntityMapper(),
+            available_material_mapper: AvailableMaterialRowMapper = AvailableMaterialRowMapper()
     ):
         super().__init__(repository, mapper)
         self._available_material_mapper = available_material_mapper

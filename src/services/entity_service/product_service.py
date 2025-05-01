@@ -1,5 +1,3 @@
-from typing import Type
-
 from src.server.handlers.models.product_models import AvailableProductModel
 from src.services.entity_service import BaseEntityService
 from src.services.mappers.entity_mappers import ProductEntityMapper
@@ -17,9 +15,9 @@ class ProductService(BaseEntityService):
 
     def __init__(
             self,
-            repository: ProductRepository=ProductRepository(),
-            mapper: ProductEntityMapper=ProductEntityMapper(),
-            product_cost_mapper: ProductCostRowMapper=ProductCostRowMapper()
+            repository: ProductRepository = ProductRepository(),
+            mapper: ProductEntityMapper = ProductEntityMapper(),
+            product_cost_mapper: ProductCostRowMapper = ProductCostRowMapper()
     ):
         super().__init__(repository, mapper)
         self._product_cost_mapper = product_cost_mapper

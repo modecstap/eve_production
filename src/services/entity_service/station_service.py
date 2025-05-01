@@ -1,5 +1,3 @@
-from typing import Type
-
 from src.services.entity_service import BaseEntityService
 from src.services.mappers.entity_mappers import StationEntityMapper
 from src.services.utils import ServiceFactory, ServiceConfig
@@ -15,7 +13,7 @@ class StationService(BaseEntityService):
 
     def __init__(
             self,
-            repository: StationRepository=StationRepository(),
-            mapper: StationEntityMapper=StationEntityMapper()
+            repository: StationRepository = StationRepository(),
+            mapper: StationEntityMapper = StationEntityMapper()
     ):
         super().__init__(repository, mapper)

@@ -1,5 +1,3 @@
-from typing import Type
-
 from pydantic import BaseModel
 
 from src.services.base_service import BaseService
@@ -11,8 +9,8 @@ from src.storage.repositories import BaseRepository
 class BaseEntityService(BaseService):
 
     def __init__(self, repository: BaseRepository, mapper: BaseEntityMapper):
-        self._main_repository = repository
-        self._main_mapper = mapper
+        self._main_repository: BaseRepository = repository
+        self._main_mapper: BaseEntityMapper = mapper
 
     async def get_models(self) -> list[BaseModel]:
         return await self.__try_get_models()
