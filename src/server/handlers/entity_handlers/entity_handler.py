@@ -1,9 +1,10 @@
-from typing import List
+from typing import List, Any, Coroutine
 
 from fastapi import HTTPException, status
 from pydantic import BaseModel
 
 from src.services.entity_service import BaseEntityService
+from src.services.exceptions import NotFoundException
 
 
 class EntityHandler:
@@ -17,7 +18,7 @@ class EntityHandler:
     @staticmethod
     def _raise_if_not_found(result, detail: str = "NOT_FOUND", status_code: int = status.HTTP_404_NOT_FOUND):
         if not result:
-            raise HTTPException(status_code=status_code, detail=detail)
+            raise
 
     @staticmethod
     def _raise_creation_error(result, detail="FAILED_CREATE", status_code=status.HTTP_400_BAD_REQUEST):
@@ -25,14 +26,16 @@ class EntityHandler:
             raise HTTPException(status_code=status_code, detail=detail)
 
     async def get_all(self) -> List[MODEL]:
-        models = await self._service.get_models()
-        self._raise_if_not_found(models)
-        return models
+        try:
+            return await self._service.get_models()
+        except NotFoundException as e:
+            raise  HTTPException(status_code=404, detail=str(e))
 
     async def get(self, id: int) -> MODEL:
-        models = await self._service.get_model_by_id(id)
-        self._raise_if_not_found(models)
-        return models
+        try:
+            return await self._service.get_model_by_id(id)
+        except NotFoundException as e:
+            raise  HTTPException(status_code=404, detail=str(e))
 
     async def create(self, data: INSERT_MODEL) -> MODEL:
         created_models = await self._service.add_models([data])
