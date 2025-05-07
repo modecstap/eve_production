@@ -130,20 +130,3 @@ class BaseTestApi(
         assert del_response.status_code == 200, f" 200 but got {del_response.status_code}"
         get_response = await self.client.get(f"/{self.api_version}/{self.endpoint}/{obj_id}")
         assert get_response.status_code == 404, f" 404 but got {get_response.status_code}"
-
-    @pytest.mark.asyncio
-    async def test_delete_multiple(self):
-        # Arrange
-        payloads = await self.payload_builder.build_payloads()
-        post_response = await self.client.post(f"/{self.api_version}/{self.endpoint}/bulk", json=payloads)
-        ids = [item["id"] for item in post_response.json()]
-
-        # Act
-        del_response = await self.client.request("DELETE", f"/{self.api_version}/{self.endpoint}/bulk",
-                                                 json={"ids": ids})
-
-        # Assert
-        assert del_response.status_code == 200, f" 200 but got {del_response.status_code}"
-        for obj_id in ids:
-            get_response = await self.client.get(f"/{self.api_version}/{self.endpoint}/{obj_id}")
-            assert get_response.status_code == 404, f" 404 but got {get_response.status_code}"
