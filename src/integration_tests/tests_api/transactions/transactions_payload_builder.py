@@ -12,10 +12,10 @@ class TransactionsPayloadBuilder(PayloadBuilder):
         return {
             "material_id": type_["id"],
             "product_id": None,
-            "release_date": "2025-01-01",
-            "count": "5000",
+            "release_date": "2025-01-01T00:00:00",
+            "count": 5000,
             "price": "1300.5",
-            "remains": "4000",
+            "remains": 4000,
         }
 
     async def build_payloads(self) -> list[dict]:
@@ -27,10 +27,10 @@ class TransactionsPayloadBuilder(PayloadBuilder):
             {
                 "material_id": type_["id"],
                 "product_id": None,
-                "release_date": "2025-01-01",
-                "count": "5000",
+                "release_date": "2025-01-01T00:00:00",
+                "count": 5000,
                 "price": "1300.5",
-                "remains": "4000",
+                "remains": 4000,
             } for type_ in types
         ]
 
@@ -42,10 +42,10 @@ class TransactionsPayloadBuilder(PayloadBuilder):
             "id": id_,
             "material_id": transaction["material_id"],
             "product_id": None,
-            "release_date": "2025-01-01",
-            "count": "5000",
+            "release_date": "2025-01-01T00:00:00",
+            "count": 5000,
             "price": "1000.5",
-            "remains": "4000",
+            "remains": 4000,
         }
 
     async def build_update_payloads(self, ids_) -> list[dict]:
@@ -56,8 +56,8 @@ class TransactionsPayloadBuilder(PayloadBuilder):
             "id": transaction["id"],
             "material_id": transaction["material_id"],
             "product_id": None,
-            "release_date": "2025-01-01",
-            "count": "5000",
+            "release_date": "2025-01-01T00:00:00",
+            "count": 5000,
             "price": "1000.5",
-            "remains": "4000",
+            "remains": 4000,
         } for transaction in transactions]
