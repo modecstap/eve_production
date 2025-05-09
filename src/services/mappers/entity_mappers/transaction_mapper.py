@@ -9,26 +9,31 @@ class TransactionEntityMapper(BaseEntityMapper):
         self._model_type = TransactionModel
         self._entity_type = Transaction
 
-    def entity_to_model(self, entity: Transaction, replace_id_with_name: bool) -> TransactionModel:
+    def entity_to_model(self, entity: Transaction, replace_id_with_name: bool = False ) -> TransactionModel:
         return TransactionModel(
             id=entity.id,
             release_date=entity.release_date,
             count=entity.count,
-            material=entity.material.name if replace_id_with_name else entity.material_id,
-            product=entity.product.name if replace_id_with_name and entity.product else entity.product_id,
+            material_id=entity.material.name if replace_id_with_name else entity.material_id,
+            product_id=entity.product.name if replace_id_with_name and entity.product else entity.product_id,
             price=entity.price,
             remains=entity.remains
         )
 
-    def entities_to_models(self, entities: list[Transaction], replace_id_with_name: bool) -> list[Transaction]:
+    def entities_to_models(
+            self,
+            entities: list[Transaction],
+            replace_id_with_name: bool = False
+    ) -> list[TransactionModel]:
         return [self.entity_to_model(entity, replace_id_with_name) for entity in entities]
+
     def model_to_entity(self, model: TransactionModel) -> Transaction:
         return Transaction(
-            id=model.id,
+            id=getattr(model, 'id', None),
             release_date=model.release_date,
             count=model.count,
-            material_id=model.material if isinstance(model.material, int) else None,
-            product_id=model.product if isinstance(model.product, int) else None,
+            material_id=getattr(model, "material_id", None),
+            product_id=getattr(model, "product_id", None),
             price=model.price,
             remains=model.remains
         )
