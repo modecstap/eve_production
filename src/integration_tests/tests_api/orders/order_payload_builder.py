@@ -13,16 +13,16 @@ class OrderPayloadBuilder(PayloadBuilder):
             "transaction_id": transaction["id"],
             "release_date": "2023-01-01T00:00:00",
             "price": "100500",
-            "count": "600",
-            "remains": "600",
+            "count": 600,
+            "remains": 600,
             "tax_percent": "0.05",
             "broker_cost": "0.02",
-            "income": 0
+            "income": "0"
         }
 
     async def build_payloads(self) -> list[dict]:
         transactions_payload = await TransactionsPayloadBuilder(self._client).build_payloads()
-        response = await self._client.post("/api/types/bulk", json=transactions_payload)
+        response = await self._client.post("/api/transactions/bulk", json=transactions_payload)
         transactions = response.json()
 
         return [
@@ -30,11 +30,11 @@ class OrderPayloadBuilder(PayloadBuilder):
                 "transaction_id": transaction["id"],
                 "release_date": "2023-01-01T00:00:00",
                 "price": "100500",
-                "count": "600",
-                "remains": "600",
+                "count": 600,
+                "remains": 600,
                 "tax_percent": "0.05",
                 "broker_cost": "0.02",
-                "income": 0
+                "income": "0"
             } for transaction in transactions
         ]
 
@@ -47,8 +47,8 @@ class OrderPayloadBuilder(PayloadBuilder):
             "transaction_id": order["transaction_id"],
             "release_date": "2023-01-01T00:00:00",
             "price": "100500",
-            "count": "600",
-            "remains": "500",
+            "count": 600,
+            "remains": 500,
             "tax_percent": "0.05",
             "broker_cost": "0.02",
             "income": "60000000"
@@ -66,8 +66,8 @@ class OrderPayloadBuilder(PayloadBuilder):
                 "transaction_id": order["transaction_id"],
                 "release_date": "2023-01-01T00:00:00",
                 "price": "100500",
-                "count": "600",
-                "remains": "500",
+                "count": 600,
+                "remains": 500,
                 "tax_percent": "0.05",
                 "broker_cost": "0.02",
                 "income": "60000000"
@@ -77,7 +77,7 @@ class OrderPayloadBuilder(PayloadBuilder):
     async def build_sell_count_payload(self, id_: int) -> dict:
         return {
             "order_id": id_,
-            "sell_count": "100"
+            "sell_count": 100
         }
 
     async def build_update_price_payload(self, id_: int):
