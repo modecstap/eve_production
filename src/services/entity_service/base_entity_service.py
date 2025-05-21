@@ -17,9 +17,6 @@ class BaseEntityService(BaseService):
         self._main_mapper: BaseEntityMapper = mapper
 
     async def get_models(self) -> list[BaseModel]:
-        return await self.__try_get_models()
-
-    async def __try_get_models(self) -> list[BaseModel]:
         entities = await self._main_repository.get_entities()
         models = self._main_mapper.entities_to_models(entities)
         return models
