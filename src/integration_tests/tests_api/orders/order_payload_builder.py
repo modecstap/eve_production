@@ -1,36 +1,41 @@
 from src.integration_tests.tests_api.base import PayloadBuilder
+from src.integration_tests.tests_api.transactions.transactions_payload_builder import TransactionsPayloadBuilder
 from src.integration_tests.tests_api.types.types_payload_builder import TypesPayloadBuilder
 
 
 class OrderPayloadBuilder(PayloadBuilder):
     async def build_payload(self) -> dict:
-        types_payload = await TypesPayloadBuilder(self._client).build_payload()
-        response = await self._client.post("/api/types/", json=types_payload)
-        type_ = response.json()
+        transaction_payload = await TransactionsPayloadBuilder(self._client).build_payload()
+        response = await self._client.post("/api/transactions/", json=transaction_payload)
+        transaction = response.json()
 
         return {
-            "release_date": "2023-01-01",
+            "transaction_id": transaction["id"],
+            "release_date": "2023-01-01T00:00:00",
             "price": "100500",
             "count": "600",
+            "remains": "600",
             "tax_percent": "0.05",
             "broker_cost": "0.02",
-            "type_id": type_["id"]
+            "income": 0
         }
 
     async def build_payloads(self) -> list[dict]:
-        types_payload = await TypesPayloadBuilder(self._client).build_payloads()
-        response = await self._client.post("/api/types/bulk", json=types_payload)
-        types = response.json()
+        transactions_payload = await TransactionsPayloadBuilder(self._client).build_payloads()
+        response = await self._client.post("/api/types/bulk", json=transactions_payload)
+        transactions = response.json()
 
         return [
             {
-                "release_date": "2023-01-01",
+                "transaction_id": transaction["id"],
+                "release_date": "2023-01-01T00:00:00",
                 "price": "100500",
                 "count": "600",
+                "remains": "600",
                 "tax_percent": "0.05",
                 "broker_cost": "0.02",
-                "type_id": type_["id"]
-            } for type_ in types
+                "income": 0
+            } for transaction in transactions
         ]
 
     async def build_update_payload(self, id_: int) -> dict:
@@ -39,12 +44,14 @@ class OrderPayloadBuilder(PayloadBuilder):
 
         return {
             "id": id_,
-            "release_date": "2023-01-01",
-            "price": "200600",
+            "transaction_id": order["transaction_id"],
+            "release_date": "2023-01-01T00:00:00",
+            "price": "100500",
             "count": "600",
+            "remains": "500",
             "tax_percent": "0.05",
             "broker_cost": "0.02",
-            "type_id": order["type_id"]
+            "income": "60000000"
         }
 
     async def build_update_payloads(self, ids_: list[int]) -> list[dict]:
@@ -56,12 +63,14 @@ class OrderPayloadBuilder(PayloadBuilder):
         return [
             {
                 "id": order["id"],
-                "release_date": "2023-01-01",
-                "price": "200600",
+                "transaction_id": order["transaction_id"],
+                "release_date": "2023-01-01T00:00:00",
+                "price": "100500",
                 "count": "600",
+                "remains": "500",
                 "tax_percent": "0.05",
                 "broker_cost": "0.02",
-                "type_id": order["type_id"]
+                "income": "60000000"
             } for order in orders
         ]
 
