@@ -1,7 +1,8 @@
 from src.services.entity_service import BaseEntityService
 from src.services.mappers.entity_mappers import MaterialListEntityMapper
 from src.services.utils import ServiceFactory, ServiceConfig
-from src.storage.repositories import MaterialListRepository
+from src.storage.repositories import BaseRepository
+from src.storage.tables import MaterialList
 
 
 @ServiceFactory.service_registration_decorator(
@@ -13,7 +14,7 @@ class MaterialListService(BaseEntityService):
 
     def __init__(
             self,
-            repository: MaterialListRepository = MaterialListRepository(),
+            repository: BaseRepository = BaseRepository(MaterialList),
             mapper: MaterialListEntityMapper = MaterialListEntityMapper()
     ):
         super().__init__(repository, mapper)

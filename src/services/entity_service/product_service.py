@@ -3,7 +3,8 @@ from src.services.entity_service import BaseEntityService
 from src.services.mappers.entity_mappers import ProductEntityMapper
 from src.services.mappers.row_mappers import ProductCostRowMapper
 from src.services.utils import ServiceFactory, ServiceConfig
-from src.storage.repositories import ProductRepository
+from src.storage.repositories import BaseRepository
+from src.storage.tables import Product
 
 
 @ServiceFactory.service_registration_decorator(
@@ -15,7 +16,7 @@ class ProductService(BaseEntityService):
 
     def __init__(
             self,
-            repository: ProductRepository = ProductRepository(),
+            repository: BaseRepository = BaseRepository(Product),
             mapper: ProductEntityMapper = ProductEntityMapper(),
             product_cost_mapper: ProductCostRowMapper = ProductCostRowMapper()
     ):

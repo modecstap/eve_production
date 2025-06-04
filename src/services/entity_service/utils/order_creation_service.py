@@ -3,8 +3,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.server.handlers.models.order_models import CreateOrderModel, OrderModel
 from src.services.exceptions import NotFoundException
 from src.services.mappers.entity_mappers import OrderEntityMapper, InsertOrderEntityMapper
-from src.storage.repositories import TransactionRepository, OrderRepository
-from src.storage.tables import Transaction
+from src.storage.repositories import TransactionRepository, BaseRepository
+from src.storage.tables import Transaction, Order
 
 
 class OrderCreationService:
@@ -14,8 +14,8 @@ class OrderCreationService:
             insert_order_model: CreateOrderModel,
             session: AsyncSession,
             insert_order_mapper: InsertOrderEntityMapper = InsertOrderEntityMapper(),
-            transaction_repository: TransactionRepository = TransactionRepository(),
-            order_repository: OrderRepository = OrderRepository(),
+            transaction_repository: BaseRepository = BaseRepository(Transaction),
+            order_repository: BaseRepository = BaseRepository(Order),
             order_mapper: OrderEntityMapper = OrderEntityMapper()
     ):
         self._insert_order_model = insert_order_model
@@ -43,8 +43,8 @@ class OrderCreationService:
     async def _find_suitable_transaction(
             self
     ) -> Transaction:
-        transactions = await self._transaction_repository.get_transactions_by_type_id(
-            [self._insert_order_model.type_id],
+        transactions = await self._transaction_repository.get_entities(
+            filters=[Transaction.material_id.in_(self._insert_order_model.type_id)],
             session=self._session
         )
         for transaction in transactions:

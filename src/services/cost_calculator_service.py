@@ -5,7 +5,9 @@ from src.services import RequiredMaterialsService
 from src.services.exceptions import NotEnoughMaterialsException
 from src.services.material_check_service import MaterialCheckService
 from src.services.utils import ServiceFactory, ServiceConfig
-from src.storage.repositories import ProductRepository
+from src.storage.repositories import BaseRepository
+from src.storage.tables import Product
+
 
 @ServiceFactory.service_registration_decorator(
     ServiceConfig(
@@ -16,7 +18,7 @@ class CostCalculatorService:
 
     def __init__(
             self,
-            product_repository: ProductRepository=ProductRepository(),
+            product_repository: BaseRepository=BaseRepository(Product),
             material_check_service: MaterialCheckService=MaterialCheckService(),
             required_materials_service: RequiredMaterialsService=RequiredMaterialsService()
     ):
@@ -33,7 +35,10 @@ class CostCalculatorService:
         materials_cost = {}
 
         for material_id, required_count in required_materials.items():
-            materials_cost[material_id] = await self._product_repository.calculate_material_cost(material_id)
+            materials_cost[material_id] = await self._product_repository.execute_query(
+                query="SELECT calculate_material_cost(:p_material_id, :p_need_count)",
+                params={"p_material_id": material_id, "p_need_count":required_count}
+            )
         production_cost = sum(materials_cost.values(), Decimal(0))
 
         return ProductionCostModel(

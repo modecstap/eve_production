@@ -4,7 +4,8 @@ from src.services.entity_service.utils.order_creation_service import OrderCreati
 from src.services.exceptions import NotEnoughMaterialsException
 from src.services.mappers.entity_mappers import OrderEntityMapper
 from src.services.utils import ServiceFactory, ServiceConfig
-from src.storage.repositories import OrderRepository
+from src.storage.repositories import BaseRepository
+from src.storage.tables import Order
 
 
 @ServiceFactory.service_registration_decorator(
@@ -16,7 +17,7 @@ class OrderService(BaseEntityService):
 
     def __init__(
             self,
-            repository: OrderRepository = OrderRepository(),
+            repository: BaseRepository = BaseRepository(Order),
             mapper: OrderEntityMapper = OrderEntityMapper(),
     ):
         super().__init__(repository, mapper)
@@ -36,7 +37,7 @@ class OrderService(BaseEntityService):
     async def update_sell_count(self, sell_count_model: SellItemModel):
         session = self._main_repository.create_session()
 
-        order = await self._main_repository.get_entitiy_by_id(sell_count_model.order_id, session=session)
+        order = await self._main_repository.get_entity_by_id(sell_count_model.order_id, session=session)
 
         if order.remains < sell_count_model.sell_count:
             raise NotEnoughMaterialsException(
@@ -50,7 +51,7 @@ class OrderService(BaseEntityService):
 
     async def update_price(self, change_price_model: ChangePriceModel):
         async with self._main_repository.create_session() as session:
-            order = await self._main_repository.get_entitiy_by_id(change_price_model.order_id, session=session)
+            order = await self._main_repository.get_entity_by_id(change_price_model.order_id, session=session)
 
             order.price = change_price_model.new_price
             order.broker_cost += change_price_model.broker_cost

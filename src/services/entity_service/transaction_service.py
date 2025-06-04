@@ -26,8 +26,7 @@ class TransactionService(BaseEntityService):
         session = self._main_repository.create_session()
         try:
             entities = await self._main_repository.get_entities(
-                session=session,
-                replace_id_with_name=replace_id_with_name
+                session=session
             )
             models = self._main_mapper.entities_to_models(
                 entities,

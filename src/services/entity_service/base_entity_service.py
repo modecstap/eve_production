@@ -22,7 +22,7 @@ class BaseEntityService(BaseService):
         return models
 
     async def get_model_by_id(self, entity_id: int) -> BaseModel:
-        entity = await self._main_repository.get_entitiy_by_id(entity_id)
+        entity = await self._main_repository.get_entity_by_id(entity_id)
         if entity is None:
             raise NotFoundException(entity_id)
         model = self._main_mapper.entity_to_model(entity)

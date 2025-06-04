@@ -1,28 +1,58 @@
-import asyncio
-from abc import ABC
-from heapq import merge
+from typing import Optional, Callable, Type, Any, Sequence
 
-from sqlalchemy import delete, select
+from sqlalchemy import delete, select, Row, RowMapping, text
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.storage.database import Database
+from src.storage.declarative_base import DeclarativeBase
 from src.storage.repositories.wrappers import ensure_session
 
-class BaseRepository(ABC):
-    def __init__(self):
+class BaseRepository():
+    def __init__(self, entity: Type[DeclarativeBase]):
         self.db = Database()
+        self._entity: Type[DeclarativeBase] = entity
 
     def create_session(self) -> AsyncSession:
         return self.db.async_session_maker()
 
     @ensure_session
-    async def get_entities(self, session: AsyncSession = None) -> list:
-        result = await session.execute(select(self._entity))
+    async def execute_query(
+            self,
+            query: str,
+            params: dict[str: Any],
+            session: AsyncSession = None
+    ):
+        return await session.execute(
+            text(query),
+            params=params
+        )
+
+    @ensure_session
+    async def get_entities(
+            self,
+            filters: Optional[list] = None,
+            order_by: Optional[Callable] = None,
+            offset: int = 0,
+            limit: int = 100,
+            session: AsyncSession = None
+    ) -> Sequence[Row[Any] | RowMapping | Any]:
+        query = select(self._entity)
+
+        if filters:
+            query = query.where(*filters)
+
+        if order_by:
+            query = query.order_by(order_by)
+
+        query = query.offset(offset)
+        query = query.limit(limit)
+
+        result = await session.execute(query)
         return result.scalars().all()
 
     @ensure_session
-    async def get_entitiy_by_id(self, entity_id: int, session: AsyncSession = None) -> declarative_base:
+    async def get_entity_by_id(self, entity_id: int, session: AsyncSession = None) -> declarative_base:
         result = await session.execute(
             select(self._entity)
             .where(self._entity.id == entity_id)

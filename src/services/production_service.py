@@ -4,8 +4,9 @@ from src.services.base_service import BaseService
 from src.services.mappers import ProductionMapper
 from src.services.production_builder import ProductionBuilder
 from src.services.utils import ServiceFactory, ServiceConfig
-from src.storage.repositories import TransactionRepository, ProductRepository
-from src.storage.tables import Transaction
+from src.storage.repositories import TransactionRepository, BaseRepository
+from src.storage.tables import Product
+
 
 @ServiceFactory.service_registration_decorator(
     ServiceConfig(
@@ -16,7 +17,7 @@ class ProductionService(BaseService):
     def __init__(
         self,
         mapper: ProductionMapper = ProductionMapper(),
-        product_repo: ProductRepository = ProductRepository(),
+        product_repo: BaseRepository = BaseRepository(Product),
         transaction_repo: TransactionRepository = TransactionRepository(),
         cost_calculator: CostCalculatorService = CostCalculatorService(),
         builder: ProductionBuilder = ProductionBuilder(),
@@ -33,7 +34,11 @@ class ProductionService(BaseService):
             product, transaction = await self._builder.build(production)
 
             await self._product_repo.insert([product], session=session)
-            await self._product_repo.insert_used_transactions(product, production.count, session=session)
+            await self._product_repo.execute_query(
+                query="SELECT create_used_transaction(:input_product_id, :input_count)",
+                params={"input_product_id": product.id, "input_count": production.count},
+                session=session
+            )
             await self._transaction_repo.insert([transaction], session=session)
 
             await session.commit()

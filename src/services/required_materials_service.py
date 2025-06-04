@@ -3,7 +3,7 @@ from decimal import Decimal, ROUND_UP
 
 from src.server.handlers.models.production_models import ProductionModel
 from src.services.utils import ServiceFactory, ServiceConfig
-from src.storage.repositories import StationRepository, MaterialListRepository
+from src.storage.repositories import BaseRepository
 from src.storage.tables import MaterialList, Station
 
 @ServiceFactory.service_registration_decorator(
@@ -14,13 +14,15 @@ from src.storage.tables import MaterialList, Station
 class RequiredMaterialsService:
 
     def __init__(self):
-        self._station_repository = StationRepository()
-        self._material_list_repository = MaterialListRepository()
+        self._station_repository = BaseRepository(Station)
+        self._material_list_repository = BaseRepository(MaterialList)
 
     async def get_required_materials(self, production: ProductionModel) -> dict[int, Decimal]:
         required_materials = defaultdict(lambda: Decimal('0'))
-        materials_list = await self._material_list_repository.get_materials_by_type_id(production.type_id)
-        station = await self._station_repository.get_entitiy_by_id(production.station_id)
+        materials_list = await self._material_list_repository.get_entities(
+            filters=[MaterialList.type_id == production.type_id]
+        )
+        station = await self._station_repository.get_entity_by_id(production.station_id)
 
         for material in materials_list:
             required_materials[material.material_id] += \
