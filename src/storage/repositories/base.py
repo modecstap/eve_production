@@ -9,7 +9,7 @@ from src.storage.declarative_base import DeclarativeBase
 from src.storage.repositories.wrappers import ensure_session
 
 
-class BaseRepository():
+class BaseRepository:
     def __init__(self, entity: Type[DeclarativeBase]):
         self.db = Database()
         self._entity: Type[DeclarativeBase] = entity

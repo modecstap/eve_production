@@ -1,12 +1,14 @@
-from typing import Type
+from typing import Type, TypeVar, cast
 
+from src.storage.declarative_base import DeclarativeBase
 from src.storage.factories.repository_factory.repository_config import RepositoryConfig
 from src.storage.repositories import BaseRepository, TransactionRepository
 from src.storage.tables import MaterialList, Order, Product, Station, Transaction, TypeInfo, UsedTransactionList
 
+T = TypeVar("T", bound=BaseRepository)
 
 class RepositoryFactory:
-    _repository_classes: dict[str, tuple[Type[BaseRepository], Any]] = {}
+    _repository_classes: dict[str, tuple[Type[BaseRepository], Type[DeclarativeBase]]] = {}
     _instances: dict[str, BaseRepository] = {}
     _required: set[str] = {
         "material_list_repository",
@@ -41,15 +43,25 @@ class RepositoryFactory:
         return decorator
 
     @classmethod
-    def get_entity_repository(cls, repository_entity_name: str) -> BaseRepository:
-        if repository_entity_name not in cls._repository_classes:
-            raise ValueError(f"Репозиторий '{repository_entity_name}' не зарегистрирован")
+    def get_repository_as(cls, name: str, expected_cls: Type[T]) -> T:
+        repo = cls.get_repository(name)
+        if not isinstance(repo, expected_cls):
+            raise TypeError(
+                f"Репозиторий '{name}' должен быть экземпляром {expected_cls.__name__}, "
+                f"но получен {type(repo).__name__}"
+            )
+        return cast(T, repo)
 
-        if repository_entity_name not in cls._instances:
-            repository_cls, entity = cls._repository_classes[repository_entity_name]
-            cls._instances[repository_entity_name] = repository_cls(entity)
+    @classmethod
+    def get_repository(cls, repository_name: str) -> BaseRepository:
+        if repository_name not in cls._repository_classes:
+            raise ValueError(f"Репозиторий '{repository_name}' не зарегистрирован")
 
-        return cls._instances[repository_entity_name]
+        if repository_name not in cls._instances:
+            repository_cls, entity = cls._repository_classes[repository_name]
+            cls._instances[repository_name] = repository_cls(entity)
+
+        return cls._instances[repository_name]
 
     @classmethod
     def validate_required(cls):
