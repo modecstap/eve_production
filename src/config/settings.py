@@ -15,6 +15,8 @@ class Settings(metaclass=Singleton):
             filename = 'config.yaml'
         elif env == "test":
             filename = 'test-config.yaml'
+        else:
+            raise Exception(f"Неверный параметр запуска. ожидалось prod или test, получено {env}")
 
         if os.path.isfile(filename):
             with open(filename, 'r') as fd:

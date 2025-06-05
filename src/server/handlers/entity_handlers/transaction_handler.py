@@ -7,7 +7,7 @@ from src.services.utils import ServiceFactory
 class TransactionHandler(EntityHandler):
 
     def __init__(self):
-        self._service = ServiceFactory.get_entity_service("transaction")
+        super().__init__(ServiceFactory.get_entity_service("transaction"))
 
     async def get_all(
             self,
