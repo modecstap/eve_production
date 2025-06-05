@@ -10,7 +10,7 @@ class UsedTransactionHandler(EntityHandler):
     UPDATE_MODEL = UpdateUsedTransactionModel
 
     def __init__(self):
-        super().__init__(ServiceFactory.get_entity_service("used_transaction"))
+        super().__init__(ServiceFactory.get_service("used_transaction"))
 
     async def get_all(self) -> list[MODEL]:
         return await super().get_all()

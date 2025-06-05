@@ -7,7 +7,7 @@ from src.services.utils import ServiceFactory
 class AvailableMaterialHandler:
 
     def __init__(self):
-        self._service = ServiceFactory.get_entity_service("available_materials")
+        self._service = ServiceFactory.get_service("available_materials")
 
     @staticmethod
     def __raise_if_not_found(result, detail: str = "NOT_FOUND", status_code: int = status.HTTP_404_NOT_FOUND):

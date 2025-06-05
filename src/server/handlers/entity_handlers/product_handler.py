@@ -9,7 +9,7 @@ class ProductHandler(EntityHandler):
     UPDATE_MODEL = UpdateProductModel
 
     def __init__(self):
-        super().__init__(ServiceFactory.get_entity_service("product"))
+        super().__init__(ServiceFactory.get_service("product"))
 
     async def get_all(self) -> list[MODEL]:
         return await super().get_all()

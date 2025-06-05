@@ -9,7 +9,7 @@ class StationHandler(EntityHandler):
     UPDATE_MODEL = UpdateStationModel
 
     def __init__(self):
-        super().__init__(ServiceFactory.get_entity_service("station"))
+        super().__init__(ServiceFactory.get_service("station"))
 
     async def get_all(self) -> list[MODEL]:
         return await super().get_all()

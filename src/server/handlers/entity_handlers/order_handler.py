@@ -10,7 +10,7 @@ class OrderHandler(EntityHandler):
     UPDATE_MODEL = UpdateOrderModel
 
     def __init__(self):
-        super().__init__(ServiceFactory.get_entity_service("order"))
+        super().__init__(ServiceFactory.get_service("order"))
 
     async def get_all(self) -> list[MODEL]:
         return await super().get_all()

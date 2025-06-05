@@ -4,7 +4,7 @@ from src.services.utils import ServiceFactory
 
 class ProductionHandler:
     def __init__(self):
-        self.production_service = ServiceFactory.get_entity_service("production")
+        self.production_service = ServiceFactory.get_service("production")
 
     async def create_products(self, products: ProductionModel):
         return await self.production_service.write_production(products)

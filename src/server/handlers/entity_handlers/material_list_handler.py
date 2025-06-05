@@ -10,7 +10,7 @@ class MaterialListHandler(EntityHandler):
     UPDATE_MODEL = UpdateMaterialListModel
 
     def __init__(self):
-        super().__init__(ServiceFactory.get_entity_service("material_list"))
+        super().__init__(ServiceFactory.get_service("material_list"))
 
     async def get_all(self) -> list[MODEL]:
         return await super().get_all()

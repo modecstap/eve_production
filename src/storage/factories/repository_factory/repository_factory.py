@@ -8,31 +8,31 @@ from src.storage.tables import MaterialList, Order, Product, Station, Transactio
 T = TypeVar("T", bound=BaseRepository)
 
 class RepositoryFactory:
-    _repository_classes: dict[str, tuple[Type[BaseRepository], Type[DeclarativeBase]]] = {}
+    _repository_classes: dict[str, tuple[Type[BaseRepository], RepositoryConfig]] = {}
     _instances: dict[str, BaseRepository] = {}
     _required: set[str] = {
-        "material_list_repository",
-        "order_repository",
-        "product_repository",
-        "station_repository",
-        "transaction_repository",
-        "type_info_repository",
-        "used_transaction_repository"
+        "material_list",
+        "order",
+        "product",
+        "station",
+        "transaction",
+        "type_info",
+        "used_transaction"
     }
 
     @classmethod
     def initialize(cls):
-        cls.register(RepositoryConfig("material_list_repository", MaterialList), BaseRepository)
-        cls.register(RepositoryConfig("order_repository", Order), BaseRepository)
-        cls.register(RepositoryConfig("product_repository", Product), BaseRepository)
-        cls.register(RepositoryConfig("station_repository", Station), BaseRepository)
-        cls.register(RepositoryConfig("transaction_repository", Transaction), TransactionRepository)
-        cls.register(RepositoryConfig("type_info_repository", TypeInfo), BaseRepository)
-        cls.register(RepositoryConfig("used_transaction_repository", UsedTransactionList), BaseRepository)
+        cls.register(RepositoryConfig("material_list", MaterialList), BaseRepository)
+        cls.register(RepositoryConfig("order", Order), BaseRepository)
+        cls.register(RepositoryConfig("product", Product), BaseRepository)
+        cls.register(RepositoryConfig("station", Station), BaseRepository)
+        cls.register(RepositoryConfig("transaction", Transaction), TransactionRepository)
+        cls.register(RepositoryConfig("type_info", TypeInfo), BaseRepository)
+        cls.register(RepositoryConfig("used_transaction", UsedTransactionList), BaseRepository)
 
     @classmethod
     def register(cls, configuration: RepositoryConfig, repository_cls: Type[BaseRepository]):
-        cls._repository_classes[configuration.name] = (repository_cls, configuration.entity)
+        cls._repository_classes[configuration.name] = (repository_cls, configuration)
 
     @classmethod
     def repository_registration_decorator(cls, configuration: RepositoryConfig):
@@ -58,8 +58,8 @@ class RepositoryFactory:
             raise ValueError(f"Репозиторий '{repository_name}' не зарегистрирован")
 
         if repository_name not in cls._instances:
-            repository_cls, entity = cls._repository_classes[repository_name]
-            cls._instances[repository_name] = repository_cls(entity)
+            repository_cls, configuration = cls._repository_classes[repository_name]
+            cls._instances[repository_name] = repository_cls(configuration.entity)
 
         return cls._instances[repository_name]
 
