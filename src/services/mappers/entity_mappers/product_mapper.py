@@ -1,5 +1,5 @@
 from src.server.handlers.models.product_models import ProductModel
-from src.services.mappers.entity_mappers  import BaseEntityMapper
+from src.services.mappers.entity_mappers import BaseEntityMapper
 from src.storage.tables import Product
 
 

@@ -1,6 +1,6 @@
 from src.server.handlers.models.production_models import ProductionModel
-from src.services.cost_calculator_service import CostCalculatorService
 from src.services.base_service import BaseService
+from src.services.cost_calculator_service import CostCalculatorService
 from src.services.mappers import ProductionMapper
 from src.services.production_builder import ProductionBuilder
 from src.services.utils import ServiceFactory, ServiceConfig
@@ -15,12 +15,12 @@ from src.storage.tables import Product
 )
 class ProductionService(BaseService):
     def __init__(
-        self,
-        mapper: ProductionMapper = ProductionMapper(),
-        product_repo: BaseRepository = BaseRepository(Product),
-        transaction_repo: TransactionRepository = TransactionRepository(),
-        cost_calculator: CostCalculatorService = CostCalculatorService(),
-        builder: ProductionBuilder = ProductionBuilder(),
+            self,
+            mapper: ProductionMapper = ProductionMapper(),
+            product_repo: BaseRepository = BaseRepository(Product),
+            transaction_repo: TransactionRepository = TransactionRepository(),
+            cost_calculator: CostCalculatorService = CostCalculatorService(),
+            builder: ProductionBuilder = ProductionBuilder(),
     ):
         self._mapper = mapper
         self._product_repo = product_repo
@@ -30,7 +30,6 @@ class ProductionService(BaseService):
 
     async def write_production(self, production: ProductionModel):
         async with self._product_repo.create_session() as session:
-
             product, transaction = await self._builder.build(production)
 
             await self._product_repo.insert([product], session=session)

@@ -6,6 +6,7 @@ from src.services.utils import ServiceFactory, ServiceConfig
 from src.storage.repositories import BaseRepository
 from src.storage.tables import MaterialList, Station
 
+
 @ServiceFactory.service_registration_decorator(
     ServiceConfig(
         name="required_materials",

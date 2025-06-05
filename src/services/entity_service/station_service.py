@@ -1,7 +1,7 @@
 from src.services.entity_service import BaseEntityService
 from src.services.mappers.entity_mappers import StationEntityMapper
 from src.services.utils import ServiceFactory, ServiceConfig
-from src.storage.repositories import  BaseRepository
+from src.storage.repositories import BaseRepository
 from src.storage.tables import Station
 
 

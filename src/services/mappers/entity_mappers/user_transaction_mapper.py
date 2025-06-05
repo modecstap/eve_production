@@ -1,4 +1,4 @@
-from src.server.handlers.models.used_transactions import  UsedTransactionModel
+from src.server.handlers.models.used_transactions import UsedTransactionModel
 from src.services.mappers.entity_mappers import BaseEntityMapper
 from src.storage.tables import UsedTransactionList
 

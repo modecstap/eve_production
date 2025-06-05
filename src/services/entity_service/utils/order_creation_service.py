@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.server.handlers.models.order_models import CreateOrderModel, OrderModel
 from src.services.exceptions import NotFoundException
 from src.services.mappers.entity_mappers import OrderEntityMapper, InsertOrderEntityMapper
-from src.storage.repositories import TransactionRepository, BaseRepository
+from src.storage.repositories import BaseRepository
 from src.storage.tables import Transaction, Order
 
 
@@ -26,12 +26,12 @@ class OrderCreationService:
         self._order_mapper = order_mapper
 
     async def create_order(self) -> OrderModel:
-            order_entity = self._insert_order_mapper.model_to_entity(self._insert_order_model)
-            suitable_transaction = await self._prepare_transaction()
-            order_entity.transaction_id = suitable_transaction.id
-            order = await self._order_repository.insert([order_entity], session=self._session)
-            await self._session.commit()
-            return self._order_mapper.entity_to_model(order[0])
+        order_entity = self._insert_order_mapper.model_to_entity(self._insert_order_model)
+        suitable_transaction = await self._prepare_transaction()
+        order_entity.transaction_id = suitable_transaction.id
+        order = await self._order_repository.insert([order_entity], session=self._session)
+        await self._session.commit()
+        return self._order_mapper.entity_to_model(order[0])
 
     async def _prepare_transaction(
             self

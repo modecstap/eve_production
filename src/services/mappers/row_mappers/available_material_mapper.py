@@ -1,5 +1,3 @@
-from sqlalchemy import Row
-
 from src.server.handlers.models import AvailableMaterialModel
 from src.services.mappers.row_mappers import BaseRowMapper
 

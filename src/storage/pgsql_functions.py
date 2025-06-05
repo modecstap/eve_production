@@ -1,4 +1,5 @@
 from sqlalchemy import text
+
 pgsql_functions = {
     "calculate_material_cost": text("""
         CREATE OR REPLACE FUNCTION calculate_material_cost (

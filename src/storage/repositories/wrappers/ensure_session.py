@@ -1,8 +1,6 @@
 from functools import wraps
 from inspect import signature
 
-from sqlalchemy.ext.asyncio import AsyncSession
-
 
 def ensure_session(method):
     @wraps(method)

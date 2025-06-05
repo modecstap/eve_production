@@ -37,6 +37,7 @@ class RepositoryFactory:
         def decorator(repository_cls: Type[BaseRepository]):
             RepositoryFactory.register(configuration, repository_cls)
             return repository_cls
+
         return decorator
 
     @classmethod
@@ -52,7 +53,7 @@ class RepositoryFactory:
 
     @classmethod
     def validate_required(cls):
-        missing = cls._required-cls._repository_classes.keys()
+        missing = cls._required - cls._repository_classes.keys()
         if missing:
             raise RuntimeError(f"Не зарегистрированы обязательные репозитории: {', '.join(sorted(missing))}")
 

@@ -9,7 +9,7 @@ class TransactionEntityMapper(BaseEntityMapper):
         self._model_type = TransactionModel
         self._entity_type = Transaction
 
-    def entity_to_model(self, entity: Transaction, replace_id_with_name: bool = False ) -> TransactionModel:
+    def entity_to_model(self, entity: Transaction, replace_id_with_name: bool = False) -> TransactionModel:
         return TransactionModel(
             id=entity.id,
             release_date=entity.release_date,

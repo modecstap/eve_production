@@ -1,3 +1,3 @@
-from src.server.handlers.models.material_list_models.material_list_model import MaterialListModel
 from src.server.handlers.models.material_list_models.insert_material_list_model import InsertMaterialListModel
+from src.server.handlers.models.material_list_models.material_list_model import MaterialListModel
 from src.server.handlers.models.material_list_models.update_material_list_model import UpdateMaterialListModel

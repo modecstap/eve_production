@@ -1,9 +1,6 @@
-from fastapi import HTTPException, status
-
 from src.server.handlers.entity_handlers.entity_handler import EntityHandler
 from src.server.handlers.models.transactions_models import TransactionModel, InsertTransactionModel, \
     UpdateTransactionModel
-from src.services.exceptions import NotFoundException
 from src.services.utils import ServiceFactory
 
 

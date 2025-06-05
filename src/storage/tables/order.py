@@ -30,7 +30,6 @@ class Order(Base):
     tax_percent = Column(Numeric, nullable=False)
     income = Column(Numeric, default=0)
 
-
     # ИСХОДЯЩИЕ ОТНОШЕНИЯ
 
     transaction = relationship('Transaction', back_populates='orders')

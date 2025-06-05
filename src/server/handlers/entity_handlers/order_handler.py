@@ -1,5 +1,5 @@
 from src.server.handlers.entity_handlers.entity_handler import EntityHandler
-from src.server.handlers.models.order_models import OrderModel, CreateOrderModel, ChangePriceModel, SellItemModel, \
+from src.server.handlers.models.order_models import OrderModel, ChangePriceModel, SellItemModel, \
     UpdateOrderModel, InsertOrderModel
 from src.services.utils import ServiceFactory
 

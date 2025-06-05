@@ -18,9 +18,9 @@ class CostCalculatorService:
 
     def __init__(
             self,
-            product_repository: BaseRepository=BaseRepository(Product),
-            material_check_service: MaterialCheckService=MaterialCheckService(),
-            required_materials_service: RequiredMaterialsService=RequiredMaterialsService()
+            product_repository: BaseRepository = BaseRepository(Product),
+            material_check_service: MaterialCheckService = MaterialCheckService(),
+            required_materials_service: RequiredMaterialsService = RequiredMaterialsService()
     ):
         self._product_repository = product_repository
         self._material_check_service = material_check_service
@@ -37,7 +37,7 @@ class CostCalculatorService:
         for material_id, required_count in required_materials.items():
             materials_cost[material_id] = await self._product_repository.execute_query(
                 query="SELECT calculate_material_cost(:p_material_id, :p_need_count)",
-                params={"p_material_id": material_id, "p_need_count":required_count}
+                params={"p_material_id": material_id, "p_need_count": required_count}
             )
         production_cost = sum(materials_cost.values(), Decimal(0))
 

@@ -1,12 +1,13 @@
 from typing import Optional, Callable, Type, Any, Sequence
 
 from sqlalchemy import delete, select, Row, RowMapping, text
-from sqlalchemy.orm import declarative_base
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import declarative_base
 
 from src.storage.database import Database
 from src.storage.declarative_base import DeclarativeBase
 from src.storage.repositories.wrappers import ensure_session
+
 
 class BaseRepository():
     def __init__(self, entity: Type[DeclarativeBase]):

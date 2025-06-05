@@ -1,4 +1,4 @@
-from typing import List, Any, Coroutine
+from typing import List
 
 from fastapi import HTTPException, status
 from pydantic import BaseModel
@@ -29,13 +29,13 @@ class EntityHandler:
         try:
             return await self._service.get_models()
         except NotFoundException as e:
-            raise  HTTPException(status_code=404, detail=str(e))
+            raise HTTPException(status_code=404, detail=str(e))
 
     async def get(self, id: int) -> MODEL:
         try:
             return await self._service.get_model_by_id(id)
         except NotFoundException as e:
-            raise  HTTPException(status_code=404, detail=str(e))
+            raise HTTPException(status_code=404, detail=str(e))
 
     async def create(self, data: INSERT_MODEL) -> MODEL:
         created_models = await self._service.add_models([data])

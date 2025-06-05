@@ -1,5 +1,5 @@
 from src.server.handlers.models.station_models import StationModel
-from src.services.mappers.entity_mappers  import BaseEntityMapper
+from src.services.mappers.entity_mappers import BaseEntityMapper
 from src.storage.tables import Station
 
 

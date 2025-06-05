@@ -1,6 +1,5 @@
 from src.integration_tests.tests_api.base import PayloadBuilder
 from src.integration_tests.tests_api.transactions.transactions_payload_builder import TransactionsPayloadBuilder
-from src.integration_tests.tests_api.types.types_payload_builder import TypesPayloadBuilder
 
 
 class OrderPayloadBuilder(PayloadBuilder):

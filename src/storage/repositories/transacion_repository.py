@@ -1,9 +1,8 @@
-from typing import Any, Coroutine, Sequence, Type
+from typing import Type
 
-from sqlalchemy import func, Row, RowMapping
+from sqlalchemy import func
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import joinedload
 
 from src.storage.repositories.base import BaseRepository
 from src.storage.repositories.wrappers import ensure_session

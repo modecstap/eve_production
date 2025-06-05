@@ -1,7 +1,5 @@
-from typing import Dict
-
 import uvicorn
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from src.config.server_config import ServerConfig

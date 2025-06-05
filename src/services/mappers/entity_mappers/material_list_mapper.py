@@ -1,6 +1,6 @@
 from src.server.handlers.models.material_list_models import MaterialListModel
-from src.services.mappers.entity_mappers  import BaseEntityMapper
-from src.storage.tables import  MaterialList
+from src.services.mappers.entity_mappers import BaseEntityMapper
+from src.storage.tables import MaterialList
 
 
 class MaterialListEntityMapper(BaseEntityMapper):
