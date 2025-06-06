@@ -2,7 +2,7 @@ from src.server.handlers.models.order_models import CreateOrderModel, SellItemMo
 from src.services.entity_service import BaseEntityService
 from src.services.entity_service.utils.order_creation_service import OrderCreationService
 from src.services.exceptions import NotEnoughMaterialsException
-from src.services.mappers.entity_mappers import OrderEntityMapper
+from src.services.mappers.entity_mappers import BaseEntityMapper
 from src.services.utils import ServiceFactory, ServiceConfig
 from src.storage.repositories import BaseRepository
 from src.storage.tables import Order
@@ -18,7 +18,7 @@ class OrderService(BaseEntityService):
     def __init__(
             self,
             repository: BaseRepository = BaseRepository(Order),
-            mapper: OrderEntityMapper = OrderEntityMapper(),
+            mapper: BaseEntityMapper = BaseEntityMapper(OrderModel, Order),
     ):
         super().__init__(repository, mapper)
 

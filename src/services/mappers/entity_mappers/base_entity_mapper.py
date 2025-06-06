@@ -7,9 +7,13 @@ from src.services.mappers import BaseMapper
 
 
 class BaseEntityMapper(BaseMapper):
-    def __init__(self):
-        self._model_type: Type[BaseModel] = None
-        self._entity_type: Type[DeclarativeBase] = None
+    def __init__(
+            self,
+            model_type: Type[BaseModel],
+            entity_type: Type[DeclarativeBase]
+    ):
+        self._model_type: Type[BaseModel] = model_type
+        self._entity_type: Type[DeclarativeBase] = entity_type
 
     def model_to_entity(self, model: BaseModel):
         return self._entity_type(**model.model_dump())

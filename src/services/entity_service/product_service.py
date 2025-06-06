@@ -1,6 +1,6 @@
-from src.server.handlers.models.product_models import AvailableProductModel
+from src.server.handlers.models.product_models import AvailableProductModel, ProductModel
 from src.services.entity_service import BaseEntityService
-from src.services.mappers.entity_mappers import ProductEntityMapper
+from src.services.mappers.entity_mappers import BaseEntityMapper
 from src.services.mappers.row_mappers import ProductCostRowMapper
 from src.services.utils import ServiceFactory, ServiceConfig
 from src.storage.repositories import BaseRepository
@@ -17,7 +17,7 @@ class ProductService(BaseEntityService):
     def __init__(
             self,
             repository: BaseRepository = BaseRepository(Product),
-            mapper: ProductEntityMapper = ProductEntityMapper(),
+            mapper: BaseEntityMapper = BaseEntityMapper(ProductModel, Product),
             product_cost_mapper: ProductCostRowMapper = ProductCostRowMapper()
     ):
         super().__init__(repository, mapper)

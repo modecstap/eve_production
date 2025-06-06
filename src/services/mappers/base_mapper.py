@@ -6,5 +6,9 @@ from pydantic import BaseModel
 class BaseMapper(ABC):
 
     @abstractmethod
-    def model_to_entity(self, model: BaseModel):
+    def entity_to_model(self, model: BaseModel):
+        pass
+
+    @abstractmethod
+    def entities_to_models(self, models: list[BaseModel]):
         pass

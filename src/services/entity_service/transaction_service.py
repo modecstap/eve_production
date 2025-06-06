@@ -1,9 +1,11 @@
 from src.server.handlers.models.transactions_models import TransactionModel
 from src.services.entity_service import BaseEntityService
-from src.services.mappers.entity_mappers import TransactionEntityMapper
+from src.services.mappers.entity_mappers import BaseEntityMapper
 from src.services.mappers.row_mappers import AvailableMaterialRowMapper
+from src.services.mappers.transaction_name_mapper import TransactionNameMapper
 from src.services.utils import ServiceFactory, ServiceConfig
 from src.storage.repositories import TransactionRepository
+from src.storage.tables import Transaction
 
 
 @ServiceFactory.service_registration_decorator(
@@ -16,7 +18,7 @@ class TransactionService(BaseEntityService):
     def __init__(
             self,
             repository: TransactionRepository = TransactionRepository(),
-            mapper: TransactionEntityMapper = TransactionEntityMapper(),
+            mapper: BaseEntityMapper = BaseEntityMapper(TransactionModel, Transaction),
             available_material_mapper: AvailableMaterialRowMapper = AvailableMaterialRowMapper()
     ):
         super().__init__(repository, mapper)
@@ -28,11 +30,14 @@ class TransactionService(BaseEntityService):
             entities = await self._main_repository.get_entities(
                 session=session
             )
-            models = self._main_mapper.entities_to_models(
+            if replace_id_with_name:
+                return TransactionNameMapper.entities_to_models(
+                    entities,
+                )
+
+            return self._main_mapper.entities_to_models(
                 entities,
-                replace_id_with_name=replace_id_with_name
             )
-            return models
         except Exception as e:
             await session.rollback()
             raise e

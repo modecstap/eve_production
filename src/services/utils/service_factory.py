@@ -20,7 +20,7 @@ class ServiceFactory:
         return decorator
 
     @classmethod
-    def get_entity_service(cls, service_entity_name: str) -> BaseService:
+    def get_service(cls, service_entity_name: str) -> BaseService:
         if service_entity_name not in cls._services:
             raise ValueError(f"Сервис типа '{service_entity_name}' не зарегистрирован")
         return cls._services[service_entity_name]
