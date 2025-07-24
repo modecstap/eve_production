@@ -7,4 +7,4 @@ class ProductionHandler:
         self.production_service = ServiceFactory.get_service("production")
 
     async def create_products(self, products: ProductionModel):
-        return await self.production_service.write_production(products)
+        return await self.production_service.do(products)

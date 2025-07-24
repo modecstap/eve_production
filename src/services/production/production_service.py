@@ -1,8 +1,8 @@
-from src.server.handlers.models.production_models import ProductionModel
-from src.services.base_service import BaseService
-from src.services.cost_calculator_service import CostCalculatorService
+from src.services.AService import Service
+from src.services.cost_calculator.cost_calculator_service import CostCalculatorService
 from src.services.mappers import ProductionMapper
-from src.services.production_builder import ProductionBuilder
+from src.services.production.production_builder import ProductionBuilder
+from src.services.production.production_payload import ProductionPayload
 from src.services.utils import ServiceFactory, ServiceConfig
 from src.storage.repositories import TransactionRepository, BaseRepository
 from src.storage.tables import Product
@@ -13,7 +13,7 @@ from src.storage.tables import Product
         name="production",
     )
 )
-class ProductionService(BaseService):
+class ProductionService(Service):
     def __init__(
             self,
             mapper: ProductionMapper = ProductionMapper(),
@@ -28,7 +28,7 @@ class ProductionService(BaseService):
         self._cost_calculator = cost_calculator
         self._builder = builder
 
-    async def write_production(self, production: ProductionModel):
+    async def do(self, production: ProductionPayload) -> None:
         async with self._product_repo.create_session() as session:
             product, transaction = await self._builder.build(production)
 

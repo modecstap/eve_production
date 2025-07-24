@@ -6,7 +6,7 @@ from src.server.handlers import AvailableMaterialHandler
 class AvailableMaterialsRouter:
     def __init__(
             self,
-            prefix: str = "available_materials",
+            prefix: str = "available_material",
             handler: AvailableMaterialHandler = AvailableMaterialHandler()
     ):
         self._prefix = f"/api/{prefix}"

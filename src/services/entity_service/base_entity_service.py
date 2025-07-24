@@ -1,12 +1,11 @@
 from pydantic import BaseModel
 
-from src.services.base_service import BaseService
 from src.services.exceptions import NotFoundException
 from src.services.mappers.entity_mappers import BaseEntityMapper
 from src.storage.repositories import BaseRepository
 
 
-class BaseEntityService(BaseService):
+class BaseEntityService:
 
     def __init__(
             self,

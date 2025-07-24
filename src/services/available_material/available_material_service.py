@@ -1,5 +1,5 @@
-from src.server.handlers.models import AvailableMaterialModel
-from src.services.base_service import BaseService
+from src.services.available_material.available_material_model import AvailableMaterialModel
+from src.services.AService import Service
 from src.services.mappers.row_mappers import AvailableMaterialRowMapper
 from src.services.utils import ServiceConfig, ServiceFactory
 from src.storage.repositories import TransactionRepository
@@ -7,10 +7,10 @@ from src.storage.repositories import TransactionRepository
 
 @ServiceFactory.service_registration_decorator(
     ServiceConfig(
-        name="available_materials",
+        name="available_material",
     )
 )
-class AvailableMaterialsService(BaseService):
+class AvailableMaterialsService(Service):
 
     def __init__(
             self,
@@ -20,7 +20,7 @@ class AvailableMaterialsService(BaseService):
         self._transaction_repository = transaction_repository
         self._available_material_mapper = available_material_mapper
 
-    async def get_available_materials(self) -> list[AvailableMaterialModel]:
+    async def do(self, model = None) -> list[AvailableMaterialModel]:
         entities = await self._transaction_repository.get_available_materials()
         models = self._available_material_mapper.entities_to_models(entities)
         return models

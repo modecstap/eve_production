@@ -16,7 +16,7 @@ class ProductionBuilder:
         product = self.mapper.model_to_entity(production)
         transaction = Transaction(
             release_date=production.release_date,
-            material_id=production.type_id,
+            material_id=production.product_type_id,
             product_id=product.id,
             count=production.count,
             price=cost,

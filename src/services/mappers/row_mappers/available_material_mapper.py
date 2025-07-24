@@ -1,4 +1,4 @@
-from src.server.handlers.models import AvailableMaterialModel
+from src.services.available_material.available_material_model import AvailableMaterialModel
 from src.services.mappers.row_mappers import BaseRowMapper
 
 
