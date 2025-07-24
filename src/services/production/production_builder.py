@@ -12,7 +12,7 @@ class ProductionBuilder:
         self.mapper = mapper
 
     async def build(self, production) -> tuple:
-        cost = await self._cost_calculator_service.calculate_production_cost(production)
+        cost = await self._cost_calculator_service.do(production)
         product = self.mapper.model_to_entity(production)
         transaction = Transaction(
             release_date=production.release_date,

@@ -1,10 +1,4 @@
-from collections import defaultdict
-from decimal import Decimal
-from typing import Sequence
-
 from src.services.AService import Service
-from src.services.corrected_material.corrected_material_calculator import CorrectedMaterialCalculator
-from src.services.corrected_material.material_calculation_model import MaterialCalculationModel
 from src.services.production_materials_calculator.production_materials_calculator import ProductionMaterialsCalculator
 from src.services.production_materials_calculator.production_materials_payload import ProductionMaterialsPayload
 from src.services.required_material.required_materials_payload import RequiredMaterialsPayload

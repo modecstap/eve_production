@@ -1,6 +1,5 @@
 from typing import Type, TypeVar, cast
 
-from src.storage.declarative_base import DeclarativeBase
 from src.storage.factories.repository_factory.repository_config import RepositoryConfig
 from src.storage.repositories import BaseRepository, TransactionRepository
 from src.storage.tables import MaterialList, Order, Product, Station, Transaction, TypeInfo, UsedTransactionList

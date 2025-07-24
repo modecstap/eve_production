@@ -39,7 +39,7 @@ class Database(metaclass=Singleton):
 
     async def _try_create_session(self):
         try:
-            # SQLAlchemy не создат таблицы в БД если не создать объекты.
+            # SQLAlchemy не создат таблицы в БД, если не создать объекты.
             Order()
             Product()
             MaterialList()
