@@ -1,13 +1,13 @@
 from decimal import Decimal
+from typing import Type
 
-
-from src.server.handlers.models.production_models import ProductionModel
-from src.services import RequiredMaterialsService
 from src.services.AService import Service
+from src.server.handlers.models.production_models import ProductionModel
+from src.services.required_material.required_materials_service import RequiredMaterialsService
+from src.services.chekers.material_checker.material_checker_mediator import MaterialCheckerMediator
 from src.services.cost_calculator.cost_model import CostModel
-from src.services.material_cheker.material_checker import MaterialChecker
-from src.services.material_cheker.material_checker_payload import MaterialCheckerPayload
-from src.services.required_material.required_materials_payload import RequiredMaterialsPayload
+from src.services.mappers.production_to_required_materials import ProductionToRequiredMaterialsMapper
+from src.services.mappers.required_materials_to_material_cheker import RequiredMaterialsToMaterialsCheckerMapper
 from src.services.utils import ServiceFactory, ServiceConfig
 from src.storage.repositories import BaseRepository
 from src.storage.tables import Product
@@ -19,28 +19,27 @@ from src.storage.tables import Product
     )
 )
 class CostCalculatorService(Service):
+    # TODO из этого класса сделать посредник и вынести логику подсчёта в другой класс
+    """
+    Считает цену производства продукта.
+    """
+
 
     def __init__(
             self,
             product_repository: BaseRepository = BaseRepository(Product),
-            material_checker: MaterialChecker = MaterialChecker(),
-            required_materials_service: RequiredMaterialsService = RequiredMaterialsService()
+            required_materials_service: RequiredMaterialsService = RequiredMaterialsService(),
+            material_checker: Type[MaterialCheckerMediator] = MaterialCheckerMediator,
     ):
         self._product_repository = product_repository
         self._material_checker = material_checker
         self._required_materials_service = required_materials_service
 
     async def do(self, production: ProductionModel) -> CostModel:
-        await self._material_checker.do(MaterialCheckerPayload(
-            product_type_id=production.type_id,
-            count=production.count,
-            blueprint_efficiency=production.blueprint_efficiency,
-        ))
-        required_materials = await self._required_materials_service.do(RequiredMaterialsPayload(
-            product_type_id=production.type_id,
-            count=production.count,
-            blueprint_efficiency=production.blueprint_efficiency
-        ))
+        required_material_payload = ProductionToRequiredMaterialsMapper(production).map()
+        required_materials = await self._required_materials_service.do(required_material_payload)
+        check_payload = RequiredMaterialsToMaterialsCheckerMapper(required_materials).map()
+        await self._material_checker(check_payload).check()
 
         materials_cost = {}
 
