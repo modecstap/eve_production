@@ -1,7 +1,5 @@
 from decimal import Decimal, ROUND_UP
 
-from pydantic import BaseModel
-
 from src.services.AService import Service
 from src.services.corrected_material.calculated_material_model import CalculatedMaterialModel
 from src.services.corrected_material.material_calculation_model import MaterialCalculationModel

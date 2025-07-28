@@ -105,7 +105,7 @@ class BaseTestApi(
         post_response = await self.client.post(f"/{self.api_version}/{self.endpoint}/bulk", json=payloads)
         items = post_response.json()
         items_id = [item["id"] for item in items]
-        updated = await self.payload_builder.build_update_payloads(items_id)
+        updated = self.payload_builder.build_update_payloads(items_id)
 
         # Act
         put_response = await self.client.put(f"/{self.api_version}/{self.endpoint}/", json=updated)

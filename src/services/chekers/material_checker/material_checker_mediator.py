@@ -3,7 +3,6 @@ from src.services.chekers.checker import Checker
 from src.services.chekers.material_checker.material_checker import MaterialChecker
 from src.services.chekers.material_checker.material_checker_mediator_payload import MaterialCheckerMediatorPayload
 from src.services.mappers.material_mediator_to_checker_mapper import MaterialMediatorToCheckerMapper
-from src.services.utils import ServiceFactory, ServiceConfig
 
 
 class MaterialCheckerMediator(Checker):

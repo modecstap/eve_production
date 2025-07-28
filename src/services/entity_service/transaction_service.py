@@ -32,7 +32,7 @@ class TransactionService(BaseEntityService):
             )
             if replace_id_with_name:
                 return TransactionNameMapper.entities_to_models(
-                    entities,
+                    entities
                 )
 
             return self._main_mapper.entities_to_models(

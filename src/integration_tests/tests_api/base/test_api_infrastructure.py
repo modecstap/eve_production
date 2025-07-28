@@ -18,7 +18,7 @@ class TestApiInfrastructure(ABC):
         try:
             await self.db.drop_all()
             await self.db.create_all()
-        except Exception as e:
+        except Exception as _:
             await self.db.create_all()
         finally:
             await self.db.dispose_connection()
