@@ -14,7 +14,6 @@ class MaterialCheckerMediator(Checker):
             self,
             check_payload: MaterialCheckerMediatorPayload,
             available_materials_service=AvailableMaterialsService(),
-
     ):
         self._check_payload = check_payload
         self._available_materials_service = available_materials_service

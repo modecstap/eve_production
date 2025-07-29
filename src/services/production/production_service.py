@@ -1,5 +1,5 @@
 from src.services.AService import Service
-from src.services.cost_calculator.cost_calculator_service import CostCalculatorService
+from src.services.cost_calculator.cost_calculator_facade import CostCalculatorFacade
 from src.services.mappers import ProductionMapper
 from src.services.production.production_builder import ProductionBuilder
 from src.services.production.production_payload import ProductionPayload
@@ -19,7 +19,7 @@ class ProductionService(Service):
             mapper: ProductionMapper = ProductionMapper(),
             product_repo: BaseRepository = BaseRepository(Product),
             transaction_repo: TransactionRepository = TransactionRepository(),
-            cost_calculator: CostCalculatorService = CostCalculatorService(),
+            cost_calculator: CostCalculatorFacade = CostCalculatorFacade(),
             builder: ProductionBuilder = ProductionBuilder(),
     ):
         self._mapper = mapper
