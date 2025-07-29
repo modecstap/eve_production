@@ -1,7 +1,7 @@
 from typing import Type, TypeVar, cast
 
 from src.storage.factories.repository_factory.repository_config import RepositoryConfig
-from src.storage.repositories import BaseRepository, TransactionRepository
+from src.storage.repositories import BaseRepository
 from src.storage.tables import MaterialList, Order, Product, Station, Transaction, TypeInfo, UsedTransactionList
 
 T = TypeVar("T", bound=BaseRepository)
@@ -25,7 +25,7 @@ class RepositoryFactory:
         cls.register(RepositoryConfig("order", Order), BaseRepository)
         cls.register(RepositoryConfig("product", Product), BaseRepository)
         cls.register(RepositoryConfig("station", Station), BaseRepository)
-        cls.register(RepositoryConfig("transaction", Transaction), TransactionRepository)
+        cls.register(RepositoryConfig("transaction", Transaction), BaseRepository)
         cls.register(RepositoryConfig("type_info", TypeInfo), BaseRepository)
         cls.register(RepositoryConfig("used_transaction", UsedTransactionList), BaseRepository)
 

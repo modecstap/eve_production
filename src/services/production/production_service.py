@@ -4,8 +4,8 @@ from src.services.mappers import ProductionMapper
 from src.services.production.production_builder import ProductionBuilder
 from src.services.production.production_payload import ProductionPayload
 from src.services.utils import ServiceFactory, ServiceConfig
-from src.storage.repositories import TransactionRepository, BaseRepository
-from src.storage.tables import Product
+from src.storage.repositories import BaseRepository
+from src.storage.tables import Product, Transaction
 
 
 @ServiceFactory.service_registration_decorator(
@@ -18,7 +18,7 @@ class ProductionService(Service):
             self,
             mapper: ProductionMapper = ProductionMapper(),
             product_repo: BaseRepository = BaseRepository(Product),
-            transaction_repo: TransactionRepository = TransactionRepository(),
+            transaction_repo: BaseRepository = BaseRepository(Transaction),
             cost_calculator: CostCalculatorFacade = CostCalculatorFacade(),
             builder: ProductionBuilder = ProductionBuilder(),
     ):

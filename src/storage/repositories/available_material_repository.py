@@ -1,21 +1,14 @@
-from typing import Type
-
 from sqlalchemy import func
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.storage.repositories.base import BaseRepository
 from src.storage.repositories.wrappers import ensure_session
 from src.storage.tables import Transaction, TypeInfo
 
 
-class TransactionRepository(BaseRepository):
-
-    def __init__(self, entity: Type[Transaction] = Transaction):
-        super().__init__(entity)
-
+class AvailableMaterialsRepository:
     @ensure_session
-    async def get_available_materials(self, type_id: list[int] = None, session: AsyncSession = None):
+    async def get_entities(self, type_id: list[int] = None, session: AsyncSession = None):
         query = (
             select(
                 Transaction.material_id,

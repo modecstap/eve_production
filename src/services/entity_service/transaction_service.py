@@ -4,7 +4,7 @@ from src.services.mappers.entity_mappers import BaseEntityMapper
 from src.services.mappers.row_mappers import AvailableMaterialRowMapper
 from src.services.mappers.transaction_name_mapper import TransactionNameMapper
 from src.services.utils import ServiceFactory, ServiceConfig
-from src.storage.repositories import TransactionRepository
+from src.storage.repositories import BaseRepository
 from src.storage.tables import Transaction
 
 
@@ -17,7 +17,7 @@ class TransactionService(BaseEntityService):
 
     def __init__(
             self,
-            repository: TransactionRepository = TransactionRepository(),
+            repository: BaseRepository = BaseRepository(Transaction),
             mapper: BaseEntityMapper = BaseEntityMapper(TransactionModel, Transaction),
             available_material_mapper: AvailableMaterialRowMapper = AvailableMaterialRowMapper()
     ):
