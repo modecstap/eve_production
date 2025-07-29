@@ -1,7 +1,7 @@
 from datetime import datetime
 from decimal import Decimal
 
-from pydantic import BaseModel, Field, root_validator
+from pydantic import BaseModel, Field, field_validator
 
 
 class CreateOrderModel(BaseModel):
@@ -13,8 +13,8 @@ class CreateOrderModel(BaseModel):
     broker_cost: Decimal = Field(default=0)
     type_id: int
 
-    @root_validator(pre=True)
-    def set_remains_default(cls, values):
-        if 'remains' not in values or values['remains'] is None:
-            values['remains'] = values.get('count')
-        return values
+    @field_validator("remains", mode="before")
+    def set_default_remains(self, v, info):
+        if v is None:
+            return info.data.get("count")
+        return v
