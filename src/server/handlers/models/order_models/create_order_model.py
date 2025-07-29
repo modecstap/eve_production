@@ -13,8 +13,9 @@ class CreateOrderModel(BaseModel):
     broker_cost: Decimal = Field(default=0)
     type_id: int
 
+    @classmethod
     @field_validator("remains", mode="before")
-    def set_default_remains(self, v, info):
+    def set_default_remains(cls, v, info):
         if v is None:
             return info.data.get("count")
         return v
