@@ -1,4 +1,4 @@
-from src.services import CostCalculatorService
+from src.services.cost_calculator.cost_calculator_facade import CostCalculatorFacade
 from src.services.mappers import ProductionMapper
 from src.storage.tables import Transaction
 
@@ -8,7 +8,7 @@ class ProductionBuilder:
             self,
             mapper: ProductionMapper = ProductionMapper()
     ):
-        self._cost_calculator_service = CostCalculatorService()
+        self._cost_calculator_service = CostCalculatorFacade()
         self.mapper = mapper
 
     async def build(self, production) -> tuple:

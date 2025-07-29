@@ -1,1 +1,1 @@
-from src.server.handlers.models.production_models.production_model import ProductionModel
+from src.server.handlers.models.production_models.production_model import ProductionMediatorModel

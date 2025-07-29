@@ -4,7 +4,7 @@ from decimal import Decimal
 from pydantic import BaseModel, Field
 
 
-class ProductionModel(BaseModel):
+class ProductionMediatorModel(BaseModel):
     type_id: int
     release_date: datetime
     count: int

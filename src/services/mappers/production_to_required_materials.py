@@ -1,9 +1,9 @@
-from src.server.handlers.models.production_models import ProductionModel
+from src.services.cost_calculator.production_facade_model import CostCalculatorFacadeModel
 from src.services.required_material.required_materials_payload import RequiredMaterialsPayload
 
 
 class ProductionToRequiredMaterialsMapper:
-    def __init__(self, model: ProductionModel):
+    def __init__(self, model: CostCalculatorFacadeModel):
         self._model = model
 
     def map(self) -> RequiredMaterialsPayload:
