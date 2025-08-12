@@ -3,10 +3,7 @@ from src.services.required_material.required_materials_model import RequiredMate
 
 
 class RequiredMaterialsToMaterialsCheckerMapper:
-    def __init__(self, model: RequiredMaterialsModel):
-        self._model = model
-
-    def map(self) -> MaterialCheckerMediatorPayload:
+    def map(self, model: RequiredMaterialsModel) -> MaterialCheckerMediatorPayload:
         return MaterialCheckerMediatorPayload(
-            required_materials=self._model.required_materials
+            required_materials=model.required_materials
         )

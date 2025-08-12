@@ -1,5 +1,5 @@
 from src.services.available_material.available_material_service import AvailableMaterialsService
 from src.services.chekers.material_checker.material_checker_mediator import MaterialChecker
-from src.services.cost_calculator.cost_calculator_facade import CostCalculatorFacadeModel
+from src.services.cost_calculator.material_cost_calculator_facade import CostCalculatorFacadeModel
 from src.services.production.production_service import ProductionService
 from src.services.required_material.required_materials_service import RequiredMaterialsService

@@ -1,10 +1,9 @@
 from src.services.AService import Service
-from src.services.cost_calculator.cost_calculator_facade import CostCalculatorFacade
-from src.services.mappers import ProductionMapper
-from src.services.production.production_builder import ProductionBuilder
+
 from src.services.production.production_payload import ProductionPayload
 from src.services.utils import ServiceFactory, ServiceConfig
 from src.storage.repositories import BaseRepository
+from src.storage.repositories.product_usage_repository import ProductUsageRepository
 from src.storage.tables import Product, Transaction
 
 
@@ -14,30 +13,39 @@ from src.storage.tables import Product, Transaction
     )
 )
 class ProductionService(Service):
+    """
+    Записывает данные о произведённых продуктах
+    """
+
     def __init__(
             self,
-            mapper: ProductionMapper = ProductionMapper(),
             product_repo: BaseRepository = BaseRepository(Product),
             transaction_repo: BaseRepository = BaseRepository(Transaction),
-            cost_calculator: CostCalculatorFacade = CostCalculatorFacade(),
-            builder: ProductionBuilder = ProductionBuilder(),
+            product_usage_repo: ProductUsageRepository = ProductUsageRepository()
     ):
-        self._mapper = mapper
         self._product_repo = product_repo
         self._transaction_repo = transaction_repo
-        self._cost_calculator = cost_calculator
-        self._builder = builder
+        self._product_usage_repo = product_usage_repo
 
     async def do(self, production: ProductionPayload) -> None:
         async with self._product_repo.create_session() as session:
-            product, transaction = await self._builder.build(production)
-
+            product = Product(
+                station_id=production.station_id,
+                blueprint_efficiency=production.blueprint_efficiency
+            )
             await self._product_repo.insert([product], session=session)
-            await self._product_repo.execute_query(
-                query="SELECT create_used_transaction(:input_product_id, :input_count)",
-                params={"input_product_id": product.id, "input_count": production.count},
-                session=session
+
+            # записываем транзакцию с поступлением продуктов на склад
+            transaction = Transaction(
+                release_date=production.release_date,
+                material_id=production.product_type_id,
+                product=product,
+                count=production.count,
+                price=production.assembly_cost,
+                remains=production.count
             )
             await self._transaction_repo.insert([transaction], session=session)
 
+            # записываем какие транзакции были использованы в качестве материалов
+            await self._product_usage_repo.register_usage(product.id, production.count, session=session)
             await session.commit()
