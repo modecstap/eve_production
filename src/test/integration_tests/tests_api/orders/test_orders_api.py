@@ -1,5 +1,5 @@
-from src.integration_tests.tests_api.base import BaseTestApi
-from src.integration_tests.tests_api.orders.order_payload_builder import OrderPayloadBuilder
+from src.test.integration_tests.tests_api.base import BaseTestApi
+from src.test.integration_tests.tests_api.orders.order_payload_builder import OrderPayloadBuilder
 
 
 class TestOrdersApi(BaseTestApi):

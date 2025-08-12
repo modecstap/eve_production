@@ -1,4 +1,4 @@
-from src.integration_tests.tests_api.base import PayloadBuilder
+from src.test.integration_tests.tests_api.base import PayloadBuilder
 
 
 class StationsPayloadBuilder(PayloadBuilder):

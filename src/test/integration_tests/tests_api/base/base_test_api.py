@@ -3,7 +3,7 @@ from typing import Type
 
 import pytest
 
-from src.integration_tests.tests_api.base import TestApiInfrastructure, TestPost, TestGet, TestPut, TestDelete, \
+from src.test.integration_tests.tests_api.base import TestApiInfrastructure, TestPost, TestGet, TestPut, TestDelete, \
     PayloadBuilder
 
 

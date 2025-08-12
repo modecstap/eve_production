@@ -1,5 +1,5 @@
-from src.integration_tests.tests_api.base import PayloadBuilder
-from src.integration_tests.tests_api.stations.stations_payload_builder import StationsPayloadBuilder
+from src.test.integration_tests.tests_api.base import PayloadBuilder
+from src.test.integration_tests.tests_api.stations.stations_payload_builder import StationsPayloadBuilder
 
 
 class ProductPayloadBuilder(PayloadBuilder):
