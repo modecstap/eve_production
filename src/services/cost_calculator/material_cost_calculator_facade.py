@@ -32,7 +32,7 @@ class MaterialCostCalculatorFacade(Service):
         required_materials = await self._required_materials_service.do(required_material_payload)
 
         check_payload = RequiredMaterialsToMaterialsCheckerMapper().map(required_materials)
-        await MaterialCheckerMediator(check_payload).check()
+        await MaterialCheckerMediator().check(check_payload)
 
         cost = await self._cost_calculator.do(required_materials)
 
