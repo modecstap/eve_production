@@ -4,11 +4,11 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from src.config.server_config import ServerConfig
 from src.server.handlers import OrderHandler, TestHandler, TransactionHandler, ProductHandler, TypeHandler, \
-    StationHandler, ProductionHandler, AvailableMaterialHandler, MaterialListHandler, CostCalculatorHandler
+    StationHandler, MaterialListHandler
 from src.server.handlers.entity_handlers.entity_handler import EntityHandler
 from src.server.handlers.entity_handlers.used_transaction_handler import UsedTransactionHandler
-from src.server.routers import CRUDRouter, OrdersRouter, AvailableMaterialsRouter, CostCalculatorRouter, \
-    ProductionsRouter, EntityPrefix
+from src.server.routers import CRUDRouter, OrdersRouter, EntityPrefix
+from src.server.routers.production_router import ProductionRouter
 
 
 class FastAPIServer:
@@ -44,9 +44,6 @@ class FastAPIServer:
             EntityPrefix.TYPES: TypeHandler(),
             EntityPrefix.STATIONS: StationHandler(),
         }
-        self.production_handler = ProductionHandler()
-        self.cost_calculator_handler = CostCalculatorHandler()
-        self.available_material_handler = AvailableMaterialHandler()
 
     async def start(self):
         config = uvicorn.Config(self.app, host=self._config.host, port=self._config.port, loop="asyncio")
@@ -63,9 +60,7 @@ class FastAPIServer:
 
         self._include_crud_routes()
         self.app.include_router(OrdersRouter().router)
-        self.app.include_router(AvailableMaterialsRouter().router)
-        self.app.include_router(CostCalculatorRouter().router)
-        self.app.include_router(ProductionsRouter().router)
+        self.app.include_router(ProductionRouter().router)
 
     def _include_crud_routes(self):
         for prefix, handler in self.ENTITY_ROUTES.items():

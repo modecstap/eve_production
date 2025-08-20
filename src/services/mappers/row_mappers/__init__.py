@@ -1,3 +1,2 @@
 from src.services.mappers.row_mappers.base_row_mapper import BaseRowMapper
-from src.services.mappers.row_mappers.available_material_mapper import AvailableMaterialRowMapper
 from src.services.mappers.row_mappers.product_cost_row_mapper import ProductCostRowMapper
